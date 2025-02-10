@@ -46,7 +46,7 @@ YNow you're ready to deploy a generative AI language model to support your agent
     - **Deployment name**: *A unique name for your model deployment - for example `gpt-4-model`*
     - **Deployment type**: Standard
     - **Model version**: *Select the default version*
-    - **Connected AI resource**: *Select either of your Azure OpenAI resource connections*
+    - **Connected AI resource**: *Select your Azure OpenAI resource connection*
     - **Tokens per Minute Rate Limit (thousands)**: 5K
     - **Content filter**: DefaultV2
     - **Enable dynamic quota**: Disabled
