@@ -1,24 +1,24 @@
 ---
-title: Exercise Instructions
+title: Azure AI Agents Exercises
 permalink: index.html
 layout: home
 ---
 
-# Exercises
+# Build Azure AI Agents
 
-This page lists exercises associated with Microsoft skilling content on [Microsoft Learn](https://learn.microsoft.com)
+The following quickstart exercises are designed to provide you with a hands-on learning experience in which you'll explore common tasks that developers do when building AI agents on Microsoft Azure.
 
-<!-- You can edit the paragraph above to provide a more specific description and links to content on Learn.
+> **Note**: To complete the exercises, you'll need an Azure subscription in which you have sufficient permissions and quota to provision the necessary Azure resources and generative AI models. If you don't already have one, you can sign up for an [Azure account](https://azure.microsoft.com/free). There's a free trial option for new users that includes credits for the first 30 days.
 
-Include the following note if an Azure subscription is required (or add something similar for any other requirements, such as a Microsoft 365 account).
+## Quickstart exercises
 
-> **Note**: To complete these exercises, you will need a [Microsoft Azure subscription](https://azure.microsoft.com/free) in which you have sufficient permissions to create and configure the required resources.
-
-If a more complex setup is required, create a separate markdown file with setup instructions at \Instructions\Labs\00-setup.md - being sure to include "lab.title"" metadata at the top so it shows up the list below
--->
-
-{% assign labs = site.pages | where_exp:"page", "page.url contains '/Instructions/Labs'" %}
+{% assign labs = site.pages | where_exp:"page", "page.url contains '/Instructions'" %}
 {% for activity in labs  %}
-- [{{ activity.lab.title }}]({{ site.github.url }}{{ activity.url }})
+<hr>
+### [{{ activity.lab.title }}]({{ site.github.url }}{{ activity.url }})
+
+{{activity.lab.description}}
+
 {% endfor %}
 
+> **Note**: While you can complete these exercises on their own, they're designed to complement modules on [Microsoft Learn](https://learn.microsoft.com/training/paths/create-custom-copilots-ai-studio/); in which you'll find a deeper dive into some of the underlying concepts on which these exercises are based.
