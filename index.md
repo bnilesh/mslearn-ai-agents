@@ -4,7 +4,7 @@ permalink: index.html
 layout: home
 ---
 
-# Build Azure AI Agents
+# Develop Azure AI Agents
 
 The following quickstart exercises are designed to provide you with a hands-on learning experience in which you'll explore common tasks that developers do when building AI agents on Microsoft Azure.
 
