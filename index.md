@@ -21,4 +21,6 @@ The following quickstart exercises are designed to provide you with a hands-on l
 
 {% endfor %}
 
+<hr>
+
 > **Note**: While you can complete these exercises on their own, they're designed to complement modules on [Microsoft Learn](https://learn.microsoft.com/); in which you'll find a deeper dive into some of the underlying concepts on which these exercises are based.
