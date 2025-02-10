@@ -4,6 +4,12 @@ lab:
     description: 'Take your first steps in developing AI agents by exploring the Azure AI Agent service tools in the Azure AI Foundry portal.'
 ---
 
+# Explore AI Agent development
+
+In this exercise, you use the Azure AI Agent service tools in the Azure AI Foundry portal to create a simple AI agent that answers questions about expense claims.
+
+This exercise takes approximately **30** minutes.
+
 ## Create an Azure AI Foundry project
 
 Let's start by creating an Azure AI Foundry project.
