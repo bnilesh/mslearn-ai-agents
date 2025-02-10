@@ -1,7 +1,6 @@
-# Microsoft Lab Exercises
-<!-- Change the title above as appropriate -->
+# Azure AI Agents Exercises
 
-This repo contains exercises and supporting files for Microsoft skilling content.
+This repo contains exercises and supporting files for building Azure AI Agents.
 
 The exercises may be used in both self-paced skilling experiences on [Microsoft Learn](https://learn.microsoft.com) and in Microsoft authorized instructor-led training.
 <!-- Update thr paragraph above with a link to a specific Learning Path or course as appropriate -->
