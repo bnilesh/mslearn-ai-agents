@@ -37,7 +37,7 @@ Let's start by creating an Azure AI Foundry project.
 
 ## Deploy a generative AI model
 
-YNow you're ready to deploy a generative AI language model to support your agent.
+Now you're ready to deploy a generative AI language model to support your agent.
 
 1. In the pane on the left for your project, in the **My assets** section, select the **Models + endpoints** page.
 1. In the **Models + endpoints** page, in the **Model deployments** tab, in the **+ Deploy model** menu, select **Deploy base model**.
