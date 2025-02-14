@@ -6,7 +6,7 @@ lab:
 
 # Build an AI agent
 
-In this exercise you will explore using built-in tools in Azure AI Foundry to connect to knowledge sources and interpret code. Then, you'll develop a basic agent in Python or C#.
+In this exercise you will explore using built-in tools in Azure AI Foundry to connect to knowledge sources and interpret code. Then, you'll develop a basic agent in Python or C# (C# coming soon).
 
 This exercise should take approximately **30** minutes to complete.
 
