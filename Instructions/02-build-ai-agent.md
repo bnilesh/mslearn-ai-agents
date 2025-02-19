@@ -16,7 +16,7 @@ Let's start by creating an Azure AI Foundry project.
 
 1. In a web browser, open the [Azure AI Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that might open.
 1. In the home page, select **+ Create project**.
-1. In the **Create a project** wizard, enter a suitable project name for (for example, `my-agent-project`).
+1. In the **Create a project** wizard, enter a suitable project name (for example, `my-agent-project`).
 1. If you don't have a hub yet created, you'll see the new hub name and can expand the section below to review the Azure resources that will be automatically created to support your project. If you are reusing a hub, skip the following step.
 1. Select **Customize** and specify the following settings for your hub:
     - **Hub name**: *A unique name - for example `my-ai-hub`*
@@ -38,12 +38,12 @@ Now you're ready to create your agent.
 1. If prompted to select an Azure OpenAI Service resource, select the one created with your hub name used above.
 1. If you haven't deployed a model in your hub, you'll see a **Deploy a model** wizard come up. Select a **gpt-4** model and deploy it with the following settings:
     - **Deployment name**: *A unique name for your model deployment - for example `gpt-4-model`*
-    - **Deployment type**: Standard
+    - **Deployment type**: Global Standard
     - **Model version**: turbo-2024-04-09
     - **Connected AI resource**: *Select your Azure OpenAI resource connection*
     - **Tokens per Minute Rate Limit (thousands)**: 50k
     - **Content filter**: DefaultV2
-    - **Enable dynamic quota**: Disabled
+      
 1. Wait for the agents list to load, where you'll see a new agent created with a default name. Select it, and change the **Agent name** to **MovieTrendAgent**.
 
 ## Integrate built-in tools
@@ -108,7 +108,7 @@ Now that you've seen how agents work and how they can accomplish tasks on your b
 1. After the repo has been cloned, navigate to the folder containing the chat application code files:
 
     ```powershell
-    cd mslearn-ai-agents/labfiles/02-build-ai-agent/python
+    cd mslearn-ai-agents/Labfiles/02-build-ai-agent/Python
     ```
 
 1. In the cloud shell command line pane, enter the following command to install the Python libraries you'll use, which are:
