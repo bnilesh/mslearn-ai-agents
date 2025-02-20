@@ -10,6 +10,14 @@ In this exercise you will explore using built-in tools in Azure AI Foundry to co
 
 This exercise should take approximately **30** minutes to complete.
 
+## Before you start
+
+To complete this exercise, you'll need:
+
+- [Visual Studio Code](https://code.visualstudio.com/Download?azure-portal=true) installed.
+- [Python](https://www.python.org/downloads/?azure-portal=true) installed on your machine.
+- An Azure subscription. If you don't already have one, you can [sign up for one](https://azure.microsoft.com/?azure-portal=true).
+
 ## Create an Azure AI Foundry project
 
 Let's start by creating an Azure AI Foundry project.
