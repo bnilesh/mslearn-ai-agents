@@ -126,7 +126,8 @@ Now that you've seen how agents work and how they can accomplish tasks on your b
     code .env
     ```
 
-1. In the code file, replace the **your_project_endpoint** placeholder with the connection string for your project (copied from the project **Overview** page in the Azure AI Foundry portal), the **your_model_deployment** placeholder with the name you assigned to your GPT-4 model deployment, and **your_bing_connection** with the name you gave your Bing resource.
+1. In the code file, replace the **your_project_endpoint** placeholder with the connection string for your project (copied from the project **Overview** page in the Azure AI Foundry portal), and the **your_model_deployment** placeholder with the name you assigned to your GPT-4 model deployment.
+1. In the Agents playground, copy the name displayed in the **Setup** pane for your Bing resource and enter it in place of the **your_bing_connection** placeholder.
 1. After you've replaced the placeholders, use the **CTRL+S** command to save your changes and then use the **CTRL+Q** command to close the code editor while keeping the cloud shell command line open.
 
 ### Write code to connect to your project and chat with your model
@@ -168,7 +169,7 @@ Now that you've configured the app, you'll add the necessary code to build an ag
     ```python
     # Create an agent
     agent = project_client.agents.create_agent(
-        model="gpt-4",
+        model=deployed_model,
         name="my-agent",
         instructions="You are a helpful agent who provides information about movie trends. Keep answers concise, but include as much relevant data as possible.",
         toolset=toolset,
@@ -210,6 +211,8 @@ Now that you've configured the app, you'll add the necessary code to build an ag
     ```powershell
     python basic-agent.py
     ```
+
+    > **Tip**: For some users Azure Cloud Shell hits a timeout error getting the token from Azure ML. If you hit this, copy your agent and `.env` files into Visual Studio Code, install the libraries above, and run it in the integrated terminal.
 
 1. Observe the output, which will display the agent's text response and download the image file. Open that file, and you'll see your agent has created a graphical chart with movie revenues.
 1. Feel free to edit the message content to try other questions, such as popular movies from other years or certain genres.
