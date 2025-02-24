@@ -117,7 +117,7 @@ Now that you've seen how agents work and how they can accomplish tasks on your b
 
 ### Write code to connect to your project and chat with your model
 
-Now that you've configured the app, you'll add the necessary code to build an agent. If you are working in Visual Studio Code, you'll need to sign into your Azure subscription with `az login`. If you're completing this lab in Cloud Shell, you're already signed in.
+Now that you've configured the app, you'll add the necessary code to build an agent. In Visual Studio Code, you'll need to sign into your Azure subscription with `az login`.
 
 > **Tip**: In this exercise, you're actually building the whole agent mostly from scratch in your app to understand how to do so. During your own development, you can instead reference the agent ID of the agent you created in the Foundry portal to use that agent definition by using the `project_client.agents.get_agent("<agent_id">)`.
 
