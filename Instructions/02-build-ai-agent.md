@@ -99,27 +99,10 @@ Now that you've seen how agents work and how they can accomplish tasks on your b
 
 1. In the Azure AI Foundry portal, view the **Overview** page for your project.
 1. In the **Project details** area, note the **Project connection string**. You'll use this connection string to connect to your project in a client application.
-1. Open a new browser tab (keeping the Azure AI Foundry portal open in the existing tab). Then in the new tab, browse to the [Azure portal](https://portal.azure.com) at `https://portal.azure.com`; signing in with your Azure credentials if prompted.
-1. Use the **[\>_]** button to the right of the search bar at the top of the page (might be under the **...** depending on your screen resolution) to create a new Cloud Shell in the Azure portal, selecting a ***PowerShell*** environment. The cloud shell provides a command line interface in a pane at the bottom of the Azure portal.
-
-    > **Note**: If you have previously created a cloud shell that uses a *Bash* environment, switch it to ***PowerShell***.
-
-1. In the cloud shell toolbar, in the **Settings** menu, select **Go to Classic version** (this is required to use the code editor).
-
-1. In the PowerShell pane, enter the following commands to clone the GitHub repo for this exercise:
-
-    ```powershell
-    rm -r mslearn-ai-agents -f
-    git clone https://github.com/microsoftlearning/mslearn-ai-agents
-    ```
-
-1. After the repo has been cloned, navigate to the folder containing the chat application code files:
-
-    ```powershell
-    cd mslearn-ai-agents/Labfiles/02-build-ai-agent/Python
-    ```
-
-1. In the cloud shell command line pane, enter the following command to install the Python libraries you'll use, which are:
+1. Open VS Code and **Clone** the `https://github.com/MicrosoftLearning/mslearn-ai-agents` respository.
+1. Store the clone on a local drive, and open the folder after cloning.
+1. In the VS Code Explorer (left pane), right-click on the **Labfiles/02-build-ai-agent/Python** folder and select **Open in Integrated Terminal**.
+1. In the terminal, enter the following command to install the Python libraries you'll use, which are:
     - **python-dotenv** : Used to load settings from an application configuration file.
     - **azure-identity**: Used to authenticate with Entra ID credentials.
     - **azure-ai-projects**: Used to work with an Azure AI Foundry project.
@@ -128,28 +111,17 @@ Now that you've seen how agents work and how they can accomplish tasks on your b
     pip install python-dotenv azure-identity azure-ai-projects
     ```
 
-1. Enter the following command to edit the **.env** Python configuration file that has been provided:
-
-    ``` powershell
-    code .env
-    ```
-
-1. In the code file, replace the **your_project_endpoint** placeholder with the connection string for your project (copied from the project **Overview** page in the Azure AI Foundry portal), and the **your_model_deployment** placeholder with the name you assigned to your GPT-4 model deployment.
+1. In the VS Code Explorer (left pane), open the **.env** Python configuration file and replace the **your_project_endpoint** placeholder with the connection string for your project (copied from the project **Overview** page in the Azure AI Foundry portal), and the **your_model_deployment** placeholder with the name you assigned to your GPT-4 model deployment.
 1. In the Agents playground, copy the name displayed in the **Setup** pane for your Bing resource and enter it in place of the **your_bing_connection** placeholder.
-1. After you've replaced the placeholders, use the **CTRL+S** command to save your changes and then use the **CTRL+Q** command to close the code editor while keeping the cloud shell command line open.
+1. After you've replaced the placeholders, save your changes.
 
 ### Write code to connect to your project and chat with your model
 
-Now that you've configured the app, you'll add the necessary code to build an agent. If you are working in Visual Studio Code, you'll need to sign into your Azure subscription with `az login`. If you're completing this lab in Cloud Shell, you're already signed in.
+Now that you've configured the app, you'll add the necessary code to build an agent. In Visual Studio Code, you'll need to sign into your Azure subscription with `az login`.
 
 > **Tip**: In this exercise, you're actually building the whole agent mostly from scratch in your app to understand how to do so. During your own development, you can instead reference the agent ID of the agent you created in the Foundry portal to use that agent definition by using the `project_client.agents.get_agent("<agent_id">)`.
 
-1. Open the agent code file with the following command:
-
-    ```powershell
-    code basic-agent.py
-    ```
-
+1. In the VS Code Explorer (left pane), open the **basic-agent.py** code file.
 1. Review the included libraries, taking note of the *Azure AI Projects* libraries for the client and tools.
 1. In the definition for *Initialize tools*, add the following code to create the tool definitions and toolset:
 
@@ -213,14 +185,12 @@ Now that you've configured the app, you'll add the necessary code to build an ag
     messages = project_client.agents.list_messages(thread_id=thread.id)
     ```
 
-1. After you've added the code blocks, use the **CTRL+S** command to save your changes.
-1. In the Cloud Shell terminal, run your agent.
+1. After you've added the code blocks, save your changes.
+1. In the Integrated Terminal, run your agent.
 
     ```powershell
     python basic-agent.py
     ```
-
-    > **Tip**: For some users Azure Cloud Shell hits a timeout error getting the token from Azure ML. If you hit this, copy your agent and `.env` files into Visual Studio Code, install the libraries above, and run it in the integrated terminal.
 
 1. Observe the output, which will display the agent's text response and download the image file. Open that file, and you'll see your agent has created a graphical chart with movie revenues.
 1. Feel free to edit the message content to try other questions, such as popular movies from other years or certain genres.
