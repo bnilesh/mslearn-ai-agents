@@ -99,7 +99,7 @@ Now that you've seen how agents work and how they can accomplish tasks on your b
 
 1. In the Azure AI Foundry portal, view the **Overview** page for your project.
 1. In the **Project details** area, note the **Project connection string**. You'll use this connection string to connect to your project in a client application.
-1. Open VS Code and **Clone** the following Git repo: [https://github.com/MicrosoftLearning/mslearn-ai-agents.git](https://github.com/MicrosoftLearning/mslearn-ai-agents.git)
+1. Open VS Code and **Clone** the `https://github.com/MicrosoftLearning/mslearn-ai-agents` respository.
 1. Store the clone on a local drive, and open the folder after cloning.
 1. In the VS Code Explorer (left pane), right-click on the **Labfiles/02-build-ai-agent/Python** folder and select **Open in Integrated Terminal**.
 1. In the terminal, enter the following command to install the Python libraries you'll use, which are:
