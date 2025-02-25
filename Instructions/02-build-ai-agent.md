@@ -119,7 +119,7 @@ Now that you've seen how agents work and how they can accomplish tasks on your b
 
 Now that you've configured the app, you'll add the necessary code to build an agent. In Visual Studio Code, you'll need to sign into your Azure subscription with `az login`.
 
-> **Tip**: In this exercise, you're actually building the whole agent mostly from scratch in your app to understand how to do so. During your own development, you can instead reference the agent ID of the agent you created in the Foundry portal to use that agent definition by using the `project_client.agents.get_agent("<agent_id">)`.
+> **Tip**: In this exercise, you're actually building the whole agent mostly from scratch in your app to understand how to do so. During your own development, you can instead reference the agent ID of the agent you created in the Foundry portal to use that agent definition by using the `project_client.agents.get_agent("<agent_id>")`.
 
 1. In the VS Code Explorer (left pane), open the **basic-agent.py** code file.
 1. Review the included libraries, taking note of the *Azure AI Projects* libraries for the client and tools.
