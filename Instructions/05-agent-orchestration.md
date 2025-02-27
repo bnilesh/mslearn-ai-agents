@@ -6,7 +6,7 @@ lab:
 
 # Agent Orchestration
 
-In this exercise you'll create a project that orchestrates two AI agents using the Semantic Kernel SDK. The Incident Manager agent will analyze service logfiles for issues. If an issue is found, the Incident Manager will recommend a resolution action. The Devops Agent will receive the recommendation from the Incident Manager and invoke the corrective function to perform the resolution. The Incident Manager agent will review the updated logs to make sure the resolution is successful. For the sake of this exercise, four sample log files are provided. The Devops Agent code only updates the sample log files with some example log messages.
+In this exercise you'll create a project that orchestrates two AI agents using the Semantic Kernel SDK. The Incident Manager agent will analyze service log files for issues. If an issue is found, the Incident Manager will recommend a resolution action. The Devops Agent will receive the recommendation from the Incident Manager and invoke the corrective function to perform the resolution. The Incident Manager agent will review the updated logs to make sure the resolution is successful. For the sake of this exercise, four sample log files are provided. The Devops Agent code only updates the sample log files with some example log messages.
 
 This exercise should take approximately **30** minutes to complete.
 
@@ -40,7 +40,6 @@ Let's start by creating an Azure AI Foundry project.
 
 1. Select **Next** and review your configuration. Then select **Create** and wait for the process to complete.
 
-
 ### Prepare the application configuration
 
 1. In your web browser, navigate to the home page of the [Azure AI Foundry portal](https://ai.azure.com) at `https://ai.azure.com`
@@ -54,6 +53,8 @@ Let's start by creating an Azure AI Foundry project.
 1. Store the clone on a local drive, and open the folder after cloning.
 
 1. In the VS Code Explorer (left pane), right-click on the **Labfiles/05-agent-orchestration/Python** folder and select **Open in Integrated Terminal**.
+
+1. In the terminal, enter `pip install semantic-kernel` to install the project dependencies.
 
 1. In the VS Code Explorer (left pane), open the **.env** Python configuration file.
 
@@ -81,6 +82,7 @@ Now you're ready to create your agent! In this exercise, you'll build an inciden
 
     ```python
         kernel = Kernel()
+        kernel.add_service(AzureChatCompletion())
     ```
 
 1. Create an Azure assistant agent with the following code:
@@ -98,14 +100,17 @@ Now you're ready to create your agent! In this exercise, you'll build an inciden
 
     ```python
         instructions="""
-            Read the given log file. Determine which one of the following actions should be taken:
-            Restart service
-            Rollback transaction
-            Redeploy resource
-            Increase quota
-            No action needed
-            Escalate issue
-            Keep any resoning or explanations very brief.
+            Analyze the given log file. Recommend which one of the following actions should be taken:
+            {logfilepath} | Restart service {service_name}
+            {logfilepath} | Rollback transaction
+            {logfilepath} | Redeploy resource {resource_name}
+            {logfilepath} | Increase quota
+            If there are no issues, respond with "{logfilepath} | No action needed."
+            If none of the options resolve the issue, respond with "{logfilepath} | Escalate issue"
+
+            RULES:
+            - Only respond with the corrective action.
+            - Do not perform any of the actions yourself.
             """
     ```
 
@@ -156,20 +161,24 @@ Now you're ready to create your agent! In this exercise, you'll build an inciden
     ```python
     async def main():
         kernel = Kernel()
+        kernel.add_service(AzureChatCompletion())
 
         incident_agent = await AzureAssistantAgent.create(
             kernel=kernel,
             name="INCIDENT_AGENT",
             description="An AI assistant that reads log files and recommends corrective actions.",
             instructions="""
-                Read the given log file. Determine which one of the following actions should be taken:
-                Restart service
-                Rollback transaction
-                Redeploy resource
-                Increase quota
-                No action needed
-                Escalate issue
-                Keep any resoning or explanations very brief.
+                Analyze the given log file. Recommend which one of the following actions should be taken:
+                {logfilepath} | Restart service {service_name}
+                {logfilepath} | Rollback transaction
+                {logfilepath} | Redeploy resource {resource_name}
+                {logfilepath} | Increase quota
+                If there are no issues, respond with "{logfilepath} | No action needed."
+                If none of the options resolve the issue, respond with "{logfilepath} | Escalate issue"
+
+                RULES:
+                - Only respond with the corrective action.
+                - Do not perform any of the actions yourself.
                 """
         )
 
@@ -266,9 +275,12 @@ In this exercise, you'll introduce a second agent to the chat. This devops agent
         name="DEVOPS_AGENT",
         description="An AI assistant that invokes service functions.",
         instructions="""
-            Analyze the resolution instructions from the incident manager.
-            If there are no issues, do nothing.
-            Otherwise, apply the appropriate resolution function.
+            Apply the resolution instructions from the incident manager. 
+            If there are no issues, respond with "No action needed."
+
+            RULES:
+            - Use the instructions provided.
+            - Do not read any log files yourself.
             """
     )
     ```
@@ -288,7 +300,6 @@ In this exercise, you'll introduce a second agent to the chat. This devops agent
         termination_strategy=KernelFunctionTerminationStrategy(
             agents=[incident_agent],
             kernel=kernel,
-            result_parser=lambda result: "No action needed" in str(result.value[0]).lower(),
             automatic_reset=True
         ),
     )
@@ -298,16 +309,53 @@ In this exercise, you'll introduce a second agent to the chat. This devops agent
 
     Note that the automatic reset flag will automatically clear the chat when it ends. This way, the agent can continue analyzing the files without the chat history object using too many unnecessary tokens. 
 
-1. Now let's define a termination function that will let the AI know when to end the current chat thread.
+    Now let's define a termination function that will let the AI know when to end the current chat thread.
+
+1. Enter the following code above the agent group chat object:
 
     ```python
-    TODO
+    termination_keyword = "yes"
+    termination_function = KernelFunctionFromPrompt(
+        function_name="termination", 
+        prompt=f"""
+        Examine the RESPONSE and determine whether there is no action needed.
+        If no action is needed, respond with a single word without explanation: {termination_keyword}.
+        Otherwise, respond with: no
+
+        RESPONSE:
+        {{{{$lastmessage}}}}
+        """
+    )
     ```
 
-1. Add the termination function flag to the agent group chat definition:
+1. Add the termination flags to the agent group chat definition:
 
     ```python
-    TODO
+    chat = AgentGroupChat(
+        agents=[incident_agent, devops_agent],
+        termination_strategy=KernelFunctionTerminationStrategy(
+            agents=[incident_agent],
+            function=termination_function,
+            kernel=kernel,
+            result_parser=lambda result: termination_keyword in str(result.value[0]).lower(),
+            history_variable_name="lastmessage",
+            automatic_reset=True,
+        ),
+    )
+    ```
+
+    Next, let's add a selection strategy so the AI can allow the two agents to take turns.
+
+1. Add the following code below your termination strategy function, above the agent group chat object:
+
+    ```python
+    #TODO
+    ```
+
+1. Now add the selection strategy function to the agent group chat definition:
+
+    ```python
+    #TODO
     ```
 
 1. Remove the `try`-`finally` code block you added in the previous task.
@@ -331,14 +379,50 @@ In this exercise, you'll introduce a second agent to the chat. This devops agent
 
     Now you're ready to run the code and watch the agents collaborate!
 
+## Check your work
+
+In this exercise, you'll run your code and verify that your agent collaboraton is working as expected.
+
+1. Review your `main` method to check that it is similar to the following:
+
+    ```python
+    TODO
+    ```
+
 1. In the terminal, enter `python agent_chat.py`
 
     You should see some output similar to the following:
 
-## Check your work
+    ```output
+    # INCIDENT_AGENT:
+    sample_logs/log1.log | Restart service ServiceX
 
-    TODO:
+    # DEVOPS_AGENT:
+    The service ServiceX has been restarted successfully.
 
-    Verify that the log files are updated with resolution operation messages from the DevopsManager.
+    # INCIDENT_AGENT:
+    sample_logs/log1.log | INCIDENT_AGENT: No action needed.
+
+    # INCIDENT_AGENT:
+    sample_logs/log2.log | Increase quota.
+
+    # DEVOPS_AGENT:
+    The quota has been successfully increased.
+
+    # INCIDENT_AGENT:
+    sample_logs/log2.log | INCIDENT_AGENT: No action needed.
+
+    (continued)
+    ```
+
+1. Verify that the log files are updated with resolution operation messages from the DevopsManager.
+
+    For example, log1.log should have the following log messages appended:
+
+    ```log
+    [2025-02-27 12:43:38] ALERT  DevopsManager: Multiple failures detected in ServiceX. Restarting service.
+    [2025-02-27 12:43:38] INFO  ServiceX: Restart initiated.
+    [2025-02-27 12:43:38] INFO  ServiceX: Service restarted successfully.
+    ```
 
 Now you've successfully created AI incident and devops agents that can automatically detect issues and apply resolutions. Great work!
