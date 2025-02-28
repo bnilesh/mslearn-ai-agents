@@ -1,10 +1,10 @@
 ---
 lab:
-    title: 'Build an AI agent'
+    title: 'Create an AI agent'
     description: 'Learn how to use the Azure AI Agent Service to build an agent that uses built-in tools.'
 ---
 
-# Build an AI agent
+# Create an AI agent
 
 In this exercise you will explore using built-in tools in Azure AI Foundry to connect to knowledge sources and interpret code. Then, you'll develop a basic agent in Python or C# (C# coming soon).
 
