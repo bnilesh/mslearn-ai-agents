@@ -1,7 +1,7 @@
 ---
 lab:
-    title: 'Agent Custom Functions'
+    title: 'Implement custom tools in an AI agent'
     description: 'TODO.'
 ---
 
-# TODO
+# Implement custom tools in an AI agent
