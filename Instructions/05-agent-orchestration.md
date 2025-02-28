@@ -1,10 +1,10 @@
 ---
 lab:
-    title: 'Agent Orchestration'
+    title: 'Develop a multi-agent solution'
     description: 'Learn to configure mutliple agents to collaborate using the Semantic Kernel SDK'
 ---
 
-# Agent Orchestration
+# Develop a multi-agent solution
 
 In this exercise you'll create a project that orchestrates two AI agents using the Semantic Kernel SDK. The Incident Manager agent will analyze service log files for issues. If an issue is found, the Incident Manager will recommend a resolution action. The Devops Agent will receive the recommendation from the Incident Manager and invoke the corrective function to perform the resolution. The Incident Manager agent will review the updated logs to make sure the resolution is successful. For the sake of this exercise, four sample log files are provided. The Devops Agent code only updates the sample log files with some example log messages.
 
