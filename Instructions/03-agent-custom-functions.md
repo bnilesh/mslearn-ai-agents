@@ -57,12 +57,11 @@ Let's start by creating an Azure AI Foundry project.
 
 In this section of the exercise you create the Azure Function App, the Azure Storage account used by the Function App, and a user-assigned managed identity. You created these in the Azure Cloud Shell using Azure CLI commands. The managed identity provides the authentication between the various resources in Azure.
 
->Tip: Keep the cloud shell open until you complete this section. If you close the cloud shell you may lose the variables you set in the next section.
-
-### Launch the cloud shell and set variables used in the CLI commands
+### Launch the cloud shell and create the resources
 
 1. Open the [Azure Portal](https://portal.azure.com) in a browser and launch the cloud shell. Select **bash** for the shell version.
-1. Set variables used by the commands with the following commands. Replace `<myLocation>` and `<my-resource-group>` with the same values you used when creating the AI Foundry project earlier. **Note:** The `rndId` variable is used to help with unique services names.
+
+1. Set variables used by the commands with the following commands. Replace `<myLocation>` and `<my-resource-group>` with the same values you used when creating the AI Foundry project earlier. **Note:** The `rndId` variable is used to help with unique service names.
 
     ```bash
     let "rndId=$RANDOM"
@@ -73,11 +72,10 @@ In this section of the exercise you create the Azure Function App, the Azure Sto
     skuStorage="Standard_LRS"
     functionsVersion="4"
     pythonVersion="3.11" 
+    managedIdentity="id-functool$rndId"
     ```
 
-### Create the Azure Function App and associated storage
-
-1. Run the following command to create a storage account for the Azure Function App.
+1. Create a storage account for the Azure Function App with the `az storage account create` command.
 
     ```bash
     echo "Creating $storage"
@@ -85,7 +83,7 @@ In this section of the exercise you create the Azure Function App, the Azure Sto
         --resource-group $resourceGroup --sku $skuStorage
     ```
 
-1. Run the following command to create the Azure Function App.
+1. Create the Azure Function App with the `az functionapp create` command.
 
     ```bash
     # Create a serverless python function app in the resource group.
@@ -96,4 +94,8 @@ In this section of the exercise you create the Azure Function App, the Azure Sto
         --functions-version $functionsVersion
     ```
 
+1. Create the user-assigned managed identity with the `az identity create` command.
 
+    ```bash
+    az identity create --resource-group $resourceGroup  --name $managedIdentity
+    ```
