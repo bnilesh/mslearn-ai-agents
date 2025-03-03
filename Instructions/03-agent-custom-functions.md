@@ -26,6 +26,7 @@ To complete this exercise, you'll need:
 * [Python](https://www.python.org/downloads/) installed on your machine. 
 * An Azure subscription. If you don't already have one, you can [sign up for one](https://azure.microsoft.com/).
 * [Visual Studio Code](https://code.visualstudio.com/Download) installed.
+    * The [Azure Functions extension](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurefunctions) recommended.
 
 ## Create an Azure AI Foundry project
 
