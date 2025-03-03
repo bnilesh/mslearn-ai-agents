@@ -59,7 +59,7 @@ In this section of the exercise you create the Azure Function App, the Azure Sto
 
 ### Launch the cloud shell and create the resources
 
-1. Open the [Azure Portal](https://portal.azure.com) in a browser and launch the cloud shell. Select **bash** for the shell version.
+1. Open the [Azure portal](https://portal.azure.com) in a browser and launch the cloud shell. Select **bash** for the shell version.
 
 1. Set variables used by the commands with the following commands. Replace `<myLocation>` and `<my-resource-group>` with the same values you used when creating the AI Foundry project earlier. **Note:** The `rndId` variable is used to help with unique service names.
 
@@ -83,6 +83,13 @@ In this section of the exercise you create the Azure Function App, the Azure Sto
         --resource-group $resourceGroup --sku $skuStorage
     ```
 
+1. Create input and output queues in the storage account with the `az storage queue create` command.
+
+    ```bash
+    az storage queue create -n input --account-name $storage
+    az storage queue create -n output --account-name $storage
+    ```
+
 1. Create the Azure Function App with the `az functionapp create` command.
 
     ```bash
@@ -94,8 +101,57 @@ In this section of the exercise you create the Azure Function App, the Azure Sto
         --functions-version $functionsVersion
     ```
 
+1. Create an environment variable in your function app that contains the queue service URI.
+
+    ```bash
+    az functionapp config appsettings set --name $functionApp  \
+        --resource-group $resourceGroup \ 
+        --settings  STORAGE_CONNECTION__queueServiceUri=$storage".queue.core.windows.net"
+    ```
+
 1. Create the user-assigned managed identity with the `az identity create` command.
 
     ```bash
     az identity create --resource-group $resourceGroup  --name $managedIdentity
     ```
+
+## Configure identity
+
+You need to assign roles to the managed identity, and also set the identity of the function app. 
+
+### Configure the managed identity
+
+You need to assign two [verify] roles to the managed identity to give the AI project permission to interact with the Azure Function app.
+
+1. In the Azure portal, navigate to the managed identity you created earlier (for example, "*id-functool...*").
+1. Select **+ Add role assignment (Preview)**, then make the following selections in the window, and then select **Save**.
+
+    | Setting | Action |
+    |--|--|
+    | Scope | Select **Resource group** in the drop-down list. |
+    | Subscription | Verify you are targeting the correct subscription. |
+    | Resource group | Select the resource group you created earlier in this exercise. |
+    | Role | Select **Azure AI Administrator** in the drop-down list. |
+
+1. Select **+ Add role assignment (Preview)**, then make the following selections in the window, and then select **Save**.
+
+    | Setting | Action |
+    |--|--|
+    | Scope | Select **Storage** in the drop-down list. |
+    | Subscription | Verify you are targeting the correct subscription. |
+    | Resource | Select the storage account in the drop-down list you created for the function app earlier in this exercise. (For example, "*staifunctool...*".) |
+    | Role | Select **Storage Queue Data Contributor** in the drop-down list. |
+
+The two [verify] roles will appear as assignments.
+
+### Configure the function app identity
+
+You need to configure the function app as a resource of the managed identity. 
+
+1. In the Azure portal, navigate to the function app you created earlier (for example, "*aifunctool...*").
+1. Expand the **Settings** section in the navigation pane, then select **Identity**.
+1. Select **User assigned** in the main window, and then select **+ Add**. 
+1. In the **Add user assigned managed identity** pane, select the managed identity you created earlier, and then select **Add**.
+
+## Finally start something with code
+
