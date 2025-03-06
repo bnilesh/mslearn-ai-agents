@@ -56,7 +56,9 @@ Let's start by creating an Azure AI Foundry project.
 
 1. In the VS Code Explorer (left pane), right-click on the **Labfiles/05-agent-orchestration/Python** folder and select **Open in Integrated Terminal**.
 
-1. In the terminal, enter `pip install semantic-kernel==1.22.1` to install the project dependencies.
+1. In the terminal, enter the following command to install the project dependencies:
+
+    `pip install python-dotenv azure-identity azure-ai-projects azure-ai-inference semantic-kernel==1.22.1`
 
 1. In the VS Code Explorer (left pane), open the **.env** Python configuration file.
 
