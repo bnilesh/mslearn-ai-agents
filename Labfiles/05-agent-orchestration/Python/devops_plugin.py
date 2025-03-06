@@ -2,7 +2,7 @@ import textwrap
 from datetime import datetime
 from semantic_kernel.functions.kernel_function_decorator import kernel_function
 
-class devops_plugin:
+class DevopsPlugin:
     """A plugin that performs developer operation tasks."""
     
     def append_to_log_file(self, filepath: str, content: str) -> None:
@@ -12,7 +12,7 @@ class devops_plugin:
     @kernel_function(description="A function that restarts the provided service")
     def restart_service(self, service_name: str = "", logfile: str = "") -> str:
         log_entries = [
-            f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] ALERT  DevopsManager: Multiple failures detected in {service_name}. Restarting service.",
+            f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] ALERT  DevopsAssistant: Multiple failures detected in {service_name}. Restarting service.",
             f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] INFO  {service_name}: Restart initiated.",
             f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] INFO  {service_name}: Service restarted successfully."
         ]
@@ -25,7 +25,7 @@ class devops_plugin:
     @kernel_function(description="")
     def rollback_transaction(self, logfile: str = "") -> str:
         log_entries = [
-            f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] ALERT  DevopsManager: Transaction failure detected. Rolling back transaction batch.",
+            f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] ALERT  DevopsAssistant: Transaction failure detected. Rolling back transaction batch.",
             f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] INFO   TransactionProcessor: Rolling back transaction batch.",
             f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] INFO   Transaction rollback completed successfully."
         ]
@@ -38,7 +38,7 @@ class devops_plugin:
     @kernel_function(description="")
     def redeploy_resource(self, resource_name: str = "", logfile: str = "") -> str:
         log_entries = [
-            f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] ALERT  DevopsManager: Resource deployment failure detected in '{resource_name}'. Redeploying resource."
+            f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] ALERT  DevopsAssistant: Resource deployment failure detected in '{resource_name}'. Redeploying resource."
             f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] INFO   DeploymentManager: Redeployment request submitted."
             f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] INFO   DeploymentManager: Service successfully redeployed, resource '{resource_name}' created successfully."
         ]
@@ -51,7 +51,7 @@ class devops_plugin:
     @kernel_function(description="")
     def increase_quota(self, logfile: str = "") -> str:
         log_entries = [
-            f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] ALERT  DevopsManager: High request volume detected. Increasing quota."
+            f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] ALERT  DevopsAssistant: High request volume detected. Increasing quota."
             f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] INFO   APIManager: Quota increase request submitted."
             f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] INFO   APIManager: Quota successfully increased to 150% of previous limit."
         ]
@@ -64,8 +64,8 @@ class devops_plugin:
     @kernel_function(description="")
     def escalate_issue(self, logfile: str = "") -> str:
         log_entries = [
-            f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] ALERT  DevopsManager: Cannot resolve issue."
-            f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] ALERT  DevopsManager: Requesting escalation."
+            f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] ALERT  DevopsAssistant: Cannot resolve issue."
+            f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] ALERT  DevopsAssistant: Requesting escalation."
         ]
         
         log_message = "\n".join(log_entries)
