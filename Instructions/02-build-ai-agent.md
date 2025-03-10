@@ -223,6 +223,8 @@ Now that you've seen how agents work and how they can accomplish tasks on your b
    python basic-agent.py
     ```
 
+> **Note**: If the script returns the error `AzureCliCredential.get_token_info failed: Failed to invoke the Azure CLI`, run the command `az login` and authenticate your connection before running the app again.
+
 1. Observe the output, which will display the agent's text response and download the image file. Open that file with the following command, and you'll see your agent has created a graphical chart with movie revenues:
 
     ```
