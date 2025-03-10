@@ -14,8 +14,6 @@ This exercise should take approximately **30** minutes to complete.
 
 To complete this exercise, you'll need:
 
-- [Visual Studio Code](https://code.visualstudio.com/Download?azure-portal=true) installed.
-- [Python](https://www.python.org/downloads/?azure-portal=true) installed on your machine.
 - An Azure subscription. If you don't already have one, you can [sign up for one](https://azure.microsoft.com/?azure-portal=true).
 
 ## Create an Azure AI Foundry project
