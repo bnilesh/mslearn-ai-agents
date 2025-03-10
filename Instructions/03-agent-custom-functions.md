@@ -22,8 +22,7 @@ To complete this exercise, you'll need:
 
 * [Python](https://www.python.org/downloads/) installed on your machine. Version 3.11 or greater recommended.
 * An Azure subscription. If you don't already have one, you can [sign up for one](https://azure.microsoft.com/).
-* [Visual Studio Code](https://code.visualstudio.com/Download) installed.
-    * The [Python extension](https://marketplace.visualstudio.com/items?itemName=ms-python.python) recommended.
+* [Visual Studio Code](https://code.visualstudio.com/Download) installed. The [Python extension](https://marketplace.visualstudio.com/items?itemName=ms-python.python) is recommended.
 * [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) installed on your machine.
 * An Azure subscription. If you don't already have one, you can [sign up for one](https://azure.microsoft.com/)
 * The [Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli) installed locally. 
@@ -63,11 +62,11 @@ Let's start by creating an Azure AI Foundry project.
 
 ## Develop an agent with function tools
 
-Now that you've created your project in AI Foundry, let's develop an app that implements an agent using the same built-in tools.
+Now that you've created your project in AI Foundry, let's develop an app that implements an agent using custom function tools.
 
 ### Prepare the application configuration
 
-Now that your AI project is fully deployed and ready, let's download the code and configure the application.
+Let's download the code and configure the application.
 
 1. In the Azure AI Foundry portal, view the **Overview** page for your project.
 1. In the **Project details** area, note the **Project connection string**. You'll use this connection string to connect to your project in a client application.
