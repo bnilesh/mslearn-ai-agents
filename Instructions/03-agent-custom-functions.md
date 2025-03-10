@@ -11,7 +11,7 @@ In this exercise you will explore enhancing your Agents by defining callback fun
 Tasks performed in this exercise:
 
 * Create an Azure AI Foundry project and deploy a model
-* Develop an agent with function tools
+* Develop an agent that uses function tools
 * Clean up resources
 
 This exercise should take approximately **30** minutes to complete.
@@ -60,7 +60,7 @@ Let's start by creating an Azure AI Foundry project.
 
 1. Select **Deploy** to deploy the model to your project.
 
-## Develop an agent with function tools
+## Develop an agent that uses function tools
 
 Now that you've created your project in AI Foundry, let's develop an app that implements an agent using custom function tools.
 
