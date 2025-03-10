@@ -124,7 +124,7 @@ Now that you've configured the app, you'll add the necessary code to build an ag
 
 Now that the `FunctionTool` is defined, you need to add code to monitor the agent run status and handle the function calls.
 
-1. Add the following code in the `# Monitor and process the run status, and handle the function calls` section to create the definition and add it to `FunctionTool`.
+1. Add the following code in the `# Monitor and process the run status, and handle the function calls` section to monitor the agent and invoke the `FunctionTool` when needed.
 
     ```python
     while run.status in ["queued", "in_progress", "requires_action"]:
