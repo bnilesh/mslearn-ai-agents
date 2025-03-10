@@ -223,7 +223,12 @@ Now that you've seen how agents work and how they can accomplish tasks on your b
    python basic-agent.py
     ```
 
-1. Observe the output, which will display the agent's text response and download the image file. Open that file, and you'll see your agent has created a graphical chart with movie revenues.
+1. Observe the output, which will display the agent's text response and download the image file. Open that file with the following command, and you'll see your agent has created a graphical chart with movie revenues:
+
+    ```
+   download ./<your_image_filename>
+    ```
+    
 1. Feel free to edit the message content to try other questions, such as popular movies from other years or certain genres.
 
 ## Clean up
