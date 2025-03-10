@@ -16,7 +16,7 @@ To complete this exercise, you'll need:
 
 - An Azure subscription. If you don't already have one, you can [sign up for one](https://azure.microsoft.com/?azure-portal=true).
 
-## Create an Azure AI Foundry project
+## Create an Azure AI Foundry project and deploy a model
 
 Let's start by creating an Azure AI Foundry project.
 
@@ -35,6 +35,14 @@ Let's start by creating an Azure AI Foundry project.
     > \* Model quotas are constrained at the tenant level by regional quotas. In the event of a quota limit being reached later in the exercise, there's a possibility you may need to create another project in a different region.
 
 1. Select **Next** and review your configuration. Then select **Create** and wait for the process to complete.
+1. Once complete, in the **My assets** section, select **Models + endpoints** and deploy a **gpt-4** base model with the following settings:
+    - **Deployment name**: *A unique name for your model deployment - for example `gpt-4-model`*
+    - **Deployment type**: Global Standard
+    - **Model version**: turbo-2024-04-09
+    - **Connected AI resource**: *Select your Azure OpenAI resource connection*
+    - **Tokens per Minute Rate Limit (thousands)**: 5k
+    - **Content filter**: DefaultV2
+1. Select **Deploy** and wait for the deployment to complete.
 
 ## Create an AI agent
 
@@ -42,14 +50,7 @@ Now you're ready to create your agent.
 
 1. In the pane on the left for your project, in the **Build and customize** section, select the **Agents** page.
 1. If prompted to select an Azure OpenAI Service resource, select the one created with your hub name used above.
-1. If you haven't deployed a model in your hub, you'll see a **Deploy a model** wizard come up. Select a **gpt-4** model and deploy it with the following settings:
-    - **Deployment name**: *A unique name for your model deployment - for example `gpt-4-model`*
-    - **Deployment type**: Global Standard
-    - **Model version**: turbo-2024-04-09
-    - **Connected AI resource**: *Select your Azure OpenAI resource connection*
-    - **Tokens per Minute Rate Limit (thousands)**: 50k
-    - **Content filter**: DefaultV2
-      
+1. Select the **gpt-4** model you deployed above.      
 1. Wait for the agents list to load, where you'll see a new agent created with a default name. Select it, and change the **Agent name** to **MovieTrendAgent**.
 
 ## Integrate built-in tools
