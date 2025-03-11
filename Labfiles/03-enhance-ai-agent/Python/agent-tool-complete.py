@@ -21,6 +21,7 @@ def add_disclaimer(email: str) -> str:
     disclaimer = "\n\nThis is an automated email. Please do not reply."
     return email + disclaimer
 
+# Add the disclaimer function to the toolset
 functions = FunctionTool({add_disclaimer})
 
 # Function to initialize the Azure Project Client
