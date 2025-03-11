@@ -18,14 +18,18 @@ load_dotenv()
 # Function to initialize the Azure Project Client
 def initialize_client():
     # Ensure environment variables are loaded
-    project_conn_str = os.getenv("PROJECT_CONNECTION_STRING")
+    project_conn_str = os.getenv("PROJECT_CONNECTION")
     
     if not project_conn_str:
-        raise ValueError("Environment variable PROJECT_CONNECTION_STRING must be set")
+        raise ValueError("Environment variable PROJECT_CONNECTION must be set")
         
-    # Create a project client using the connection string
+    # Create a project client using the project connection string
+    # Use DefaultAzureCredential to authenticate the client
     project_client = AIProjectClient.from_connection_string(
-        credential=DefaultAzureCredential(exclude_environment_credential=True, exclude_managed_identity_credential=True),
+        credential=DefaultAzureCredential(
+            exclude_environment_credential=True, 
+            exclude_managed_identity_credential=True 
+        ),
         conn_str=project_conn_str
     )
     print("Project client created:")
@@ -66,6 +70,7 @@ print(f"Created message, message ID: {message.id}")
 run = project_client.agents.create_run(thread_id=thread.id, assistant_id=agent.id)
 
 # Monitor and process the run status, and handle the function calls
+
 
 
 
