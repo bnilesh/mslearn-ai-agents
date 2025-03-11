@@ -14,27 +14,53 @@ load_dotenv()
 def add_disclaimer(email: str) -> str:
     """
     Adds a disclaimer to the email content.
-    :param email (str): The email content.
-    :return: Email content with disclaimer.
-    :rtype: str
+    
+    # Function Purpose:
+    This function appends a standard disclaimer text to any email content.
+    It's used as a tool by the AI agent to process emails before sending.
+    
+    # Parameters Explained:
+    :param email (str): The email content provided by the AI agent.
+                        This is the complete text of the email that needs a disclaimer.
+    
+    # Return Value:
+    :return: The original email with the disclaimer added at the end.
+    :rtype: str (a string containing the modified email)
+    
+    # How It Works:
+    1. The function receives the email content as a string
+    2. It concatenates (joins) the original email with the disclaimer
+    3. It returns the complete email including the disclaimer
+    
+    # Usage in AI Context:
+    When the AI needs to generate an email, it will call this function
+    and pass the email content as an argument. The function returns the
+    modified email which the agent can then present to the user.
     """
+    # Define the disclaimer with newlines for spacing
     disclaimer = "\n\nThis is an automated email. Please do not reply."
+    
+    # Concatenate the original email with the disclaimer and return
     return email + disclaimer
 
-# Add the disclaimer function to the toolset
+# Register our Python function as a tool that the AI can use
 functions = FunctionTool({add_disclaimer})
 
 # Function to initialize the Azure Project Client
 def initialize_client():
     # Ensure environment variables are loaded
-    project_conn_str = os.getenv("PROJECT_CONNECTION_STRING")
+    project_conn_str = os.getenv("PROJECT_CONNECTION")
     
     if not project_conn_str:
-        raise ValueError("Environment variable PROJECT_CONNECTION_STRING must be set")
+        raise ValueError("Environment variable PROJECT_CONNECTION must be set")
         
-    # Create a project client using the connection string
+    # Create a project client using the project connection string
+    # Use DefaultAzureCredential to authenticate the client
     project_client = AIProjectClient.from_connection_string(
-        credential=DefaultAzureCredential(exclude_environment_credential=True, exclude_managed_identity_credential=True),
+        credential=DefaultAzureCredential(
+            exclude_environment_credential=True, 
+            exclude_managed_identity_credential=True 
+        ),
         conn_str=project_conn_str
     )
     print("Project client created:")
@@ -75,33 +101,46 @@ print(f"Created message, message ID: {message.id}")
 run = project_client.agents.create_run(thread_id=thread.id, assistant_id=agent.id)
 
 # Monitor and process the run status, and handle the function calls
+# This loop keeps checking the agent's status until the interaction is complete
 while run.status in ["queued", "in_progress", "requires_action"]:
+    # Sleep briefly to prevent excessive API calls
     time.sleep(1)
+    
+    # Get the latest status of the run - this polls the agent to see what state it's in
     run = project_client.agents.get_run(thread_id=thread.id, run_id=run.id)
 
-    # Handle required actions (function calls)
+    # If the agent needs to execute a tool/function, we need to handle that request
+    # "requires_action" means the AI needs us to run a function and give it the results
     if run.status == "requires_action" and run.required_action.type == "submit_tool_outputs":
         print("Tool execution required")
-        tool_calls = run.required_action.submit_tool_outputs.tool_calls
-        tool_outputs = []
         
-        # Process each tool call
+        # Extract the list of tool calls the AI wants us to perform
+        # A single response might require multiple function calls
+        tool_calls = run.required_action.submit_tool_outputs.tool_calls
+        tool_outputs = []  # We'll collect all function results here
+        
+        # Process each function call request from the AI
         for tool_call in tool_calls:
+            # Get the name of the function to call and its arguments
             function_name = tool_call.function.name
             function_args = json.loads(tool_call.function.arguments)
             
             print(f"Executing function: {function_name}.")
             
-            # Execute the appropriate function
+            # Execute the requested function with its arguments
+            # In this case we only have one function, but you could have multiple
             if function_name == "add_disclaimer":
                 email = function_args.get("email")
                 output = add_disclaimer(email)
+                
+                # Store both the function result and which function call it belongs to
+                # The tool_call_id links the result back to the specific request
                 tool_outputs.append({
                     "tool_call_id": tool_call.id,
                     "output": output
                 })
         
-        # Submit the outputs back to the agent
+        # Send all the function results back to the AI agent so it can continue
         print(f"Submitting tool outputs: {tool_outputs}")
         run = project_client.agents.submit_tool_outputs_to_run(
             thread_id=thread.id,
@@ -109,6 +148,8 @@ while run.status in ["queued", "in_progress", "requires_action"]:
             tool_outputs=tool_outputs
         )
     
+    # Exit the loop if the run is no longer active
+    # This happens when processing is complete or failed
     if run.status not in ["queued", "in_progress", "requires_action"]:
         break
 
