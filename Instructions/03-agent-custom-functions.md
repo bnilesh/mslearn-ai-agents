@@ -6,7 +6,7 @@ lab:
 
 # Implement custom tools in an AI agent
 
-In this exercise you will explore enhancing your Agents by defining callback functions as function tools.
+In this exercise you will explore creating an agent with a function call.
 
 Tasks performed in this exercise:
 
@@ -20,12 +20,7 @@ This exercise should take approximately **30** minutes to complete.
 
 To complete this exercise, you'll need:
 
-* [Python](https://www.python.org/downloads/) installed on your machine. Version 3.11 or greater recommended.
 * An Azure subscription. If you don't already have one, you can [sign up for one](https://azure.microsoft.com/).
-* [Visual Studio Code](https://code.visualstudio.com/Download) installed. The [Python extension](https://marketplace.visualstudio.com/items?itemName=ms-python.python) is recommended.
-* [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) installed on your machine.
-* An Azure subscription. If you don't already have one, you can [sign up for one](https://azure.microsoft.com/)
-* The [Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli) installed locally. 
 
 ## Create an Azure AI Foundry project
 
@@ -34,16 +29,23 @@ Let's start by creating an Azure AI Foundry project.
 1. In a web browser, open the [Azure AI Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that might open.
 1. In the home page, select **+ Create project**.
 1. In the **Create a project** wizard, enter project name or accept the name provided.
-1. If you don't have a hub yet created, you'll see the new hub name and can expand the section below to review the Azure resources that will be automatically created to support your project. If you are reusing a hub, skip the following step.
-1. Select **Customize** and specify the following settings for your hub:
+
+1. If you don't have a hub yet created, you'll see the new suggested unique hub name with *(new)* to the left of the name. Select **Customize** to expand the section, and then use the settings in the following step. 
+
+    If you have already created a hub for another project, you need to create a new one. Select the drop down to the right of the hub name and select **Create a new hub** and it will suggest a new unique name. Then select **Customize** to expand the section, and then use the settings in the following step. 
+
+    ![Screenshot showing the Create a new hub selection in the Hub drop down menu.](./Media/ai-agent-create-hub.png)
+
+1. The following table shows the settings you should use after selecting  **Customize** in the previous step.:
 
     | Setting | Value |
     |--|--|
-    | Hub name | You can accept the provided name, or enter your own unique name - for example `my-ai-hub`. |  |
-    | Subscription | Your Azure subscription. |
-    | Resource group | Create a new resource group with a unique name (for example, `my-ai-resources`). |
+    | Hub name | Accept the suggested unique name. |
+    | Subscription | Accept the default subscription for the account you used to sign in to AI Founcry, or select another subscription. |
+    | Resource group | Accept the suggested new group, or create a with a unique name (for example, `my-ai-resources`) you choose. |
     | Location | Select **Help me choose** and then select **gpt-4** in the Location helper window and use the recommended region. |
-    | Connect Azure AI Services or Azure OpenAI | Create a new AI Services resource with an appropriate name (for example, `my-ai-services`) or use an existing one.
+    | Connect Azure AI Services or Azure OpenAI | No changes to this value.|
+    | Connect Azure AI Search | No changes to this value.
 
     >**Note:** Model quotas are constrained at the tenant level by regional quotas. In the event of a quota limit being reached later in the exercise, there's a possibility you may need to create another project in a different region.
 
@@ -54,57 +56,86 @@ Let's start by creating an Azure AI Foundry project.
 1. After the deployment process completes, add a model to your project by selecting **Models + endpoints** in the **My assets** section of the navigation pane.
 1. Select the **+ Deploy model**  drop down, and then select **Deploy base model**.
 1. Select **gpt-4** from the list of available models, and then select **Confirm**. 
-1. In the **Deploy model gpt-4** screen, select **Standard** in the drop-down box under **Deployment type**. Verify the **Model version** is set to *0613 (Default)*. Do not change any other values.
+1. Select **Customize** in the deployment details and use the settings in the following table.
 
-    ![Screenshot showing the selection of the Standard Deployment type.](./Media/ai-project-model-deployment-type.png)
+    | Setting | Value |
+    |--|--|
+    | Deployment name | Leave the value as *gpt-4*. |
+    | Deployment type | Select **Standard** from the drop down menu. |
+    | Model version | The default version should be selected for you. If not, select the version with *(Default)* at the end of the version name. |
+    | Connected AI resource | No changes |
+    | Tokens per Minute Rate Limit | Adjust the slider to a value of **5K**. |
+    | Content filter | Ensure **DefaultV2** is selected. |
+    | Enable dynamic quota | Select **Disabled**. |
 
-1. Select **Deploy** to deploy the model to your project.
+1. Select Deploy and wait for the deployment provisioning state to be **Completed**.
 
 ## Develop an agent that uses function tools
 
 Now that you've created your project in AI Foundry, let's develop an app that implements an agent using custom function tools.
 
-### Prepare the application configuration
+### Clone the repo containing the starter code
 
-Let's download the code and configure the application.
+1. Open a new browser tab (keeping the Azure AI Foundry portal open in the existing tab). Then in the new tab, browse to the [Azure portal](https://portal.azure.com) at `https://portal.azure.com`; signing in with your Azure credentials if prompted.
+1. Use the **[\>_]** button to the right of the search bar at the top of the page to create a new Cloud Shell in the Azure portal, selecting a ***PowerShell*** environment. The cloud shell provides a command line interface in a pane at the bottom of the Azure portal.
 
-1. In the Azure AI Foundry portal, view the **Overview** page for your project.
-1. In the **Project details** area, note the **Project connection string**. You'll use this connection string to connect to your project in a client application.
-1. Open VS Code and **Clone** the `https://github.com/MicrosoftLearning/mslearn-ai-agents` repository.
-1. Store the clone on a local drive, and open the folder after cloning.
-1. In the VS Code Explorer (left pane), right-click on the **Labfiles/03-enhance-ai-agent/Python** folder and select **Open in Integrated Terminal**.
-1. Run the following command in the terminal to create a virtual environment for the project. This ensures your project is using the correct libraries.
+    > **Note**: If you have previously created a cloud shell that uses a *Bash* environment, switch it to ***PowerShell***.
 
-    ```bash
-    python -m venv .venv
+1. In the cloud shell toolbar, in the **Settings** menu, select **Go to Classic version** (this is required to use the code editor).
+1. In the PowerShell pane, enter the following commands to clone the GitHub repo containing the code files for this exercise:
+
+    ```
+   rm -r ai-agents -f
+   git clone https://github.com/MicrosoftLearning/mslearn-ai-agents ai-agents
     ```
 
-1. Wait for the environment to be created, then run the following command in the terminal to activate the environment. After activation you should see a `(.venv)` indicator next to the command prompt.
+    > **Tip**: As you enter commands into the cloudshell, the ouput may take up a large amount of the screen buffer and the cursor on the current line may be obscured. You can clear the screen by entering the `cls` command to make it easier to focus on each task.
 
-    ```bash
-    .venv\Scripts\activate
+1. Enter the following command to change the working directory to the folder containing the code files and list them all.
+
+    ```
+   cd ai-agents/Labfiles/03-enhance-ai-agent/Python
+   ls -a -l
     ```
 
-1. The *requirements.txt* file in the project contains all of the required libraries. In the terminal, enter the following command to install the Python libraries you'll use, which are:
-    - **python-dotenv** : Used to load settings from an application configuration file.
-    - **azure-identity**: Used to authenticate with Entra ID credentials.
-    - **azure-ai-projects**: Used to work with an Azure AI Foundry project, version 1.0.0b6.
+    The provided files include application code and a file for configuration settings.
 
-    ```powershell
-    pip install -r requirements.txt
+### Configure the application settings
+
+1. In the cloud shell command line pane, enter the following command to install the libraries you'll use:
+
+    ```
+   pip install python-dotenv azure-identity azure-ai-projects==1.0.0b6
     ```
 
-1. In the VS Code Explorer (left pane), open the **.env** Python configuration file.
-1. Replace the **your_project_endpoint** placeholder with the connection string for your project (copied from the project **Overview** page in the Azure AI Foundry portal).
-1. After you've replaced the placeholders, save your changes.
+    >**Note:** You can ignore any warning or error messages displayed during the library installation.
+
+1. Enter the following command to edit the configuration file that has been provided:
+
+    ```
+   code .env
+    ```
+
+    The file is opened in a code editor.
+
+1. In the code file, replace the **your_project_connection_string** placeholder with the connection string for your project (copied from the project **Overview** page in the Azure AI Foundry portal).
+1. After you've replaced the placeholders, use the **CTRL+S** command to save your changes and then use the **CTRL+Q** command to close the code editor while keeping the cloud shell command line open.
+
+### Write code for an agent app
+
+> **Tip**: As you add code, be sure to maintain the correct indentation.
 
 ### Write code to connect to your project and chat with your model
 
-Now that you've configured the app, you'll add the necessary code to build an agent that uses a custom function. In Visual Studio Code, you'll need to sign into your Azure subscription. Run the with `az login` command in the terminal and login using the same account you used to create the AI Foundry project.
+Now that you've configured the app, you'll add the necessary code to build an agent that uses a custom function. 
 
-1. In the VS Code Explorer (left pane), open the **agent-tool-starter.py** code file.
-1. Review the included libraries, taking note of the *Azure AI Projects* libraries for the client and tools.
-1. Add the following code in the `# Define the function and toolset` section to create the definition and add it to `FunctionTool`. 
+1. Enter the following command to begin editing the code.
+
+    ```
+    code agent-tool-starter.py
+    ```
+
+1. Add the following code in the `# Define the function and toolset` section. This code defines a function and adds it to the toolset. The agent uses the function when asked to draft an email to a customer. The agent sends the email to the function, and the function returns the email with the added disclaimer at the end.
 
     ```python
     def add_disclaimer(email: str) -> str:
@@ -117,10 +148,9 @@ Now that you've configured the app, you'll add the necessary code to build an ag
         disclaimer = "\n\nThis is an automated email. Please do not reply."
         return email + disclaimer
     
+    # Add the disclaimer function to the toolset
     functions = FunctionTool({add_disclaimer})
     ```
-
-1. Save the file and review the code you just added. The function receives the email from the agent, appends the disclaimer to the email, and returns the result to the agent. 
 
 Now that the `FunctionTool` is defined, you need to add code to monitor the agent run status and handle the function calls.
 
@@ -165,15 +195,17 @@ Now that the `FunctionTool` is defined, you need to add code to monitor the agen
             break
     ```
 
-1. Save the changes, and review the code you just added.
+1. Review the code you just entered. The code monitors the call to the agent. The `run.status` changes to `requires_action` if the agent determines it needs to use the function tool to process the request.
 
-The code monitors the call to the agent. The `run.status` changes to `requires_action` if the agent determines it needs to use the function tool to process the request.
+    The code monitors the call to the agent. The `run.status` changes to `requires_action` if the agent determines it needs to use the function tool to process the request. Otherwise the agent processes the request 
+    
+    When it processes the request, the code:
 
-When it processes the request, the code:
+    * Retrieves the function names and required arguments from the defined tools.
+    * Determines which function to run and includes the arguments required by the function 
+    * Submits the output back to the agent
 
-* Retrieves the function names and required arguments from the defined tools.
-* Determines which function to run and includes the arguments required by the function 
-* Submits the output back to the agent
+1. Use the **CTRL+S** command to save the changes, and then **CTRL+Q** to exit the editor.
 
 ### Run the application
 
@@ -181,11 +213,13 @@ Now that the code is complete, it's time to run the application.
 
 1. Run the following command in the terminal to run the app.
 
-    ```bash
+    ```
     python agent-tool-starter.py
     ```
 
-1. When you are asked to enter a prompt, press **Enter** to accept the default prompt which will trigger the function. You should see output similar to the following example. **Note:** You can run the app again and enter your own prompt.
+1. When you are asked to enter a prompt, press **Enter** to accept the default prompt which will trigger the function. You should see output similar to the following example.
+
+    >**Note:** You can run the app again and enter your own prompt. If you don't ask the agent to create a customer email, it will run without being processed by the function.
 
     ```
     Last Message: Here is the final version of the email with the added disclaimer:
