@@ -34,7 +34,7 @@ def initialize_client():
         
     # Create a project client using the connection string
     project_client = AIProjectClient.from_connection_string(
-        credential=DefaultAzureCredential(),
+        credential=DefaultAzureCredential(exclude_environment_credential=True, exclude_managed_identity_credential=True),
         conn_str=project_conn_str
     )
     print("Project client created:")

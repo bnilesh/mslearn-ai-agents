@@ -207,11 +207,19 @@ Now that the `FunctionTool` is defined, you need to add code to monitor the agen
 
 1. Use the **CTRL+S** command to save the changes, and then **CTRL+Q** to exit the editor.
 
-### Run the application
+### Sign into Azure and run the app
 
 Now that the code is complete, it's time to run the application.
 
-1. Run the following command in the terminal to run the app.
+1. In the cloud shell command line pane, enter the following command to sign into Azure.
+
+    ```
+    az login
+    ```
+    
+1. When prompted, follow the instructions to open the sign-in page in a new tab and enter the authentication code provided and your Azure credentials. Then complete the sign in process in the command line, selecting the subscription containing your Azure AI Foundry hub if prompted.
+
+1. After you have signed in, enter the following command to run the application:
 
     ```
     python agent-tool-starter.py
