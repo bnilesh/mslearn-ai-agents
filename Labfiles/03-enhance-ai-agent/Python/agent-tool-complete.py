@@ -106,7 +106,7 @@ while True:
     )
 
     # Run the agent
-    run = project_client.agents.create_run(thread_id=thread.id, assistant_id=agent.id)
+    run = project_client.agents.create_run(thread_id=thread.id, agent_id=agent.id)
 
     # Monitor and process the run status, and handle the function calls
     
