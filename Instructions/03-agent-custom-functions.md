@@ -28,12 +28,18 @@ Let's start by creating an Azure AI Foundry project.
 
 1. In a web browser, open the [Azure AI Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that might open.
 1. In the home page, select **+ Create project**.
-1. In the **Create a project** wizard, enter a suitable project name for (for example, `my-ai-project`) and if an existing hub is suggested, choose the option to create a new one. Then review the Azure resources that will be automatically created to support your hub and project.
+1. In the **Create a project** wizard, enter a suitable project name (for example, `my-agent-project`).
+1. If you don't have a hub yet created, you'll see the new hub name and can expand the section below to review the Azure resources that will be automatically created to support your project. If you are reusing a hub, skip the following step.
 1. Select **Customize** and specify the following settings for your hub:
     - **Hub name**: *A unique name - for example `my-ai-hub`*
     - **Subscription**: *Your Azure subscription*
     - **Resource group**: *Create a new resource group with a unique name (for example, `my-ai-resources`), or select an existing one*
-    - **Location**: Select **Help me choose** and then select **gpt-4** in the Location helper window and use the recommended region\*
+    - **Location**: Select a region from the following:\*
+        - australiaeast
+        - eastus
+        - eastus2
+        - francecentral
+        - swedencentral
     - **Connect Azure AI Services or Azure OpenAI**: *Create a new AI Services resource with an appropriate name (for example, `my-ai-services`) or use an existing one*
     - **Connect Azure AI Search**: Skip connecting
 
@@ -56,7 +62,7 @@ Now you're ready to deploy a generative AI language model to support your agent.
 1. Deploy the model with the following settings by selecting **Customize** in the deployment details:
     - **Deployment name**: *A unique name for your model deployment - for example `gpt-4-model` (remember the name you choose - you'll need it later)*
     - **Deployment type**: Standard
-    - **Model version**: *Select the default version*
+    - **Model version**: 0613
     - **Connected AI resource**: *Select your Azure OpenAI resource connection*
     - **Tokens per Minute Rate Limit (thousands)**: 5K
     - **Content filter**: DefaultV2
@@ -175,6 +181,8 @@ Now that the `FunctionTool` is defined, you need to add code to monitor the agen
 
 1. Add the following code in the `# Monitor and process the run status, and handle the function calls` section to monitor the agent and invoke the `FunctionTool` when needed.
 
+    > **Tip**: As you add code, be sure to maintain the correct indentation.
+
     ```python
     # This loop keeps checking the agent's status until the interaction is complete
     while run.status in ["queued", "in_progress", "requires_action"]:
@@ -187,8 +195,7 @@ Now that the `FunctionTool` is defined, you need to add code to monitor the agen
         # If the agent needs to execute a tool/function, we need to handle that request
         # "requires_action" means the AI needs us to run a function and give it the results
         if run.status == "requires_action" and run.required_action.type == "submit_tool_outputs":
-            print("Tool execution required")
-            
+    
             # Extract the list of tool calls the AI wants us to perform
             # A single response might require multiple function calls
             tool_calls = run.required_action.submit_tool_outputs.tool_calls
@@ -200,7 +207,7 @@ Now that the `FunctionTool` is defined, you need to add code to monitor the agen
                 function_name = tool_call.function.name
                 function_args = json.loads(tool_call.function.arguments)
                 
-                print(f"Executing function: {function_name}.")
+                print(f"Executing function to add disclaimer.")
                 
                 # Execute the requested function with its arguments
                 # In this case we only have one function, but you could have multiple
@@ -216,7 +223,6 @@ Now that the `FunctionTool` is defined, you need to add code to monitor the agen
                     })
             
             # Send all the function results back to the AI agent so it can continue
-            print(f"Submitting tool outputs: {tool_outputs}")
             run = project_client.agents.submit_tool_outputs_to_run(
                 thread_id=thread.id,
                 run_id=run.id,
@@ -266,8 +272,6 @@ Now that the code is complete, it's time to run the application.
     
     This is an automated email. Please do not reply."
     ```
-
-    >**Note:** You can run the app again and enter your own prompt. If you don't ask the agent to create a customer email, it will run without being processed by the function.
 
 ## Clean up
 
