@@ -133,7 +133,7 @@ Now that you've configured the app, you'll add the necessary code to build an ag
     code agent-tool-starter.py
     ```
 
-1. Add the following code in the `Define the function and toolset` section. This code defines a function and adds it to the toolset.
+1. Add the following code in the **Define the function and toolset** section. This code defines a function and adds it to the toolset.
 
     > **Tip**: As you add code, be sure to maintain the correct indentation.
 
@@ -177,9 +177,9 @@ Now that you've configured the app, you'll add the necessary code to build an ag
 
 1. Review the code you just entered. The comments explain how the function interacts with the agent.
 
-Now that the `FunctionTool` is defined, you need to add code to monitor the agent run status and handle the function calls.
+Now that the *FunctionTool* is defined, you need to add code to monitor the agent run status and handle the function calls.
 
-1. Add the following code in the `Monitor and process the run status, and handle the function calls` section to monitor the agent and invoke the `FunctionTool` when needed.
+1. Add the following code in the **Monitor and process the run status, and handle the function calls** section to monitor the agent and invoke the *FunctionTool* when needed.
 
     > **Tip**: As you add code, be sure to maintain the correct indentation.
 
