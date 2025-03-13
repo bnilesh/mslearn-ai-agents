@@ -79,35 +79,35 @@ Now you're ready to create a client app that defines an agent and a custom funct
 1. In the PowerShell pane, enter the following commands to clone the GitHub repo containing the code files for this exercise:
 
     ```
-   rm -r ai-agents -f
-   git clone https://github.com/MicrosoftLearning/mslearn-ai-agents ai-agents
+    rm -r ai-agents -f
+    git clone https://github.com/MicrosoftLearning/mslearn-ai-agents ai-agents
     ```
 
     > **Tip**: As you enter commands into the cloud shell, the output may take up a large amount of the screen buffer and the cursor on the current line may be obscured. You can clear the screen by entering the `cls` command to make it easier to focus on each task.
 
-1. Enter the following command to change the working directory to the folder containing the code files and list them all.
-
-    ```
-   cd ai-agents/Labfiles/05-agent-orchestration/Python
-   ls -a -l
-    ```
-
-    The provided files include application code and a file for configuration settings.
-
 1. Enter the following command to install the required version of Python in the cloud shell:
 
     ```
-   sh ~/ai-agents/update-python.sh
+    sh ~/ai-agents/Labfiles/05-agent-orchestration/Python/update-python.sh
     ```
 
 1. After the installation is complete, in the cloud shell toolbar, in the **Settings** menu, select **Go to Classic version** (this starts a new session, and is required to use the code editor).
+
+1. Enter the following command to change the working directory to the folder containing the code files and list them all.
+
+    ```
+    cd ai-agents/Labfiles/05-agent-orchestration/Python
+    ls -a -l
+    ```
+
+    The provided files include application code and a file for configuration settings.
 
 ### Configure the application settings
 
 1. In the cloud shell command line pane, enter the following command to install the libraries you'll use:
 
     ```
-   pip install python-dotenv azure-identity semantic-kernel[azure] 
+    pip install python-dotenv azure-identity semantic-kernel[azure] 
     ```
 
     > **Note**: Installing *semantic-kernel[azure]* automatically installs a semantic kernel-compatible version of *azure-ai-projects*.
@@ -115,7 +115,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
 1. Enter the following command to edit the configuration file that has been provided:
 
     ```
-   code .env
+    code .env
     ```
 
     The file is opened in a code editor.
@@ -297,7 +297,7 @@ In this exercise, you'll introduce a second agent to the chat. This devops agent
 
     Note that the automatic reset flag will automatically clear the chat when it ends. This way, the agent can continue analyzing the files without the chat history object using too many unnecessary tokens. 
 
-1. Take a moment to observe the `ApprovalTerminationStrategy` and `SelectionStrategy` classes located above the `main` method.
+1. Take a moment to observe the **ApprovalTerminationStrategy** and **SelectionStrategy** classes located above the **main** method.
 
     Notice that the termination strategy relies on "no action needed" being present in the incident manager's response. The selection strategy determines the order the agents will take in the chat, starting with the incident manager agent.
 
@@ -327,7 +327,7 @@ In this exercise, you'll introduce a second agent to the chat. This devops agent
 
 In this exercise, you'll run your code and verify that your agent collaboration is working as expected.
 
-1. Review your `main` method to check that it is similar to the following:
+1. Review your **main** method to check that it is similar to the following:
 
     ```python
     ai_agent_settings = AzureAIAgentSettings.create()
