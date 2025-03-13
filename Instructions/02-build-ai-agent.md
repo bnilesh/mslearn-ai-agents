@@ -28,7 +28,12 @@ Let's start by creating an Azure AI Foundry project.
     - **Hub name**: *A unique name - for example `my-ai-hub`*
     - **Subscription**: *Your Azure subscription*
     - **Resource group**: *Create a new resource group with a unique name (for example, `my-ai-resources`), or select an existing one*
-    - **Location**: Select **Help me choose** and then select **gpt-4** in the Location helper window and use the recommended region\*
+    - **Location**: Select a region from the following:\*
+        - australiaeast
+        - eastus
+        - eastus2
+        - francecentral
+        - swedencentral
     - **Connect Azure AI Services or Azure OpenAI**: *Create a new AI Services resource with an appropriate name (for example, `my-ai-services`) or use an existing one*
     - **Connect Azure AI Search**: Skip connecting
 
@@ -37,8 +42,8 @@ Let's start by creating an Azure AI Foundry project.
 1. Select **Next** and review your configuration. Then select **Create** and wait for the process to complete.
 1. Once complete, in the **My assets** section, select **Models + endpoints** and deploy a **gpt-4** base model with the following settings:
     - **Deployment name**: *A unique name for your model deployment - for example `gpt-4-model`*
-    - **Deployment type**: Global Standard
-    - **Model version**: turbo-2024-04-09
+    - **Deployment type**: Standard
+    - **Model version**: 0613
     - **Connected AI resource**: *Select your Azure OpenAI resource connection*
     - **Tokens per Minute Rate Limit (thousands)**: 5k
     - **Content filter**: DefaultV2

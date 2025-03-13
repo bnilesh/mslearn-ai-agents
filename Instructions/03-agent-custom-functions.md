@@ -10,9 +10,9 @@ In this exercise you will explore creating an agent with a function call.
 
 Tasks performed in this exercise:
 
-* Create an Azure AI Foundry project and deploy a model
-* Develop an agent that uses function tools
-* Clean up resources
+- Create an Azure AI Foundry project and deploy a model
+- Develop an agent that uses function tools
+- Clean up resources
 
 This exercise should take approximately **30** minutes to complete.
 
@@ -20,7 +20,7 @@ This exercise should take approximately **30** minutes to complete.
 
 To complete this exercise, you'll need:
 
-* An Azure subscription. If you don't already have one, you can [sign up for one](https://azure.microsoft.com/).
+- An Azure subscription. If you don't already have one, you can [sign up for one](https://azure.microsoft.com/).
 
 ## Create an Azure AI Foundry project
 
@@ -33,7 +33,12 @@ Let's start by creating an Azure AI Foundry project.
     - **Hub name**: *A unique name - for example `my-ai-hub`*
     - **Subscription**: *Your Azure subscription*
     - **Resource group**: *Create a new resource group with a unique name (for example, `my-ai-resources`), or select an existing one*
-    - **Location**: Select **Help me choose** and then select **gpt-4** in the Location helper window and use the recommended region\*
+    - **Location**: Select a region from the following:\*
+        - australiaeast
+        - eastus
+        - eastus2
+        - francecentral
+        - swedencentral
     - **Connect Azure AI Services or Azure OpenAI**: *Create a new AI Services resource with an appropriate name (for example, `my-ai-services`) or use an existing one*
     - **Connect Azure AI Search**: Skip connecting
 
@@ -56,7 +61,7 @@ Now you're ready to deploy a generative AI language model to support your agent.
 1. Deploy the model with the following settings by selecting **Customize** in the deployment details:
     - **Deployment name**: *A unique name for your model deployment - for example `gpt-4-model` (remember the name you choose - you'll need it later)*
     - **Deployment type**: Standard
-    - **Model version**: *Select the default version*
+    - **Model version**: 0613
     - **Connected AI resource**: *Select your Azure OpenAI resource connection*
     - **Tokens per Minute Rate Limit (thousands)**: 5K
     - **Content filter**: DefaultV2
