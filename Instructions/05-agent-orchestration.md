@@ -139,7 +139,7 @@ Now you're ready to create your agent! In this exercise, you'll build an Inciden
     code agent_chat.py
     ```
 
-1. Note the `INCIDENT_MANAGER_INSTRUCTIONS` string. These are the instructions you'll provide to your agent.
+1. Note the **INCIDENT_MANAGER_INSTRUCTIONS** string. These are the instructions you'll provide to your agent.
 
 1. Add the following code under the comment **Create the incident manager agent on the Azure AI agent service**
 
@@ -165,7 +165,7 @@ Now you're ready to create your agent! In this exercise, you'll build an Inciden
     )
     ```
 
-    This code creates the Semantic Kernel agent with access to the `LogFilePlugin` functions.
+    This code creates the Semantic Kernel agent with access to the **LogFilePlugin** functions.
 
 1. Under the comment **Create a chat thread to test the incident manager agent**, add the following code to prompt the agent to read the log files
 
@@ -195,9 +195,9 @@ Now you're ready to create your agent! In this exercise, you'll build an Inciden
 
     ```
     code log_file_plugin.py
-    ````
+    ```
 
-1. Add the following function that can read files to the `log_file_plugin` class
+1. Add the following function that can read files to the **LogFilePlugin** class
 
     ```python
     @kernel_function(description="Accesses the given file path string and returns the file contents as a string")
@@ -237,7 +237,7 @@ In this exercise, you'll introduce a second agent to the chat. This devops agent
     code agent_chat.py
     ````
 
-1. Take a moment to observe the `DEVOPS_ASSISTANT_INSTRUCTIONS` string. These are the instructions you'll provide to the new devops assistant agent.
+1. Take a moment to observe the **DEVOPS_ASSISTANT_INSTRUCTIONS** string. These are the instructions you'll provide to the new devops assistant agent.
 
 1. Remove the agent chat thread you created in the previous task:
 
@@ -338,7 +338,9 @@ In this exercise, you'll run your code and verify that your agent collaboration 
     ai_agent_settings = AzureAIAgentSettings.create()
 
     async with (
-        DefaultAzureCredential() as creds,
+        DefaultAzureCredential(
+            exclude_environment_credential=True, 
+            exclude_managed_identity_credential=True) as creds,
         AzureAIAgent.create_client(credential=creds) as client,
     ):
     

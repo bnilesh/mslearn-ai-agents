@@ -71,7 +71,8 @@ async def main():
     ai_agent_settings = AzureAIAgentSettings.create()
 
     async with (
-        DefaultAzureCredential() as creds,
+        DefaultAzureCredential(exclude_environment_credential=True, 
+            exclude_managed_identity_credential=True) as creds,
         AzureAIAgent.create_client(credential=creds) as client,
     ):
     
