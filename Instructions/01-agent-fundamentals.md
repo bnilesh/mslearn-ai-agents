@@ -19,7 +19,7 @@ Let's start by creating an Azure AI Foundry project.
     ![Screenshot of Azure AI Foundry portal.](./Media/ai-foundry-home.png)
 
 1. In the home page, select **+ Create project**.
-1. In the **Create a project** wizard, enter a suitable project name for (for example, `my-ai-project`) then review the Azure resources that will be automatically created to support your project.
+1. In the **Create a project** wizard, enter a suitable project name for (for example, `my-ai-project`) and if an existing hub is suggested, choose the option to create a new one. Then review the Azure resources that will be automatically created to support your hub and project.
 1. Select **Customize** and specify the following settings for your hub:
     - **Hub name**: *A unique name - for example `my-ai-hub`*
     - **Subscription**: *Your Azure subscription*
