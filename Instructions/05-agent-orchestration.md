@@ -328,13 +328,7 @@ In this exercise, you'll introduce a second agent to the chat. This devops agent
         print(f"{response.content}")
     ```
 
-    Now you're ready to run the code and watch the agents collaborate!
-
-## Check your work
-
-In this exercise, you'll run your code and verify that your agent collaboration is working as expected.
-
-1. Review your **main** method to check that it is similar to the following:
+1. Let's check that everything is as it should be. Review your **main** method to check that it is similar to the following:
 
     ```python
     ai_agent_settings = AzureAIAgentSettings.create()
@@ -411,7 +405,25 @@ In this exercise, you'll run your code and verify that your agent collaboration 
                 print(f"Error during chat invocation: {e}")
     ```
 
-1. In the integrated terminal, enter `python agent_chat.py`
+## Sign into Azure and run the app
+
+Now that the code is complete, it's time to run the application.
+
+1. In the cloud shell command line pane, enter the following command to sign into Azure.
+
+    ```
+    az login
+    ```
+
+    **<font color="red">You must sign into Azure - even though the cloud shell session is already authenticated.</font>**    
+
+1. When prompted, follow the instructions to open the sign-in page in a new tab and enter the authentication code provided and your Azure credentials. Then complete the sign in process in the command line, selecting the subscription containing your Azure AI Foundry hub if prompted.
+
+1. After you have signed in, enter the following command to run the app:
+
+    ```
+   python agent_chat.py
+    ```
 
     You should see some output similar to the following:
 

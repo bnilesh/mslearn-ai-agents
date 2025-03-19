@@ -248,7 +248,9 @@ Now that the code is complete, it's time to run the application.
     ```
     az login
     ```
-    
+
+    **<font color="red">You must sign into Azure - even though the cloud shell session is already authenticated.</font>**    
+
 1. When prompted, follow the instructions to open the sign-in page in a new tab and enter the authentication code provided and your Azure credentials. Then complete the sign in process in the command line, selecting the subscription containing your Azure AI Foundry hub if prompted.
 
 1. After you have signed in, enter the following command to run the application:

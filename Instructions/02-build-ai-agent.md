@@ -223,13 +223,25 @@ Now that you've seen how agents work and how they can accomplish tasks on your b
 
 1. Use the **CTRL+S** command to save your changes to the code file and then use the **CTRL+Q** command to close the code editor while keeping the cloud shell command line open.
 
-1. In the cloud shell command line pane, enter the following command to run the app:
+### Sign into Azure and run the app
+
+Now that the code is complete, it's time to run the application.
+
+1. In the cloud shell command line pane, enter the following command to sign into Azure.
+
+    ```
+    az login
+    ```
+
+    **<font color="red">You must sign into Azure - even though the cloud shell session is already authenticated.</font>**    
+
+1. When prompted, follow the instructions to open the sign-in page in a new tab and enter the authentication code provided and your Azure credentials. Then complete the sign in process in the command line, selecting the subscription containing your Azure AI Foundry hub if prompted.
+
+1. After you have signed in, enter the following command to run the app:
 
     ```
    python basic-agent.py
     ```
-
-> **Note**: If the script returns the error `AzureCliCredential.get_token_info failed: Failed to invoke the Azure CLI`, run the command `az login` and authenticate your connection before running the app again.
 
 1. Observe the output, which will display the agent's text response and download the image file. Open that file with the following command, and you'll see your agent has created a graphical chart with movie revenues:
 
