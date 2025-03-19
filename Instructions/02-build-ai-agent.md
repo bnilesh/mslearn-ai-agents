@@ -116,13 +116,13 @@ Now that you've seen how agents work and how they can accomplish tasks on your b
 
     ```
     rm -r mslearn-ai-agents -f
-    git clone https://github.com/microsoftlearning/mslearn-ai-agents mslearn-ai-agents
+    git clone https://github.com/microsoftlearning/mslearn-ai-agents ai-agents
     ```
 
 1. After the repo has been cloned, navigate to the folder containing the application code files:  
 
     ```
-   cd mslearn-ai-agents/Labfiles/02-build-ai-agent/Python
+   cd ai-agents/Labfiles/02-build-ai-agent/Python
     ```
 
 1. In the cloud shell command line pane, enter the following command to install the libraries you'll use, which are:
