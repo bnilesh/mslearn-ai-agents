@@ -141,25 +141,28 @@ Now you're ready to create a client app that defines an agent and a custom funct
     - A **create_expense_claim** function in which the code to create and use your agent must be added
     - An **EmailPlugin** class that includes a kernel function named **send_email**; which will be used by your agent to simulate the functionality used to send an email.
 
-1. IAt the top of the file, after the existing **import** statement, under the comment **Add references**, add the following code to reference the namespaces in the libraries you installed previously:
+1. At the top of the file, after the existing **import** statement, find the comment **Add references**, and add the following code to reference the namespaces in the libraries you installed previously:
 
     ```python
+   # Add references
    from dotenv import load_dotenv
    from azure.identity.aio import DefaultAzureCredential
    from semantic_kernel.agents.azure_ai import AzureAIAgent, AzureAIAgentSettings
    from semantic_kernel.functions import kernel_function
     ```
 
-1. In the **create_expense_claim** function, under the comment **Get configuration settings**, add the following code to load the configuration file and create an **AzureAIAgentSettings** object (which will automatically include the Azure AI Agent settings from the configuration).
+1. In the **create_expense_claim** function, find the comment **Get configuration settings**, and add the following code to load the configuration file and create an **AzureAIAgentSettings** object (which will automatically include the Azure AI Agent settings from the configuration).
 
     ```python
+   # Get configuration settings
    load_dotenv()
    ai_agent_settings = AzureAIAgentSettings.create()
     ```
 
-1. Under the comment **Connect to the Azure AI Foundry project**, add the following code to connect to your Azure AI Foundry project using the Azure credentials you are currently signed in with:
+1. Find the comment **Connect to the Azure AI Foundry project**, and add the following code to connect to your Azure AI Foundry project using the Azure credentials you are currently signed in with:
 
     ```python
+   # Connect to the Azure AI Foundry project
    async with (
        DefaultAzureCredential(
            exclude_environment_credential=True,
@@ -171,9 +174,10 @@ Now you're ready to create a client app that defines an agent and a custom funct
    ):
     ```
 
-1. Under the comment **Define an agent that sends an expense claim email**, add the following code to create an Azure AI Agent definition for your agent (be sure to maintain the indentation level):
+1. Find the comment **Define an agent that sends an expense claim email**, and add the following code to create an Azure AI Agent definition for your agent (be sure to maintain the indentation level):
 
     ```python
+   # Define an agent that sends an expense claim email
    expenses_agent_def = await project_client.agents.create_agent(
        model= ai_agent_settings.model_deployment_name,
        name="expenses_agent",
@@ -181,9 +185,10 @@ Now you're ready to create a client app that defines an agent and a custom funct
    )
     ```
 
-1. Under the comment **Create an instance of the agent**, add the following code to create an instance of your agent, including a reference to the **EmailPlugin** plugin (be sure to maintain the indentation level):
+1. Find the comment **Create an instance of the agent**, and add the following code to create an instance of your agent, including a reference to the **EmailPlugin** plugin (be sure to maintain the indentation level):
 
     ```python
+   # Create an instance of the agent
    expenses_agent = AzureAIAgent(
        client=project_client,
        definition=expenses_agent_def,
@@ -191,9 +196,10 @@ Now you're ready to create a client app that defines an agent and a custom funct
    )
     ```
 
-1. Under the comment **Use the agent to generate an expense claim email**, add the following code to create a thread for your agent to run on, and then invoke it with a chat message (be sure to maintain the indentation level):
+1. Find the comment **Use the agent to generate an expense claim email**, and add the following code to create a thread for your agent to run on, and then invoke it with a chat message (be sure to maintain the indentation level):
 
     ```python
+   # Use the agent to generate an expense claim email
    thread = await project_client.agents.create_thread()
 
    try:
