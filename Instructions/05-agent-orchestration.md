@@ -93,10 +93,12 @@ Now you're ready to create a client app that defines an agent and a custom funct
 1. Enter the following command to install the required version of Python in the cloud shell:
 
     ```
-    sh ~/ai-agents/Labfiles/05-agent-orchestration/Python/update-python.sh
+    sh ~/ai-agents/Labfiles/update-python.sh
     ```
 
 1. After the installation is complete, in the cloud shell toolbar, in the **Settings** menu, select **Go to Classic version** (this starts a new session, and is required to use the code editor).
+
+    **<font color="red">Ensure you've switched to the classic version of the cloud shell and a new session has started before continuing.</font>**
 
 1. Enter the following command to change the working directory to the folder containing the code files and list them all.
 
