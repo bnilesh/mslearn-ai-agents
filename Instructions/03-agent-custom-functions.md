@@ -107,7 +107,7 @@ Now that you've created your project in AI Foundry, let's develop an app that im
 1. In the cloud shell command line pane, enter the following command to install the libraries you'll use:
 
     ```
-   pip install python-dotenv azure-identity azure-ai-projects
+   pip install python-dotenv azure-identity azure-ai-projects==1.0.0b7
     ```
 
     >**Note:** You can ignore any warning or error messages displayed during the library installation.
