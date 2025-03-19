@@ -141,7 +141,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
     - A **create_expense_claim** function in which the code to create and use your agent must be added
     - An **EmailPlugin** class that includes a kernel function named **send_email**; which will be used by your agent to simulate the functionality used to send an email.
 
-1. At the top of the file, after the existing **import** statement, find the comment **Add references**, and add the following code to reference the namespaces in the libraries you installed previously:
+1. At the top of the file, after the existing **import** statement, find the comment **Add references**, and add the following code to reference the namespaces in the libraries you will need to implement your agent:
 
     ```python
    # Add references
@@ -149,9 +149,31 @@ Now you're ready to create a client app that defines an agent and a custom funct
    from azure.identity.aio import DefaultAzureCredential
    from semantic_kernel.agents.azure_ai import AzureAIAgent, AzureAIAgentSettings
    from semantic_kernel.functions import kernel_function
+   from typing import Annotated
     ```
 
-1. In the **create_expense_claim** function, find the comment **Get configuration settings**, and add the following code to load the configuration file and create an **AzureAIAgentSettings** object (which will automatically include the Azure AI Agent settings from the configuration).
+1. Near the bottom of the file, find the comment **Create a Plugin for the email functionality**, and add the following code to define a class for a plugin containing a function that your agent will use to send email:
+
+    ```python
+   # Create a Plugin for the email functionality
+   class EmailPlugin:
+       """A Plugin to simulate email functionality."""
+    
+       @kernel_function(description="Sends an email.")
+       def send_email(self,
+                      to: Annotated[str, "Who to send the email to"],
+                      subject: Annotated[str, "The subject of the email."],
+                      body: Annotated[str, "The text body of the email."]):
+           print("\nTo:", to)
+           print("Subject:", subject)
+           print(body, "\n")
+    ```
+
+    > **Note**: The function *simulates* sending an email by printing it to the console. In a real application, you'd use an SMTP service or similar to actually send the email!
+
+1. Back up above the new **EmailPlugin** class code, in the **create_expense_claim** function, find the comment **Get configuration settings**, and add the following code to load the configuration file and create an **AzureAIAgentSettings** object (which will automatically include the Azure AI Agent settings from the configuration).
+
+    (Be sure to maintain the indentation level)
 
     ```python
    # Get configuration settings
@@ -159,7 +181,9 @@ Now you're ready to create a client app that defines an agent and a custom funct
    ai_agent_settings = AzureAIAgentSettings.create()
     ```
 
-1. Find the comment **Connect to the Azure AI Foundry project**, and add the following code to connect to your Azure AI Foundry project using the Azure credentials you are currently signed in with:
+1. Find the comment **Connect to the Azure AI Foundry project**, and add the following code to connect to your Azure AI Foundry project using the Azure credentials you are currently signed in with.
+
+    (Be sure to maintain the indentation level)
 
     ```python
    # Connect to the Azure AI Foundry project
@@ -174,10 +198,12 @@ Now you're ready to create a client app that defines an agent and a custom funct
    ):
     ```
 
-1. Find the comment **Define an agent that sends an expense claim email**, and add the following code to create an Azure AI Agent definition for your agent (be sure to maintain the indentation level):
+1. Find the comment **Define an Azure AI agent that sends an expense claim email**, and add the following code to create an Azure AI Agent definition for your agent.
+
+    (Be sure to maintain the indentation level)
 
     ```python
-   # Define an agent that sends an expense claim email
+   # Define an Azure AI agent that sends an expense claim email
    expenses_agent_def = await project_client.agents.create_agent(
        model= ai_agent_settings.model_deployment_name,
        name="expenses_agent",
@@ -185,10 +211,12 @@ Now you're ready to create a client app that defines an agent and a custom funct
    )
     ```
 
-1. Find the comment **Create an instance of the agent**, and add the following code to create an instance of your agent, including a reference to the **EmailPlugin** plugin (be sure to maintain the indentation level):
+1. Find the comment **Create a  semantic kernel agent**, and add the following code to create asemantic kernel agent object for your Azure AI agent, and includes a reference to the **EmailPlugin** plugin.
+
+    (Be sure to maintain the indentation level)
 
     ```python
-   # Create an instance of the agent
+   # Create a semantic kernel agent
    expenses_agent = AzureAIAgent(
        client=project_client,
        definition=expenses_agent_def,
@@ -196,7 +224,9 @@ Now you're ready to create a client app that defines an agent and a custom funct
    )
     ```
 
-1. Find the comment **Use the agent to generate an expense claim email**, and add the following code to create a thread for your agent to run on, and then invoke it with a chat message (be sure to maintain the indentation level):
+1. Find the comment **Use the agent to generate an expense claim email**, and add the following code to create a thread for your agent to run on, and then invoke it with a chat message.
+
+    (Be sure to maintain the indentation level):
 
     ```python
    # Use the agent to generate an expense claim email
@@ -218,7 +248,102 @@ Now you're ready to create a client app that defines an agent and a custom funct
        await project_client.agents.delete_agent(expenses_agent.id)
     ```
 
-1. Save your code changes (**CTRL+S**).
+1. Verify that the completed code for your agent looks like this, and then save your code changes (**CTRL+S**).
+
+    ```python
+   import os                                                       
+   import asyncio
+   from typing import Annotated
+    
+   # Add references
+   from dotenv import load_dotenv
+   from azure.identity.aio import DefaultAzureCredential
+   from semantic_kernel.agents.azure_ai import AzureAIAgent, AzureAIAgentSettings
+   from semantic_kernel.functions import kernel_function
+    
+   async def main():
+       # Clear the console
+       os.system('cls' if os.name=='nt' else 'clear')
+    
+       # Create expense claim data
+       data = """{'expenses':[
+                   {'date':'07-Mar-2025','description':'taxi','amount':24.00},
+                   {'date':'07-Mar-2025','description':'dinner','amount':65.50},
+                   {'date':'07-Mar-2025','description':'hotel','amount':125.90}]
+               }
+               """
+    
+       # Run the async agent code
+       await create_expense_claim(data)
+    
+   async def create_expense_claim(expenses_data):
+    
+       # Get configuration settings
+       load_dotenv()
+       ai_agent_settings = AzureAIAgentSettings.create()
+    
+       # Connect to the Azure AI Foundry project
+       async with (
+           DefaultAzureCredential(
+               exclude_environment_credential=True,
+               exclude_managed_identity_credential=True) as creds,
+           AzureAIAgent.create_client(
+               credential=creds,
+               conn_str=ai_agent_settings.project_connection_string.get_secret_value(),
+           ) as project_client,
+       ):
+     
+           # Define an Azure AI agent that sends an expense claim email
+           expenses_agent_def = await project_client.agents.create_agent(
+               model= ai_agent_settings.model_deployment_name,
+               name="expenses_agent",
+               instructions="Send an expense claim to expenses@contoso.com with the subject 'Expense Claim`and a body that contains itemized expenses with a total."
+           )
+    
+           # Create a semantic kernel agent
+           expenses_agent = AzureAIAgent(
+               client=project_client,
+               definition=expenses_agent_def,
+               plugins=[EmailPlugin()]
+           )
+    
+           # Use the agent to generate an expense claim email
+           thread = await project_client.agents.create_thread()
+    
+           try:
+               # Add the user input as a chat message
+               prompt_message = "Create an expense claim for the following expenses: " + expenses_data
+               await expenses_agent.add_chat_message(thread_id=thread.id, message=prompt_message)
+               # Invoke the agent for the specified thread for response
+               response = await expenses_agent.get_response(thread_id=thread.id)
+               print(f"\n# {response.name}:\n{response}")
+           except Exception as e:
+               # Something went wrong
+               print (e)
+           finally:
+               # Cleanup: Delete the thread and agent
+               await project_client.agents.delete_thread(thread.id)
+               await project_client.agents.delete_agent(expenses_agent.id)
+    
+
+   # Create a Plugin for the email functionality
+   class EmailPlugin:
+       """A Plugin to simulate email functionality."""
+    
+       @kernel_function(description="Sends an email.")
+       def send_email(self,
+           to: Annotated[str, "Who to send the email to"],
+           subject: Annotated[str, "The subject of the email."],
+           body: Annotated[str, "The text body of the email."]):
+           print("\nTo:", to)
+           print("Subject:", subject)
+           print(body, "\n")
+    
+    
+   if __name__ == "__main__":
+       asyncio.run(main())
+    ```
+    
 
 ### Sign into Azure and run the app
 

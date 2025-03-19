@@ -68,7 +68,7 @@ Now you're ready to deploy a generative AI language model to support your agent.
       
     > **Note**: Reducing the TPM helps avoid over-using the quota available in the subscription you are using. 5,000 TPM is sufficient for the data used in this exercise.
 
-1. Wait for the deployment provisioning state to be **Completed**.
+1. Wait for the deployment to complete.
 
 ## Create an AI Agent client app
 
@@ -214,11 +214,20 @@ Now you're ready to create your agent! In this exercise, you'll build an Inciden
 
 1. Enter the following command to sign into Azure.
 
+    
+    **<font color="red">You must sign into Azure - even though the cloud shell session is already authenticated.</font>**    
+
     ```
     az login
     ```
-    
-1. Enter `python agent_chat.py` to run the file and observe the results
+
+1. When prompted, follow the instructions to open the sign-in page in a new tab and enter the authentication code provided and your Azure credentials. Then complete the sign in process in the command line, selecting the subscription containing your Azure AI Foundry hub if prompted.
+
+1. After you have signed in, enter the following command to run the application:
+
+    ```
+    python python agent_chat.py
+    ```
 
     You should see some output similar to the following:
 
@@ -405,21 +414,7 @@ In this exercise, you'll introduce a second agent to the chat. This devops agent
                 print(f"Error during chat invocation: {e}")
     ```
 
-## Sign into Azure and run the app
-
-Now that the code is complete, it's time to run the application.
-
-1. In the cloud shell command line pane, enter the following command to sign into Azure.
-
-    ```
-    az login
-    ```
-
-    **<font color="red">You must sign into Azure - even though the cloud shell session is already authenticated.</font>**    
-
-1. When prompted, follow the instructions to open the sign-in page in a new tab and enter the authentication code provided and your Azure credentials. Then complete the sign in process in the command line, selecting the subscription containing your Azure AI Foundry hub if prompted.
-
-1. After you have signed in, enter the following command to run the app:
+1. In the command line pane, enter the following command to run the app:
 
     ```
    python agent_chat.py

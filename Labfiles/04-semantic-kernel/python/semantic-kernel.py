@@ -28,25 +28,19 @@ async def create_expense_claim(expenses_data):
     # Connect to the Azure AI Foundry project
 
         
-        # Define an agent that sends an expense claim email
+        # Define an Azure AI agent that sends an expense claim email
 
 
-        # Create an instance of the agent
+        # Create a semantic kernel agent
 
 
         # Use the agent to generate an expense claim email
 
 
 
-# Plugin for the email functionality
-class EmailPlugin:
-    """A Plugin to simulate email functionality."""
+# Create a Plugin for the email functionality
 
-    @kernel_function(description="Sends and email.")
-    def send_email(self, to, subject, body):
-        print("\nTo:", to)
-        print("Subject:", subject)
-        print(body, "\n")
+
 
 
 if __name__ == "__main__":
