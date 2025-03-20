@@ -72,7 +72,7 @@ Now you're ready to deploy a generative AI language model to support your agent.
 
 ## Create an AI Agent client app
 
-Now you're ready to create a client app that defines an agent and a custom function. Some code has been provided for you in a GitHub repository.
+Now you're ready to create a client app that defines an agent and a custom function. Some code is provided for you in a GitHub repository.
 
 ### Prepare the environment
 
@@ -119,7 +119,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
 
     > **Note**: Installing *semantic-kernel[azure]* automatically installs a semantic kernel-compatible version of *azure-ai-projects*.
 
-1. Enter the following command to edit the configuration file that has been provided:
+1. Enter the following command to edit the configuration file that is provided:
 
     ```
     code .env
@@ -131,9 +131,9 @@ Now you're ready to create a client app that defines an agent and a custom funct
 
 1. After you've replaced the placeholders, use the **CTRL+S** command to save your changes and then use the **CTRL+Q** command to close the code editor while keeping the cloud shell command line open.
 
-### Create an AI agent
+### Create AI agents
 
-Now you're ready to create your agent! In this exercise, you'll build an Incident Manager agent that can analyze service log files, identify potential issues, and recommend resolution actions or escalate issues when necessary. Let's get started!
+Now you're ready to create your agent! In this exercise, you'll build an Incident Manager agent that can analyze service log files, identify potential issues, and recommend resolution actions or escalate issues when necessary. You'll also create a devops agent will take the resolution recommendation from the incident manager agent and invoke the necessary function to resolve the issue. Let's get started!
 
 1. Enter the following command to edit the **agent_chat.py** file:
 
@@ -167,110 +167,9 @@ Now you're ready to create your agent! In this exercise, you'll build an Inciden
     )
     ```
 
-    This code creates the Semantic Kernel agent with access to the **LogFilePlugin** functions.
-
-1. Under the comment **Create a chat thread to test the incident manager agent**, add the following code to prompt the agent to read the log files
-
-    ```python
-    # Create a chat thread to test the incident manager agent
-    thread = await client.agents.create_thread()
-
-    try:
-        for filename in os.listdir("sample_logs"):
-            # Add a message containing the log file to the chat
-            logfile_msg = ChatMessageContent(role=AuthorRole.USER, content=f"USER > sample_logs/{filename}")
-            await agent_incident.add_chat_message(thread_id=thread.id, message=logfile_msg)
-
-            # Invoke a response from the agent
-            response = await agent_incident.get_response(thread_id=thread.id)
-            print(response)
-    finally:
-        await client.agents.delete_thread(thread.id)
-    # End of chat
-    ```
-
-    This code will prompt the agent to analyze each log file and recommend a resolution. Before you can run the agent, you'll need to provide a plugin function that will allow the agent to read and write to log files.
-
-1. Use the **CTRL+S** command to save your changes
-
-1. Enter the command to edit the **log_file_plugin.py** file:
-
-    ```
-    code log_file_plugin.py
-    ```
-
-1. Add the following function that can read files to the **LogFilePlugin** class
-
-    ```python
-    @kernel_function(description="Accesses the given file path string and returns the file contents as a string")
-    def read_log_file(self, filepath: str = "") -> str:
-        with open(filepath, 'r', encoding='utf-8') as file:
-            return file.read()
-    ```
-
-1. Use the **CTRL+S** command to save your changes 
-
-    Now your agent will be able to read the log files. Let's run the code and see what resolutions the agent recommends!
-
-1. Enter the following command to sign into Azure.
-
-    
-    **<font color="red">You must sign into Azure - even though the cloud shell session is already authenticated.</font>**    
-
-    ```
-    az login
-    ```
-
-1. When prompted, follow the instructions to open the sign-in page in a new tab and enter the authentication code provided and your Azure credentials. Then complete the sign in process in the command line, selecting the subscription containing your Azure AI Foundry hub if prompted.
-
-1. After you have signed in, enter the following command to run the application:
-
-    ```
-    python python agent_chat.py
-    ```
-
-    You should see some output similar to the following:
-
-    ```output
-    INCIDENT_MANAGER > sample_logs/log1.log | Restart service ServiceX
-    INCIDENT_MANAGER > sample_logs/log2.log | Rollback transaction
-    INCIDENT_MANAGER > sample_logs/log3.log | Increase quota
-    INCIDENT_MANAGER > sample_logs/log4.log | Redeploy resource ResourceX
-    ```
-
-### Create an AI agent group chat
-
-In this exercise, you'll introduce a second agent to the chat. This devops agent will take the resolution recommendation from the incident manager agent and invoke the necessary function to resolve the issue. Let's get started!
-
-1. Enter the command to edit the **agent_chat.py** file:
-
-    ```
-    code agent_chat.py
-    ````
+    This code creates the Semantic Kernel agent with access to the **LogFilePlugin**. This plugin allows the agent to read the log file contents.
 
 1. Take a moment to observe the **DEVOPS_ASSISTANT_INSTRUCTIONS** string. These are the instructions you'll provide to the new devops assistant agent.
-
-1. Remove the agent chat thread you created in the previous task:
-
-    ```python
-    # Create a chat thread to test the incident manager agent
-    thread = await client.agents.create_thread()
-
-    try:
-        for filename in os.listdir("sample_logs"):
-            # Add a message containing the log file to the chat
-            logfile_msg = ChatMessageContent(role=AuthorRole.USER, content=f"USER > sample_logs/{filename}")
-            await agent_incident.add_chat_message(thread_id=thread.id, message=logfile_msg)
-
-            # Invoke a response from the agent
-            response = await agent_incident.get_response(thread_id=thread.id)
-            print(response)
-    finally:
-        await client.agents.delete_thread(thread.id)
-    # End of chat
-    ```
-
-    For multi agent collaboration, you'll create a different object for the agent group chat. But first, let's setup the code for the second devops agent.
 
 1. Add the following code under the comment **Create the devops agent on the Azure AI agent service**
     
@@ -294,7 +193,44 @@ In this exercise, you'll introduce a second agent to the chat. This devops agent
     )
     ```
 
-1. Under the comment **Add the agents to a group chat with a custom termination and selection strategy** add the following code to create the group chat:
+    The **DevopsPlugin** allows the agent to perform mock devops tasks, such as restarting the service or rolling back a transaction.
+
+### Define group chat strategies
+
+In this task, you define approval and selection strategies that guide the AI agent collaboration. The **ApprovalTerminationStrategy** helps signal when the goal is complete. The **SelectionStrategy** identifies which agent should take the next turn. Once the strategies are in place, you can create and run your AI agent group chat. Let's get started!
+
+1. Locate the **ApprovalTerminationStrategy** class located above the **main** method.
+
+1. Add the following code under the comment **End the chat if the agent has indicated there is no action needed**:
+
+    ```python
+    async def should_agent_terminate(self, agent, history):
+        """Check if the agent should terminate."""
+        return "no action needed" in history[-1].content.lower()
+    ```
+
+    The kernel invokes this function after the agent's response to determine if the completion criteria is complete. In this case, the goal is met when the incident manager responds with "No action needed." This phrase is defined in the incident manager agent instructions.
+
+1. Locate the **SelectionStrategy** class located above the **main** method.
+
+1. Add the following code under the comment **Select the next agent that should take the next turn in the chat**:
+
+    ```python
+    async def select_agent(self, agents, history):
+        """"Check which agent should take the next turn in the chat."""
+
+        # The Incident Manager should go after the User or the Devops Assistant
+        if (history[-1].name == DEVOPS_ASSISTANT or history[-1].role == AuthorRole.USER):
+            agent_name = INCIDENT_MANAGER
+            return next((agent for agent in agents if agent.name == agent_name), None)
+        
+        # Otherwise it is the Devops Assistant's turn
+        return next((agent for agent in agents if agent.name == DEVOPS_ASSISTANT), None)
+    ```
+
+    This code runs on every turn to determine which agent should respond. Now you're ready to initiate the agent group chat!
+
+1. In the main method, under the comment **Add the agents to a group chat with a custom termination and selection strategy** add the following code to create the group chat:
 
     ```python
     # Add the agents to a group chat with a custom termination and selection strategy
@@ -309,17 +245,11 @@ In this exercise, you'll introduce a second agent to the chat. This devops agent
     )
     ```
 
-    In this code, you create an agent group chat object with the incident manager and devops agents. You also define a termination strategy and a selection strategy for the chat.
+    In this code, you create an agent group chat object with the incident manager and devops agents. You also define the termination and selection strategies for the chat. Notice that the **ApprovalTerminationStrategy** is tied to the incident manager agent only, and not the devops agent. This makes it so the incident manager agent is responsible for signaling the end of the chat. The **SelectionStrategy** includes all agents that should take a turn in the chat.
 
     Note that the automatic reset flag will automatically clear the chat when it ends. This way, the agent can continue analyzing the files without the chat history object using too many unnecessary tokens. 
 
-1. Take a moment to observe the **ApprovalTerminationStrategy** and **SelectionStrategy** classes located above the **main** method.
-
-    Notice that the termination strategy relies on "no action needed" being present in the incident manager's response. The selection strategy determines the order the agents will take in the chat, starting with the incident manager agent.
-
-    Now you're ready to initiate the agent group chat!
-
-1. Add the following code under the commend **Append the current log file to the chat**:
+1. Add the following code under the comment **Append the current log file to the chat**:
 
     ```python
     # Append the current log file to the chat
@@ -327,7 +257,7 @@ In this exercise, you'll introduce a second agent to the chat. This devops agent
     print()
     ```
 
-1. Add the following code under the commend **Invoke a response from the agents**:
+1. Add the following code under the comment **Invoke a response from the agents**:
 
     ```python
     # Invoke a response from the agents
@@ -340,6 +270,9 @@ In this exercise, you'll introduce a second agent to the chat. This devops agent
 1. Let's check that everything is as it should be. Review your **main** method to check that it is similar to the following:
 
     ```python
+    # Clear the console
+    os.system('cls' if os.name=='nt' else 'clear')
+
     ai_agent_settings = AzureAIAgentSettings.create()
 
     async with (
@@ -363,18 +296,6 @@ In this exercise, you'll introduce a second agent to the chat. This devops agent
             definition=incident_agent_definition,
             plugins=[LogFilePlugin()]
         )
-
-    # Create a chat thread to test the incident manager agent
-        thread = await client.agents.create_thread()
-
-        try:
-            for filename in os.listdir("sample_logs"):
-                logfile_msg = ChatMessageContent(role=AuthorRole.USER, content=f"USER > sample_logs/{filename}")
-                await agent_incident.add_chat_message(thread_id=thread.id, message=logfile_msg)
-                response = await agent_incident.get_response(thread_id=thread.id)
-                print(response)
-        finally:
-            await client.agents.delete_thread(thread.id)
 
         # Create the copy writer agent on the Azure AI agent service
         devops_agent_definition = await client.agents.create_agent(
@@ -414,10 +335,26 @@ In this exercise, you'll introduce a second agent to the chat. This devops agent
                 print(f"Error during chat invocation: {e}")
     ```
 
-1. In the command line pane, enter the following command to run the app:
+1. Use the **CTRL+S** command to save your changes to the code file and then use the **CTRL+Q** command to close the code editor while keeping the cloud shell command line open.
+
+### Sign into Azure and run the app
+
+Now you're ready to run your code and watch your AI agents collaborate.
+
+1. In the cloud shell command line pane, enter the following command to sign into Azure.
 
     ```
-   python agent_chat.py
+    az login
+    ```
+
+    **<font color="red">You must sign into Azure - even though the cloud shell session is already authenticated.</font>**    
+
+1. When prompted, follow the instructions to open the sign-in page in a new tab and enter the authentication code provided and your Azure credentials. Then complete the sign in process in the command line, selecting the subscription containing your Azure AI Foundry hub if prompted.
+
+1. After you have signed in, enter the following command to run the application:
+
+    ```
+    python agent_chat.py
     ```
 
     You should see some output similar to the following:

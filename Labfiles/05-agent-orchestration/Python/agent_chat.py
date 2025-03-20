@@ -1,5 +1,7 @@
 import asyncio
 import os
+import textwrap
+from datetime import datetime
 
 from azure.identity.aio import DefaultAzureCredential
 from semantic_kernel.agents import AgentGroupChat
@@ -7,9 +9,7 @@ from semantic_kernel.agents.azure_ai import AzureAIAgent, AzureAIAgentSettings
 from semantic_kernel.agents.strategies import TerminationStrategy, SequentialSelectionStrategy
 from semantic_kernel.contents.chat_message_content import ChatMessageContent
 from semantic_kernel.contents.utils.author_role import AuthorRole
-
-from log_file_plugin import LogFilePlugin
-from devops_plugin import DevopsPlugin
+from semantic_kernel.functions.kernel_function_decorator import kernel_function
 
 INCIDENT_MANAGER = "INCIDENT_MANAGER"
 INCIDENT_MANAGER_INSTRUCTIONS = """
@@ -44,30 +44,20 @@ RULES:
 - Prepend your response with this text: "DEVOPS_ASSISTANT > "
 """
 
-
 class ApprovalTerminationStrategy(TerminationStrategy):
     """A strategy for determining when an agent should terminate."""
 
-    async def should_agent_terminate(self, agent, history):
-        """Check if the agent should terminate."""
-        # End the chat if the agent has indicated there is no action needed
-        return "no action needed" in history[-1].content.lower()
+    # End the chat if the agent has indicated there is no action needed
 
 class SelectionStrategy(SequentialSelectionStrategy):
     """A strategy for determining which agent should take the next turn in the chat."""
     
-    async def select_agent(self, agents, history):
-        """"Check which agent should take the next turn in the chat."""
-
-        # The Incident Manager should go after the User or the Devops Assistant
-        if (history[-1].name == DEVOPS_ASSISTANT or history[-1].role == AuthorRole.USER):
-            agent_name = INCIDENT_MANAGER
-            return next((agent for agent in agents if agent.name == agent_name), None)
-        
-        # Otherwise it is the Devops Assistant's turn
-        return next((agent for agent in agents if agent.name == DEVOPS_ASSISTANT), None)
+    # Select the next agent that should take the next turn in the chat
 
 async def main():
+    # Clear the console
+    os.system('cls' if os.name=='nt' else 'clear')
+
     ai_agent_settings = AzureAIAgentSettings.create()
 
     async with (
@@ -79,8 +69,6 @@ async def main():
         # Create the incident manager agent on the Azure AI agent service
 
         # Create a Semantic Kernel agent for the Azure AI incident manager agent
-
-        # Create a chat thread to test the incident manager agent
 
         # Create the devops agent on the Azure AI agent service
 
@@ -101,3 +89,82 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+
+class DevopsPlugin:
+    """A plugin that performs developer operation tasks."""
+    
+    def append_to_log_file(self, filepath: str, content: str) -> None:
+        with open(filepath, 'a', encoding='utf-8') as file:
+            file.write('\n' + textwrap.dedent(content).strip())
+
+    @kernel_function(description="A function that restarts the named service")
+    def restart_service(self, service_name: str = "", logfile: str = "") -> str:
+        log_entries = [
+            f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] ALERT  DevopsAssistant: Multiple failures detected in {service_name}. Restarting service.",
+            f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] INFO  {service_name}: Restart initiated.",
+            f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] INFO  {service_name}: Service restarted successfully.",
+        ]
+
+        log_message = "\n".join(log_entries)
+        self.append_to_log_file(logfile, log_message)
+        
+        return f"Service {service_name} restarted successfully."
+
+    @kernel_function(description="A function that rollsback the transaction")
+    def rollback_transaction(self, logfile: str = "") -> str:
+        log_entries = [
+            f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] ALERT  DevopsAssistant: Transaction failure detected. Rolling back transaction batch.",
+            f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] INFO   TransactionProcessor: Rolling back transaction batch.",
+            f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] INFO   Transaction rollback completed successfully.",
+        ]
+
+        log_message = "\n".join(log_entries)
+        self.append_to_log_file(logfile, log_message)
+        
+        return "Transaction rolled back successfully."
+
+    @kernel_function(description="A function that redeploys the named resource")
+    def redeploy_resource(self, resource_name: str = "", logfile: str = "") -> str:
+        log_entries = [
+            f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] ALERT  DevopsAssistant: Resource deployment failure detected in '{resource_name}'. Redeploying resource.",
+            f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] INFO   DeploymentManager: Redeployment request submitted.",
+            f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] INFO   DeploymentManager: Service successfully redeployed, resource '{resource_name}' created successfully.",
+        ]
+
+        log_message = "\n".join(log_entries)
+        self.append_to_log_file(logfile, log_message)
+        
+        return f"Resource '{resource_name}' redeployed successfully."
+
+    @kernel_function(description="A function that increases the quota")
+    def increase_quota(self, logfile: str = "") -> str:
+        log_entries = [
+            f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] ALERT  DevopsAssistant: High request volume detected. Increasing quota.",
+            f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] INFO   APIManager: Quota increase request submitted.",
+            f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] INFO   APIManager: Quota successfully increased to 150% of previous limit.",
+        ]
+
+        log_message = "\n".join(log_entries)
+        self.append_to_log_file(logfile, log_message)
+
+        return "Successfully increased quota."
+
+    @kernel_function(description="A function that escalates the issue")
+    def escalate_issue(self, logfile: str = "") -> str:
+        log_entries = [
+            f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] ALERT  DevopsAssistant: Cannot resolve issue.",
+            f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] ALERT  DevopsAssistant: Requesting escalation.",
+        ]
+        
+        log_message = "\n".join(log_entries)
+        self.append_to_log_file(logfile, log_message)
+        
+        return "Submitted escalation request."
+
+class LogFilePlugin:
+    """A plugin that reads and writes log files."""
+
+    @kernel_function(description="Accesses the given file path string and returns the file contents as a string")
+    def read_log_file(self, filepath: str = "") -> str:
+        with open(filepath, 'r', encoding='utf-8') as file:
+            return file.read()
