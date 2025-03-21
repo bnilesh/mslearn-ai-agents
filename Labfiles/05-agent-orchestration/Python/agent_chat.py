@@ -44,16 +44,6 @@ RULES:
 - Prepend your response with this text: "DEVOPS_ASSISTANT > "
 """
 
-class ApprovalTerminationStrategy(TerminationStrategy):
-    """A strategy for determining when an agent should terminate."""
-
-    # End the chat if the agent has indicated there is no action needed
-
-class SelectionStrategy(SequentialSelectionStrategy):
-    """A strategy for determining which agent should take the next turn in the chat."""
-    
-    # Select the next agent that should take the next turn in the chat
-
 async def main():
     # Clear the console
     os.system('cls' if os.name=='nt' else 'clear')
@@ -68,28 +58,54 @@ async def main():
     
         # Create the incident manager agent on the Azure AI agent service
 
+
         # Create a Semantic Kernel agent for the Azure AI incident manager agent
+
 
         # Create the devops agent on the Azure AI agent service
 
+
         # Create a Semantic Kernel agent for the devops Azure AI agent
+
 
         # Add the agents to a group chat with a custom termination and selection strategy
         
+
         for filename in os.listdir("sample_logs"):
             logfile_msg = ChatMessageContent(role=AuthorRole.USER, content=f"USER > sample_logs/{filename}")
+            
             # Append the current log file to the chat
+
 
             try:
                 print()
+
                 # Invoke a response from the agents
+
                 
             except Exception as e:
                 print(f"Error during chat invocation: {e}")
 
-if __name__ == "__main__":
-    asyncio.run(main())
 
+
+# class for selection strategy
+class SelectionStrategy(SequentialSelectionStrategy):
+    """A strategy for determining which agent should take the next turn in the chat."""
+    
+    # Select the next agent that should take the next turn in the chat
+
+
+
+# class for temination strategy
+class ApprovalTerminationStrategy(TerminationStrategy):
+    """A strategy for determining when an agent should terminate."""
+
+    # End the chat if the agent has indicated there is no action needed
+
+
+
+
+# class for DevOps functions
 class DevopsPlugin:
     """A plugin that performs developer operation tasks."""
     
@@ -161,6 +177,8 @@ class DevopsPlugin:
         
         return "Submitted escalation request."
 
+
+# class for Log File functions
 class LogFilePlugin:
     """A plugin that reads and writes log files."""
 
@@ -168,3 +186,8 @@ class LogFilePlugin:
     def read_log_file(self, filepath: str = "") -> str:
         with open(filepath, 'r', encoding='utf-8') as file:
             return file.read()
+
+
+# Start the app
+if __name__ == "__main__":
+    asyncio.run(main())
