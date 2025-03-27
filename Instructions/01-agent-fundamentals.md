@@ -48,7 +48,7 @@ Now you're ready to deploy a generative AI language model to support your agent.
 1. In the **Models + endpoints** page, in the **Model deployments** tab, in the **+ Deploy model** menu, select **Deploy base model**.
 1. Search for the **gpt-4** model in the list, and then select and confirm it.
 1. Deploy the model with the following settings by selecting **Customize** in the deployment details:
-    - **Deployment name**: *A unique name for your model deployment - for example `gpt-4-model`*
+    - **Deployment name**: *A unique name for your model deployment - for example `gpt-4`*
     - **Deployment type**: Standard
     - **Model version**: 0613 *This is likely the default version*
     - **Connected AI resource**: *Select your Azure OpenAI resource connection*
@@ -63,9 +63,13 @@ Now you're ready to deploy a generative AI language model to support your agent.
 
 Now that you have a model deployed, you're ready to build an AI agent. In this exercise, you'll build a simple agent that answers questions based on a corporate expenses policy. You'll download the expenses policy document, and use it as *grounding* data for the agent.
 
-1. Open another browser tab, and download [Expenses_policy.docx](https://raw.githubusercontent.com/MicrosoftLearning/mslearn-ai-agents/main/Labfiles/01-agent-fundamentals/Expenses_Policy.docx) from `https://raw.githubusercontent.com/MicrosoftLearning/mslearn-ai-agents/main/Labfiles/01-agent-fundamentals/Expenses_Policy.docx`, saving it locally. This document contains details of the expenses policy for the fictional Contoso corporation.
+1. Open another browser tab, and download [Expenses_policy.docx](https://raw.githubusercontent.com/MicrosoftLearning/mslearn-ai-agents/main/Labfiles/01-agent-fundamentals/Expenses_Policy.docx) from `https://raw.githubusercontent.com/MicrosoftLearning/mslearn-ai-agents/main/Labfiles/01-agent-fundamentals/Expenses_Policy.docx` and save it locally. This document contains details of the expenses policy for the fictional Contoso corporation.
 1. Return to the browser tab containing the Azure AI Foundry portal, and in the navigation pane on the left, in the **Build and customize** section, select the **Agents** page.
-1. Use the **+ New agent** button to create a new agent. Then, in the **Setup** pane for your new agent, set the **Agent name** to `ExpensesAgent`, ensure that the gp-4 model deployment you created previously is selected, and set the **Instructions** to `Answer questions related to expense claims`.
+1. If prompted, select your Azure OpenAI service resource and go.
+
+    A new agent with a name like *Agent123* should be created automatically (if not, use the **+ New agent** button to create one).
+
+1. Select your new agent. Then, in the **Setup** pane for your new agent, set the **Agent name** to `ExpensesAgent`, ensure that the gpt-4 model deployment you created previously is selected, and set the **Instructions** to `Answer questions related to expense claims`.
 
     ![Screenshot of the AI agent setup page in Azure AI Foundry portal.](./Media/ai-agent-setup.png)
 
