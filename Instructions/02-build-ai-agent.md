@@ -1,102 +1,68 @@
 ---
 lab:
     title: 'Create an AI agent'
-    description: 'Learn how to use the Azure AI Agent Service to build an agent that uses built-in tools.'
+    description: 'Use the Azure AI Agent Service to develop an agent that uses built-in tools.'
 ---
 
 # Create an AI agent
 
-In this exercise you will explore using built-in tools in Azure AI Foundry to connect to knowledge sources and interpret code. Then, you'll develop a basic agent in Python.
+In this exercise you'll use Azure AI Agent Service to create a simple agent that analyzes data and creates charts. The agent uses the built-in *Code Interpreter* tool to dynamically generate the code required to create charts as images, and then saves the resulting chart images.
 
 This exercise should take approximately **30** minutes to complete.
 
-## Create an Azure AI Foundry project and deploy a model
+## Create an Azure AI Foundry project
 
 Let's start by creating an Azure AI Foundry project.
 
-1. In a web browser, open the [Azure AI Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that might open.
+1. In a web browser, open the [Azure AI Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that are opened the first time you sign in, and if necessary use the **Azure AI Foundry** logo at the top left to navigate to the home page, which looks similar to the following image:
+
+    ![Screenshot of Azure AI Foundry portal.](./Media/ai-foundry-home.png)
+
 1. In the home page, select **+ Create project**.
-1. In the **Create a project** wizard, enter a suitable project name (for example, `my-agent-project`).
-1. If you don't have a hub yet created, you'll see the new hub name and can expand the section below to review the Azure resources that will be automatically created to support your project. If you are reusing a hub, skip the following step.
+1. In the **Create a project** wizard, enter a suitable project name for (for example, `my-ai-project`) and if an existing hub is suggested, choose the option to create a new one. Then review the Azure resources that will be automatically created to support your hub and project.
 1. Select **Customize** and specify the following settings for your hub:
     - **Hub name**: *A unique name - for example `my-ai-hub`*
     - **Subscription**: *Your Azure subscription*
     - **Resource group**: *Create a new resource group with a unique name (for example, `my-ai-resources`), or select an existing one*
-    - **Location**: Select a region from the following:\*
-        - eastus
-        - eastus2
-        - swedencentral
-        - westus
-        - westus3
+    - **Location**: Select **Help me choose** and then select **gpt-4** in the Location helper window and use the recommended region\*
     - **Connect Azure AI Services or Azure OpenAI**: *Create a new AI Services resource with an appropriate name (for example, `my-ai-services`) or use an existing one*
     - **Connect Azure AI Search**: Skip connecting
 
-   > \* At the time of writing, the OpenAI *gpt-4* model we're going to use in this exercise is available for use with agents in these regions. You can check the latest regional availability for specific models in the [Azure AI Foundry documentation](https://learn.microsoft.com/azure/ai-foundry/how-to/deploy-models-serverless-availability#region-availability). In the event of a regional quota limit being reached later in the exercise, there's a possibility you may need to create another resource in a different region.
+    > \* Model quotas are constrained at the tenant level by regional quotas. In the event of a quota limit being reached later in the exercise, there's a possibility you may need to create another project in a different region.
 
 1. Select **Next** and review your configuration. Then select **Create** and wait for the process to complete.
-1. Once complete, in the **My assets** section, select **Models + endpoints** and deploy a **gpt-4** base model with the following settings:
-    - **Deployment name**: *A unique name for your model deployment - for example `gpt-4-model`*
+1. When your project is created, close any tips that are displayed and review the project page in Azure AI Foundry portal, which should look similar to the following image:
+
+    ![Screenshot of a Azure AI project details in Azure AI Foundry portal.](./Media/ai-foundry-project.png)
+
+1. In the project overview page, in the **Project details** area, note the **Project connection string**. Later, you'll use this connection string to connect to your project in a client application.
+
+## Deploy a generative AI model
+
+Now you're ready to deploy a generative AI language model to support your agent.
+
+1. In the pane on the left for your project, in the **My assets** section, select the **Models + endpoints** page.
+1. In the **Models + endpoints** page, in the **Model deployments** tab, in the **+ Deploy model** menu, select **Deploy base model**.
+1. Search for the **gpt-4** model in the list, and then select and confirm it.
+1. Deploy the model with the following settings by selecting **Customize** in the deployment details:
+    - **Deployment name**: *A unique name for your model deployment - for example `gpt-4-model` (remember the name you choose - you'll need it later)*
     - **Deployment type**: Standard
-    - **Model version**: turbo-2024-04-09
+    - **Model version**: *Select the default version*
     - **Connected AI resource**: *Select your Azure OpenAI resource connection*
-    - **Tokens per Minute Rate Limit (thousands)**: 5k
+    - **Tokens per Minute Rate Limit (thousands)**: 5K
     - **Content filter**: DefaultV2
-1. Select **Deploy** and wait for the deployment to complete.
+    - **Enable dynamic quota**: Disabled
+      
+    > **Note**: Reducing the TPM helps avoid over-using the quota available in the subscription you are using. 5,000 TPM is sufficient for the data used in this exercise.
 
-## Create an AI agent
+1. Wait for the deployment provisioning state to be **Completed**.
 
-Now you're ready to create your agent.
+## Create an agent client app
 
-1. In the pane on the left for your project, in the **Build and customize** section, select the **Agents** page.
-1. If prompted to select an Azure OpenAI Service resource, select the one created with your hub name used above.
-1. Select the **gpt-4** model you deployed above.
-1. Wait for the agents list to load, where you'll see a new agent created with a default name. Select it, and change the **Agent name** to `MovieTrendAgent`.
+Now you're ready to create a client app that uses an agent. Some code has been provided for you in a GitHub repository.
 
-## Integrate built-in tools
+### Clone the repo containing the starter code
 
-Now that you have your agent created, you're ready to customize its behavior. Here you'll be adding built-in tools to find current information and visualize data.
-
-> **Tip**: This section uses **Grounding with Bing Search**, which has additional usage and security considerations covered on the documentation [overview page](https://learn.microsoft.com/azure/ai-services/agents/how-to/tools/bing-grounding?pivots=overview).
-
-1. In the **Setup** pane, update the instructions to be:
-
-    ```text
-    You are a helpful agent who provides information about movie trends.
-    Keep answers concise, but include as much relevant data as possible.
-    ```
-
-1. Select the **Try in playground** button to see behavior without tools.
-1. In the agent chat window, send the question `What were the 10 most popular movies in 2024?`.
-1. Observe the response, which will indicate the model was trained in 2023 and doesn't have that current data.
-1. In the **Setup** pane, scroll down to the **Knowledge** section and select **+ Add**.
-1. Select **Grounding with Bing Search**, and then select the **+ Create connection** button.
-1. On the Azure portal page that pops up, create a **Grounding with Bing Search** resource with the following settings:
-    - **Subscription**: *Your Azure subscription*
-    - **Resource group**: *Choose the resource group you created with your Azure AI Foundry project*
-    - **Name**: *Choose a globally unique name (for example `<your-initials>-bing-search`)*
-    - **Region**: Global
-    - **Pricing tier**: *Select the only available pricing tier*
-    - **Terms**: *Select the checkbox confirming you read and understood the notice*
-1. Navigate back to the **Agents playground** tab and again select the **+ Create connection** button.
-1. Here you'll see your Bing Search resource. Select the **Add connection** button, and once connected click **Connect**.
-1. In the **Setup** pane, find the **Actions** tool section and select **+ Add**.
-1. Select **Code Interpreter** and then save without uploading any files.
-1. In the chat window, send the prompt `What were the 10 most popular movies in 2024? Chart out the total gross revenue for those movies`.
-1. While the response might take a bit longer, you'll see your agent is accessing your Bing Search resource for current movie data, and then using that information in Python code to generate a chart.
-1. Review the results, which should include a chart with the 10 most popular movies from 2024 with gross revenues charted. If you hover over the message above that starts with *code_interpreter*, you can see the code it wrote to generate the chart.
-
-Here you saw your agent go find the right information on Bing, write code to create a diagram, and return it to you all without you developing any of the code for those connections! The agent can use the power of the language model to understand what you are looking for and how to create it, allowing it to complete tasks that were previously very difficult or impossible.
-
-> **Important**: According to Grounding with Bing's [terms of use and use and display requirements](https://www.microsoft.com/en-us/bing/apis/grounding-legal#use-and-display-requirements), you need to display both website URLs and Bing search query URLs in your custom interface. If using this tool in your own application, be sure to follow those guidelines.
-
-## Develop an agent in your app
-
-Now that you've seen how agents work and how they can accomplish tasks on your behalf, let's develop an app that implements an agent using the same built-in tools.
-
-### Prepare the application configuration
-
-1. In the Azure AI Foundry portal, view the **Overview** page for your project.
-1. In the **Project details** area, note the **Project connection string**. You'll use this connection string to connect to your project in a client application.
 1. Open a new browser tab (keeping the Azure AI Foundry portal open in the existing tab). Then in the new tab, browse to the [Azure portal](https://portal.azure.com) at `https://portal.azure.com`; signing in with your Azure credentials if prompted.
 1. Use the **[\>_]** button to the right of the search bar at the top of the page to create a new Cloud Shell in the Azure portal, selecting a ***PowerShell*** environment. The cloud shell provides a command line interface in a pane at the bottom of the Azure portal.
 
@@ -104,27 +70,29 @@ Now that you've seen how agents work and how they can accomplish tasks on your b
 
 1. In the cloud shell toolbar, in the **Settings** menu, select **Go to Classic version** (this is required to use the code editor).
 
-    **<font color="red">It's important to choose exactly these settings - otherwise your agent may not work</font>**
+    **<font color="red">Ensure you've switched to the classic version of the cloud shell before continuing.</font>**
 
-1. In the PowerShell pane, enter the following commands to clone the GitHub repo for this exercise:
-
-    ```
-    rm -r mslearn-ai-agents -f
-    git clone https://github.com/microsoftlearning/mslearn-ai-agents ai-agents
-    ```
-
-    > **Tip**: As you paste commands into the cloudshell, the ouput may take up a large amount of the screen buffer. You can clear the screen by entering the `cls` command to make it easier to focus on each task.
-
-1. After the repo has been cloned, navigate to the folder containing the application code files:  
+1. In the PowerShell pane, enter the following commands to clone the GitHub repo containing the code files for this exercise:
 
     ```
-   cd ai-agents/Labfiles/02-build-ai-agent/Python
+   rm -r ai-agents -f
+   git clone https://github.com/MicrosoftLearning/mslearn-ai-agents ai-agents
     ```
 
-1. In the cloud shell command line pane, enter the following command to install the libraries you'll use, which are:
-    - **python-dotenv** : Used to load settings from an application configuration file.
-    - **azure-identity**: Used to authenticate with Entra ID credentials.
-    - **azure-ai-projects**: Used to work with an Azure AI Foundry project.
+    > **Tip**: As you enter commands into the cloudshell, the ouput may take up a large amount of the screen buffer and the cursor on the current line may be obscured. You can clear the screen by entering the `cls` command to make it easier to focus on each task.
+
+1. Enter the following command to change the working directory to the folder containing the code files and list them all.
+
+    ```
+   cd ai-agents/Labfiles/02-build-ai-agent/python
+   ls -a -l
+    ```
+
+    The provided files include application code and a file for configuration settings.
+
+### Configure the application settings
+
+1. In the cloud shell command line pane, enter the following command to install the libraries you'll use:
 
     ```
    pip install python-dotenv azure-identity azure-ai-projects
@@ -138,90 +106,120 @@ Now that you've seen how agents work and how they can accomplish tasks on your b
 
     The file is opened in a code editor.
 
-1. In the code file, replace the **your_project_endpoint** placeholder with the connection string for your project (copied from the project **Overview** page in the Azure AI Foundry portal), and the **your_model_deployment** placeholder with the name you assigned to your GPT-4 model deployment.
-1. In the Agents playground, copy the name displayed in the **Setup** pane for your Bing resource and enter it in place of the **your_bing_connection** placeholder.
+1. In the code file, replace the **your_project_connection_string** placeholder with the connection string for your project (copied from the project **Overview** page in the Azure AI Foundry portal), and the **your_model_deployment** placeholder with the name you assigned to your gpt-4 model deployment.
 1. After you've replaced the placeholders, use the **CTRL+S** command to save your changes and then use the **CTRL+Q** command to close the code editor while keeping the cloud shell command line open.
 
-### Write code to connect to your project and chat with your model
+### Write code for an agent app
 
 > **Tip**: As you add code, be sure to maintain the correct indentation.
 
 1. Enter the following command to edit the code file that has been provided:
 
     ```
-   code basic-agent.py
+   code agent.py
     ```
 
-> **Tip**: In this exercise, you're actually building the whole agent mostly from scratch in your app to understand how to do so. During your own development, you can instead reference the agent ID of the agent you created in the Foundry portal to use that agent definition by using the `project_client.agents.get_agent("<agent_id>")`.
-
-1. Review the included libraries, taking note of the *Azure AI Projects* libraries for the client and tools.
-1. In the definition for *Initialize tools*, add the following code to create the tool definitions and toolset:
+1. Review the existing code, which retrieves the application configuration settings and loads data from *data.txt* to be analyzed. The rest of the file includes comments where you will add the necessary code to implement your data analysis agent.
+1. Find the comment **Add references** and add the following code to import the classes you will need to build an Azure AI agent that uses the built-in code interpreter tool:
 
     ```python
-    def initialize_tools():
-        # Create bing grounding tool
-        bing_connection = project_client.connections.get(
-            connection_name=os.getenv("BING_CONNECTION_NAME")
-        )
-        conn_id = bing_connection.id
-        bing = BingGroundingTool(connection_id=conn_id)
+   # Add references
+   from azure.identity import DefaultAzureCredential
+   from azure.ai.projects import AIProjectClient
+   from azure.ai.projects.models import CodeInterpreterTool
+    ```
+
+1. Find the comment **Connect to the Azure AI Foundry project** and add the following code to connect to the Azure AI project using the current Azure credentials.
+
+    > **Tip**: Be careful to maintain the correct indentation level.
+
+    ```python
+   # Connect to the Azure AI Foundry project
+   project_client = AIProjectClient.from_connection_string(
+       credential=DefaultAzureCredential
+            (exclude_environment_credential=True,
+             exclude_managed_identity_credential=True),
+       conn_str=PROJECT_CONNECTION_STRING
+   )
+    ```
     
-        # Create code interpreter tool
-        code_interpreter = CodeInterpreterTool()
+1. Find the comment **Define an agent that uses the CodeInterpreter tool** and add the following code to define an AI agent that analyzes data and can use the code interpreter tool:
+
+    ```python
+   # Define an agent that uses the Code Interpreter tool
+   with project_client:
+       code_interpreter = CodeInterpreterTool()
+       agent = project_client.agents.create_agent(
+           model=MODEL_DEPLOYMENT,
+           name="data-agent",
+           instructions="You are an AI agent that analyzes data. If the user requests a chart, you create it and save it as a .png file.",
+           tools=code_interpreter.definitions,
+           tool_resources=code_interpreter.resources,
+       )
+       print(f"Using agent: {agent.name}")
+    ```
+
+1. Note that the next section of code sets up a loop for a user to enter a prompt, ending when the user enters "quit".
+
+1. Find the comment **Send a prompt to the agent** and add the following code to create a thread, add a user message to the prompt along with the data from the file that was loaded previously, and run thread with the agent.
+
+    ```python
     
-        # Create toolset of tools
-        toolset = ToolSet()
-        toolset.add(bing)
-        toolset.add(code_interpreter)
-        return toolset
-    ```
+   # Send a prompt to the agent
+   thread = project_client.agents.create_thread()
+   message = project_client.agents.create_message(
+       thread_id=thread.id,
+       role="user",
+       content=f"{user_prompt} - {data}",
+   )
+   run = project_client.agents.create_and_process_run(thread_id=thread.id, agent_id=agent.id)
+     ```
 
-1. Under the comment **Create an agent**, add the following code to create your agent:
-
-    ```python
-    # Create an agent
-    agent = project_client.agents.create_agent(
-        model=deployed_model,
-        name="my-agent",
-        instructions="You are a helpful agent who provides information about movie trends. Keep answers concise, but include as much relevant data as possible.",
-        toolset=toolset,
-    )
-    print(f"Created agent, agent ID: {agent.id}")
-
-    # Create a thread
-    thread = project_client.agents.create_thread()
-    print(f"Created thread, thread ID: {thread.id}")
-
-    # Create a message
-    message = project_client.agents.create_message(
-        thread_id=thread.id,
-        role="user",
-        content="What were the 10 most popular movies in 2024? Chart out the total gross revenue for those movies",
-    )
-    print(f"Created message, message ID: {message.id}")
-    ```
-
-1. Review the code you just added, taking note of the creation of the agent, thread, and message.
-1. Under the comment **Run the agent**, add the following code to run your agent and get the messages from the thread, taking note of the client calls required to do so:
+1. Find the comment **Check the run status for failures** and add the following code to show any errors that occur.
 
     ```python
-    # Run the agent
-    run = project_client.agents.create_and_process_run(thread_id=thread.id, agent_id=agent.id)
-    print(f"Run finished with status: {run.status}")
-
-    if run.status == "failed":
-        # Check if you got "Rate limit is exceeded.", then you want to get more quota
-        print(f"Run failed: {run.last_error}")
-
-    # Get messages from the thread
-    messages = project_client.agents.list_messages(thread_id=thread.id)
+   # Check the run status for failures
+   if run.status == "failed":
+       print(f"Run failed: {run.last_error}")
     ```
 
-1. Use the **CTRL+S** command to save your changes to the code file and then use the **CTRL+Q** command to close the code editor while keeping the cloud shell command line open.
+1. Find the comment **Get messages from the thread** and add the following code to retrieve the messages from the completed thread and display the last ne that was sent by the agent.
+
+    ```python
+   # Get messages from the thread
+   messages = project_client.agents.list_messages(thread_id=thread.id)
+   last_msg = messages.get_last_text_message_by_role("assistant")
+   if last_msg:
+       print(f"Last Message: {last_msg.text.value}")
+    ```
+
+1. Find the comment **Save any generated files** and add the following code to get any file paths from the messages (which indicate that the agent generated a file) and save the generated files to the app folder.
+
+    ```python
+   # Save any generated files
+   for file_path_annotation in messages.file_path_annotations:
+       project_client.agents.save_file(file_id=file_path_annotation.file_path.file_id, file_name=Path(file_path_annotation.text).name)
+       print(f"File saved as {Path(file_path_annotation.text).name}")
+    ```
+
+1. Find the comment **Delete the agent when done** and add the following code to delete the agent when no longer needed.
+
+    ```python
+   # Delete the agent when done
+   project_client.agents.delete_agent(agent.id)
+    ```
+
+1. Review the code, using the comments to understand how it:
+    - Creates a new agent that uses the built-in code interpreter tool and has explicit instructions.
+    - Runs a thread with a prompt message from the user along with the data to be analyzed.
+    - Checks the status of the run in case there's a failure
+    - Retrieves the messages from the completed thread and displays the last one sent by the agent.
+    - Saves each file that was generated.
+    - Deletes the agent when it is no longer required.
+
+1. Save the code file (*CTRL+S*) when you have finished. You can also close the code editor (*CTRL+Q*); though you may want to keep it open in case you need to make any edits to the code you added. In either case, keep the cloud shell command line pane open.
 
 ### Sign into Azure and run the app
-
-Now that the code is complete, it's time to run the application.
 
 1. In the cloud shell command line pane, enter the following command to sign into Azure.
 
@@ -229,30 +227,51 @@ Now that the code is complete, it's time to run the application.
     az login
     ```
 
-    **<font color="red">You must sign into Azure - even though the cloud shell session is already authenticated.</font>**    
-
+    **<font color="red">You must sign into Azure - even though the cloud shell session is already authenticated.</font>** 
+    
 1. When prompted, follow the instructions to open the sign-in page in a new tab and enter the authentication code provided and your Azure credentials. Then complete the sign in process in the command line, selecting the subscription containing your Azure AI Foundry hub if prompted.
-
-1. After you have signed in, enter the following command to run the app:
-
-    ```
-   python basic-agent.py
-    ```
-
-1. Observe the output, which will display the agent's text response and download the image file. Open that file with the following command, and you'll see your agent has created a graphical chart with movie revenues:
+1. After you have signed in, enter the following command to run the application:
 
     ```
-   download ./<your_image_filename>
+    python agent.py
+    ```
+    
+    The application runs using the credentials for your authenticated Azure session to connect to your project and create and run the agent.
+
+1. When prompted, view the data that the app has loaded from the *data.txt* text file. Then enter a prompt such as:
+
+    ```
+   What's the highest value category?
+    ```
+
+    > **Tip**: If the app fails because the rate limit is exceeded. Wait a few seconds and try the prompt again.
+
+1. View the response. Then enter another prompt, this time requesting a chart:
+
+    ```
+   Create a pie chart by category.
+    ```
+
+1. The agent should selectively use the code interpreter tool as required, in this case to create a chart based on your request.
+
+1. Enter `quit` to end the application.
+
+1. When the application has finished, use the **download** command to download each .png file that was saved in the app folder. For example:
+
+    ```
+   download ./<file_name>.png
     ```
 
     The download command creates a popup link at the bottom right of your browser, which you can click to download and open the file.
-    
-1. Feel free to edit the message content to try other questions, such as popular movies from other years or certain genres.
+
+## Summary
+
+In this exercise, you used the Azure AI Agent Service SDK to create a client application that uses an AI agent. The agent uses the built-in Code Interpreter tool to run dynamic code that creates images.
 
 ## Clean up
 
-Now that you've finished the exercise, you should delete the cloud resources you've created to avoid unnecessary resource usage.
+If you've finished exploring Azure AI Agent Service, you should delete the resources you have created in this exercise to avoid incurring unnecessary Azure costs.
 
-1. Open the [Azure portal](https://portal.azure.com) at `https://portal.azure.com` and view the contents of the resource group where you deployed the hub resources used in this exercise.
+1. Return to the browser tab containing the Azure portal (or re-open the [Azure portal](https://portal.azure.com) at `https://portal.azure.com` in a new browser tab) and view the contents of the resource group where you deployed the resources used in this exercise.
 1. On the toolbar, select **Delete resource group**.
 1. Enter the resource group name and confirm that you want to delete it.
