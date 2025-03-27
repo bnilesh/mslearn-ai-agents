@@ -6,15 +6,9 @@ lab:
 
 # Create an AI agent
 
-In this exercise you will explore using built-in tools in Azure AI Foundry to connect to knowledge sources and interpret code. Then, you'll develop a basic agent in Python or C# (C# coming soon).
+In this exercise you will explore using built-in tools in Azure AI Foundry to connect to knowledge sources and interpret code. Then, you'll develop a basic agent in Python.
 
 This exercise should take approximately **30** minutes to complete.
-
-## Before you start
-
-To complete this exercise, you'll need:
-
-- An Azure subscription. If you don't already have one, you can [sign up for one](https://azure.microsoft.com/?azure-portal=true).
 
 ## Create an Azure AI Foundry project and deploy a model
 
@@ -37,7 +31,7 @@ Let's start by creating an Azure AI Foundry project.
     - **Connect Azure AI Services or Azure OpenAI**: *Create a new AI Services resource with an appropriate name (for example, `my-ai-services`) or use an existing one*
     - **Connect Azure AI Search**: Skip connecting
 
-    > \* Model quotas are constrained at the tenant level by regional quotas. In the event of a quota limit being reached later in the exercise, there's a possibility you may need to create another project in a different region.
+   > \* At the time of writing, the OpenAI *gpt-4* model we're going to use in this exercise is available for use with agents in these regions. You can check the latest regional availability for specific models in the [Azure AI Foundry documentation](https://learn.microsoft.com/azure/ai-foundry/how-to/deploy-models-serverless-availability#region-availability). In the event of a regional quota limit being reached later in the exercise, there's a possibility you may need to create another resource in a different region.
 
 1. Select **Next** and review your configuration. Then select **Create** and wait for the process to complete.
 1. Once complete, in the **My assets** section, select **Models + endpoints** and deploy a **gpt-4** base model with the following settings:
@@ -55,8 +49,8 @@ Now you're ready to create your agent.
 
 1. In the pane on the left for your project, in the **Build and customize** section, select the **Agents** page.
 1. If prompted to select an Azure OpenAI Service resource, select the one created with your hub name used above.
-1. Select the **gpt-4** model you deployed above.      
-1. Wait for the agents list to load, where you'll see a new agent created with a default name. Select it, and change the **Agent name** to **MovieTrendAgent**.
+1. Select the **gpt-4** model you deployed above.
+1. Wait for the agents list to load, where you'll see a new agent created with a default name. Select it, and change the **Agent name** to `MovieTrendAgent`.
 
 ## Integrate built-in tools
 
@@ -110,7 +104,7 @@ Now that you've seen how agents work and how they can accomplish tasks on your b
 
 1. In the cloud shell toolbar, in the **Settings** menu, select **Go to Classic version** (this is required to use the code editor).
 
-    > **Tip**: As you paste commands into the cloudshell, the ouput may take up a large amount of the screen buffer. You can clear the screen by entering the `cls` command to make it easier to focus on each task.
+    **<font color="red">It's important to choose exactly these settings - otherwise your agent may not work</font>**
 
 1. In the PowerShell pane, enter the following commands to clone the GitHub repo for this exercise:
 
@@ -118,6 +112,8 @@ Now that you've seen how agents work and how they can accomplish tasks on your b
     rm -r mslearn-ai-agents -f
     git clone https://github.com/microsoftlearning/mslearn-ai-agents ai-agents
     ```
+
+    > **Tip**: As you paste commands into the cloudshell, the ouput may take up a large amount of the screen buffer. You can clear the screen by entering the `cls` command to make it easier to focus on each task.
 
 1. After the repo has been cloned, navigate to the folder containing the application code files:  
 
@@ -248,6 +244,8 @@ Now that the code is complete, it's time to run the application.
     ```
    download ./<your_image_filename>
     ```
+
+    The download command creates a popup link at the bottom right of your browser, which you can click to download and open the file.
     
 1. Feel free to edit the message content to try other questions, such as popular movies from other years or certain genres.
 
