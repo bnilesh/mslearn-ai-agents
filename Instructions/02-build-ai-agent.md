@@ -69,7 +69,9 @@ Now you're ready to create a client app that uses an agent. Some code has been p
 ### Clone the repo containing the starter code
 
 1. Open a new browser tab (keeping the Azure AI Foundry portal open in the existing tab). Then in the new tab, browse to the [Azure portal](https://portal.azure.com) at `https://portal.azure.com`; signing in with your Azure credentials if prompted.
-1. Use the **[\>_]** button to the right of the search bar at the top of the page to create a new Cloud Shell in the Azure portal, selecting a ***PowerShell*** environment. The cloud shell provides a command line interface in a pane at the bottom of the Azure portal.
+1. Use the **[\>_]** button to the right of the search bar at the top of the page to create a new Cloud Shell in the Azure portal, selecting a ***PowerShell*** environment with no storage in your subscription.
+
+    The cloud shell provides a command line interface in a pane at the bottom of the Azure portal. You can resize or maximize this pane to make it easier to work in.
 
     > **Note**: If you have previously created a cloud shell that uses a *Bash* environment, switch it to ***PowerShell***.
 
@@ -89,7 +91,7 @@ Now you're ready to create a client app that uses an agent. Some code has been p
 1. Enter the following command to change the working directory to the folder containing the code files and list them all.
 
     ```
-   cd ai-agents/Labfiles/02-build-ai-agent/python
+   cd ai-agents/Labfiles/02-build-ai-agent/Python
    ls -a -l
     ```
 
