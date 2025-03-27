@@ -210,7 +210,7 @@ Now that you've seen how agents work and how they can accomplish tasks on your b
 
     ```python
     # Run the agent
-    run = project_client.agents.create_and_process_run(thread_id=thread.id, assistant_id=agent.id)
+    run = project_client.agents.create_and_process_run(thread_id=thread.id, agent_id=agent.id)
     print(f"Run finished with status: {run.status}")
 
     if run.status == "failed":
