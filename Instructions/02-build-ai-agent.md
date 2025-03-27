@@ -95,7 +95,7 @@ Now you're ready to create a client app that uses an agent. Some code has been p
    ls -a -l
     ```
 
-    The provided files include application code and a file for configuration settings.
+    The provided files include application code,configuration settings, and data.
 
 ### Configure the application settings
 
