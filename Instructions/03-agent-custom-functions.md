@@ -16,12 +16,6 @@ Tasks performed in this exercise:
 
 This exercise should take approximately **30** minutes to complete.
 
-## Before you start
-
-To complete this exercise, you'll need:
-
-- An Azure subscription. If you don't already have one, you can [sign up for one](https://azure.microsoft.com/).
-
 ## Create an Azure AI Foundry project
 
 Let's start by creating an Azure AI Foundry project.
