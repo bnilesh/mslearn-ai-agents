@@ -66,7 +66,7 @@ Now you're ready to deploy a generative AI language model to support your agent.
 
 Now you're ready to create a client app that uses an agent. Some code has been provided for you in a GitHub repository.
 
-### Clone the repo containing the starter code
+### Clone the repo containing the application code
 
 1. Open a new browser tab (keeping the Azure AI Foundry portal open in the existing tab). Then in the new tab, browse to the [Azure portal](https://portal.azure.com) at `https://portal.azure.com`; signing in with your Azure credentials if prompted.
 1. Use the **[\>_]** button to the right of the search bar at the top of the page to create a new Cloud Shell in the Azure portal, selecting a ***PowerShell*** environment with no storage in your subscription.
@@ -197,10 +197,10 @@ Now you're ready to create a client app that uses an agent. Some code has been p
         print(f"Run failed: {run.last_error}")
     ```
 
-1. Find the comment **Show the last response from the agent** and add the following code to retrieve the messages from the completed thread and display the last one that was sent by the agent.
+1. Find the comment **Show the latest response from the agent** and add the following code to retrieve the messages from the completed thread and display the last one that was sent by the agent.
 
     ```python
-   # Show the last response from the agent
+   # Show the latest response from the agent
    messages = project_client.agents.list_messages(thread_id=thread.id)
    last_msg = messages.get_last_text_message_by_role("assistant")
    if last_msg:
@@ -212,6 +212,7 @@ Now you're ready to create a client app that uses an agent. Some code has been p
     ```python
    # Get the conversation history
    print("\nConversation Log:\n")
+   messages = project_client.agents.list_messages(thread_id=thread.id)
    for message_data in reversed(messages.data):
         last_message_content = message_data.content[-1]
         print(f"{message_data.role}: {last_message_content.text.value}\n")
@@ -239,8 +240,9 @@ Now you're ready to create a client app that uses an agent. Some code has been p
     - Runs a thread with a prompt message from the user along with the data to be analyzed.
     - Checks the status of the run in case there's a failure
     - Retrieves the messages from the completed thread and displays the last one sent by the agent.
+    - Displays the conversation history
     - Saves each file that was generated.
-    - Deletes the agent when it is no longer required.
+    - Deletes the agent and thread when they are no longer required.
 
 1. Save the code file (*CTRL+S*) when you have finished. You can also close the code editor (*CTRL+Q*); though you may want to keep it open in case you need to make any edits to the code you added. In either case, keep the cloud shell command line pane open.
 

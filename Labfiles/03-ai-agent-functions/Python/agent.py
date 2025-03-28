@@ -5,7 +5,10 @@ from pathlib import Path
 
 
 # Add references
-
+from azure.identity import DefaultAzureCredential
+from azure.ai.projects import AIProjectClient
+from azure.ai.projects.models import FunctionTool, ToolSet
+from user_functions import user_functions
 
 def main(): 
 
@@ -17,22 +20,13 @@ def main():
     PROJECT_CONNECTION_STRING= os.getenv("AZURE_AI_AGENT_PROJECT_CONNECTION_STRING")
     MODEL_DEPLOYMENT = os.getenv("AZURE_AI_AGENT_MODEL_DEPLOYMENT_NAME")
 
-    # Load data to be analyzed
-    script_dir = Path(__file__).parent  # Get the directory of the script
-    file_path = script_dir / 'data.txt'
-
-    with file_path.open('r') as file:
-        data = file.read() + "\n"
-        print(data)
 
     # Connect to the Azure AI Foundry project
+    
 
 
+    # Define an agent that can use the custom functions
 
-    # Define an agent that uses the CodeInterpreter tool
-
-
-        # Create a thread for the conversation
 
     
         # Loop until the user types 'quit'
@@ -50,21 +44,17 @@ def main():
 
             # Check the run status for failures
 
-    
+                
             # Show the latest response from the agent
 
 
         # Get the conversation history
-        
-
-
-        # Get any generated files
-
 
 
         # Clean up
 
     
+
 
 
 if __name__ == '__main__': 

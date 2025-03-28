@@ -1,18 +1,14 @@
 ---
 lab:
     title: 'Implement custom tools in an AI agent'
-    description: 'Learn how define callback functions as function tools to add capabilities to your agents.'
+    description: 'Learn how to use function tools to add custom capabilities to your agents.'
 ---
 
 # Implement custom tools in an AI agent
 
-In this exercise you will explore creating an agent with a function call.
+In this exercise you will explore creating an agent that can use custom functions as a tool to complete tasks.
 
-Tasks performed in this exercise:
-
-- Create an Azure AI Foundry project and deploy a model
-- Develop an agent that uses function tools
-- Clean up resources
+You'll build a simple technical support agent that can collect details of a technical problem and generate a support ticket.
 
 This exercise should take approximately **30** minutes to complete.
 
@@ -72,7 +68,7 @@ Now you're ready to deploy a generative AI language model to support your agent.
 
 Now that you've created your project in AI Foundry, let's develop an app that implements an agent using custom function tools.
 
-### Clone the repo containing the starter code
+### Clone the repo containing the application code
 
 1. Open a new browser tab (keeping the Azure AI Foundry portal open in the existing tab). Then in the new tab, browse to the [Azure portal](https://portal.azure.com) at `https://portal.azure.com`; signing in with your Azure credentials if prompted.
 1. Use the **[\>_]** button to the right of the search bar at the top of the page to create a new Cloud Shell in the Azure portal, selecting a ***PowerShell*** environment with no storage in your subscription.
@@ -97,7 +93,7 @@ Now that you've created your project in AI Foundry, let's develop an app that im
 1. Enter the following command to change the working directory to the folder containing the code files and list them all.
 
     ```
-   cd ai-agents/Labfiles/03-enhance-ai-agent/Python
+   cd ai-agents/Labfiles/03-ai-agent-functions/Python
    ls -a -l
     ```
 
@@ -108,7 +104,7 @@ Now that you've created your project in AI Foundry, let's develop an app that im
 1. In the cloud shell command line pane, enter the following command to install the libraries you'll use:
 
     ```
-   pip install python-dotenv azure-identity azure-ai-projects==1.0.0b7
+   pip install python-dotenv azure-identity azure-ai-projects
     ```
 
     >**Note:** You can ignore any warning or error messages displayed during the library installation.
@@ -124,125 +120,164 @@ Now that you've created your project in AI Foundry, let's develop an app that im
 1. In the code file, replace the **your_project_connection_string** placeholder with the connection string for your project (copied from the project **Overview** page in the Azure AI Foundry portal), and the **your_model_deployment** placeholder with the name you assigned to your gpt-4 model deployment.
 1. After you've replaced the placeholders, use the **CTRL+S** command to save your changes and then use the **CTRL+Q** command to close the code editor while keeping the cloud shell command line open.
 
-### Write code to connect to your project and chat with your model
+### Define a custom function
 
-Now that you've configured the app, you'll add the necessary code to build an agent that uses a custom function. 
-
-1. Enter the following command to begin editing the code.
+1. Enter the following command to edit the code file that has been provided for your function code:
 
     ```
-    code agent-tool-starter.py
+   code user_functions.py
     ```
 
-1. Add the following code in the **Define the function and toolset** section. This code defines a function and adds it to the toolset.
-
-    > **Tip**: As you add code, be sure to maintain the correct indentation.
-
+1. Find the comment **Create a function to submit a support ticket** and add the following code, which generates a ticket number and saves a support ticket as a text file.
 
     ```python
-    def add_disclaimer(email: str) -> str:
-        """
-        Adds a disclaimer to the email content.
-        
-        # Function Purpose:
-        This function appends a standard disclaimer text to any email content.
-        It's used as a tool by the AI agent to process emails before sending.
-        
-        # Parameters Explained:
-        :param email (str): The email content provided by the AI agent.
-                            This is the complete text of the email that needs a disclaimer.
-        
-        # Return Value:
-        :return: The original email with the disclaimer added at the end.
-        :rtype: str (a string containing the modified email)
-        
-        # How It Works:
-        1. The function receives the email content as a string
-        2. It concatenates (joins) the original email with the disclaimer
-        3. It returns the complete email including the disclaimer
-        
-        # Usage in AI Context:
-        When the AI needs to generate an email, it will call this function
-        and pass the email content as an argument. The function returns the
-        modified email which the agent can then present to the user.
-        """
-        # Define the disclaimer with newlines for spacing
-        disclaimer = "\n\nThis is an automated email. Please do not reply."
-        
-        # Concatenate the original email with the disclaimer and return
-        return email + disclaimer
+   # Create a function to submit a support ticket
+   def submit_support_ticket(email_address: str, description: str) -> str:
+        script_dir = Path(__file__).parent  # Get the directory of the script
+        ticket_number = str(uuid.uuid4()).replace('-', '')[:6]
+        file_name = f"ticket-{ticket_number}.txt"
+        file_path = script_dir / file_name
+        text = f"Support ticket: {ticket_number}\nSubmitted by: {email_address}\nDescription:\n{description}"
+        file_path.write_text(text)
     
-    # Register our Python function as a tool that the AI can use
-    functions = FunctionTool({add_disclaimer})
+        message_json = json.dumps({"message": f"Support ticket {ticket_number} submitted. The ticket file is saved as {file_name}"})
+        return message_json
     ```
 
-1. Review the code you just entered. The comments explain how the function interacts with the agent.
-
-Now that the *FunctionTool* is defined, you need to add code to monitor the agent run status and handle the function calls.
-
-1. Add the following code in the **Monitor and process the run status, and handle the function calls** section to monitor the agent and invoke the *FunctionTool* when needed.
-
-    > **Tip**: As you add code, be sure to maintain the correct indentation.
+1. Find the comment **Define a set of callable functions** and add the following code, which statically defines a set of callable functions in this code file (in this case, there's only one - but in a real solution you may have multiple functions that your agent can call):
 
     ```python
-    # This loop keeps checking the agent's status until the interaction is complete
-    while run.status in ["queued", "in_progress", "requires_action"]:
-        # Sleep briefly to prevent excessive API calls
-        time.sleep(1)
-        
-        # Get the latest status of the run - this polls the agent to see what state it's in
-        run = project_client.agents.get_run(thread_id=thread.id, run_id=run.id)
-    
-        # If the agent needs to execute a tool/function, we need to handle that request
-        # "requires_action" means the AI needs us to run a function and give it the results
-        if run.status == "requires_action" and run.required_action.type == "submit_tool_outputs":
-    
-            # Extract the list of tool calls the AI wants us to perform
-            # A single response might require multiple function calls
-            tool_calls = run.required_action.submit_tool_outputs.tool_calls
-            tool_outputs = []  # We'll collect all function results here
-            
-            # Process each function call request from the AI
-            for tool_call in tool_calls:
-                # Get the name of the function to call and its arguments
-                function_name = tool_call.function.name
-                function_args = json.loads(tool_call.function.arguments)
-                
-                print(f"Executing function to add disclaimer.")
-                
-                # Execute the requested function with its arguments
-                # In this case we only have one function, but you could have multiple
-                if function_name == "add_disclaimer":
-                    email = function_args.get("email")
-                    output = add_disclaimer(email)
-                    
-                    # Store both the function result and which function call it belongs to
-                    # The tool_call_id links the result back to the specific request
-                    tool_outputs.append({
-                        "tool_call_id": tool_call.id,
-                        "output": output
-                    })
-            
-            # Send all the function results back to the AI agent so it can continue
-            run = project_client.agents.submit_tool_outputs_to_run(
-                thread_id=thread.id,
-                run_id=run.id,
-                tool_outputs=tool_outputs
-            )
-        
-        # Exit the loop if the run is no longer active
-        # This happens when processing is complete or failed
-        if run.status not in ["queued", "in_progress", "requires_action"]:
-            break
+   # Define a set of callable functions
+   user_functions: Set[Callable[..., Any]] = {
+        submit_support_ticket
+    }
+    ```
+1. Save the file (*CTRL+S*).
+
+### Write code to implement an agent that can use your function
+
+1. Enter the following command to begin editing the agent code.
+
+    ```
+    code agent.py
     ```
 
-1. Review the code you just entered. The comments explain how the code monitors the call to the agent, and how the function responds to the agent.
+    > **Tip**: As you add code to the code file, be sure to maintain the correct indentation.
 
-1. Use the **CTRL+S** command to save the changes, and then **CTRL+Q** to exit the editor.
+1. Review the existing code, which retrieves the application configuration settings and sets up a loop in which the user can enter prompts for the agent. The rest of the file includes comments where you will add the necessary code to implement your technical support agent.
+1. Find the comment **Add references** and add the following code to import the classes you will need to build an Azure AI agent that uses your function code as a tool:
+
+    ```python
+   # Add references
+   from azure.identity import DefaultAzureCredential
+   from azure.ai.projects import AIProjectClient
+   from azure.ai.projects.models import FunctionTool, ToolSet
+   from user_functions import user_functions
+    ```
+
+1. Find the comment **Connect to the Azure AI Foundry project** and add the following code to connect to the Azure AI project using the current Azure credentials.
+
+    > **Tip**: Be careful to maintain the correct indentation level.
+
+    ```python
+   # Connect to the Azure AI Foundry project
+   project_client = AIProjectClient.from_connection_string(
+        credential=DefaultAzureCredential
+            (exclude_environment_credential=True,
+             exclude_managed_identity_credential=True),
+        conn_str=PROJECT_CONNECTION_STRING
+   )
+    ```
+    
+1. Find the comment **Define an agent that can use the custom functions** section, and add the following code to add your function code to a toolset, and then create an agent that can use the toolset and a thread on which to run the chat session.
+
+    ```python
+   # Define an agent that can use the custom functions
+   with project_client:
+
+        functions = FunctionTool(user_functions)
+        toolset = ToolSet()
+        toolset.add(functions)
+            
+        agent = project_client.agents.create_agent(
+            model=MODEL_DEPLOYMENT,
+            name="support-agent",
+            instructions="""You are a technical support agent.
+                            When a user has a technical issue, you get their email address and a description of the issue.
+                            Then you use those values to submit a support ticket using the function available to you.
+                            If a file is saved, tell the user the file name.
+                         """,
+            toolset=toolset
+        )
+
+        thread = project_client.agents.create_thread()
+        print(f"You're chatting with: {agent.name} ({agent.id})")
+
+    ```
+
+1. Find the comment **Send a prompt to the agent** and add the following code to add the user's prompt as a message and run the thread.
+
+    ```python
+   # Send a prompt to the agent
+   message = project_client.agents.create_message(
+        thread_id=thread.id,
+        role="user",
+        content=user_prompt
+   )
+   run = project_client.agents.create_and_process_run(thread_id=thread.id, agent_id=agent.id)
+    ```
+
+    > **Note**: Using the **create_and_process_run** method to run the thread enables the agent to automatically find your functions and choose to use them based on their names and parameters. As an alternative, you could use the **create_run** method, in which case you would be responsible for writing code to poll for run status to determine when a function call is required, call the function, and return the results to the agent.
+
+1. Find the comment **Check the run status for failures** and add the following code to show any errors that occur.
+
+    ```python
+   # Check the run status for failures
+   if run.status == "failed":
+        print(f"Run failed: {run.last_error}")
+    ```
+
+1. Find the comment **Show the latest response from the agent** and add the following code to retrieve the messages from the completed thread and display the last one that was sent by the agent.
+
+    ```python
+   # Show the latest response from the agent
+   messages = project_client.agents.list_messages(thread_id=thread.id)
+   last_msg = messages.get_last_text_message_by_role("assistant")
+   if last_msg:
+        print(f"Last Message: {last_msg.text.value}")
+    ```
+
+1. Find the comment **Get the conversation history**, which is after the loop ends, and add the following code to print out the messages from the conversation thread; reversing the order to show them in chronological sequence
+
+    ```python
+   # Get the conversation history
+   print("\nConversation Log:\n")
+   messages = project_client.agents.list_messages(thread_id=thread.id)
+   for message_data in reversed(messages.data):
+        last_message_content = message_data.content[-1]
+        print(f"{message_data.role}: {last_message_content.text.value}\n")
+    ```
+
+1. Find the comment **Clean up** and add the following code to delete the agent and thread when no longer needed.
+
+    ```python
+   # Clean up
+   project_client.agents.delete_agent(agent.id)
+   project_client.agents.delete_thread(thread.id)
+    ```
+
+1. Review the code, using the comments to understand how it:
+    - Adds your set of custom functions to a toolset
+    - Creates an agent that uses the toolset.
+    - Runs a thread with a prompt message from the user.
+    - Checks the status of the run in case there's a failure
+    - Retrieves the messages from the completed thread and displays the last one sent by the agent.
+    - Displays the conversation history
+    - Deletes the agent and thread when they are no longer required.
+
+1. Save the code file (*CTRL+S*) when you have finished. You can also close the code editor (*CTRL+Q*); though you may want to keep it open in case you need to make any edits to the code you added. In either case, keep the cloud shell command line pane open.
 
 ### Sign into Azure and run the app
-
-Now that the code is complete, it's time to run the application.
 
 1. In the cloud shell command line pane, enter the following command to sign into Azure.
 
@@ -250,30 +285,35 @@ Now that the code is complete, it's time to run the application.
     az login
     ```
 
-    **<font color="red">You must sign into Azure - even though the cloud shell session is already authenticated.</font>**    
-
+    **<font color="red">You must sign into Azure - even though the cloud shell session is already authenticated.</font>** 
+    
 1. When prompted, follow the instructions to open the sign-in page in a new tab and enter the authentication code provided and your Azure credentials. Then complete the sign in process in the command line, selecting the subscription containing your Azure AI Foundry hub if prompted.
-
 1. After you have signed in, enter the following command to run the application:
 
     ```
-    python agent-tool-starter.py
+   python agent.py
+    ```
+    
+    The application runs using the credentials for your authenticated Azure session to connect to your project and create and run the agent.
+
+1. When prompted, enter a prompt such as:
+
+    ```
+   I have a technical problem
     ```
 
-1. When you are asked to enter a prompt, press **Enter** to accept the default prompt which will trigger the function. You should see output similar to the following example.
+    > **Tip**: If the app fails because the rate limit is exceeded. Wait a few seconds and try the prompt again.
+
+1. View the response. The agent may ask for your email address and a description of the issue. You can use any email address (for example, `alex@contoso.com`) and any issue description (for example `my computer won't start`)
+
+    When it has enough information, the agent should choose to use your funtion as required.
+
+1. You can continue the conversation if you like. The thread is *stateful*, so it retains the conversation history - meaning that the agent has the full context for each response. Enter `quit` when you're done.
+1. Review the conversation messages that were retrieved from the thread, and the tickets that were generated.
+1. The tool should have saved support tickets in the app folder. You can use the `ls` command to check, and then use the `cat` command to view the file contents, like this:
 
     ```
-    Last Message: Here is the final version of the email with the added disclaimer:
-    
-    "Dear Customer,
-    
-    We are pleased to inform you that your order has been shipped. You can expect to receive it 
-    within the customary shipping time. We appreciate your patience and your business.
-    
-    Best,
-    [Your Company]
-    
-    This is an automated email. Please do not reply."
+   cat ticket-<ticket_num>.txt
     ```
 
 ## Clean up
