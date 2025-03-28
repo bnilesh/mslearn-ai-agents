@@ -143,10 +143,10 @@ Now you're ready to create a client app that uses an agent. Some code has been p
     ```python
    # Connect to the Azure AI Foundry project
    project_client = AIProjectClient.from_connection_string(
-       credential=DefaultAzureCredential
+        credential=DefaultAzureCredential
             (exclude_environment_credential=True,
              exclude_managed_identity_credential=True),
-       conn_str=PROJECT_CONNECTION_STRING
+        conn_str=PROJECT_CONNECTION_STRING
    )
     ```
     
@@ -155,15 +155,15 @@ Now you're ready to create a client app that uses an agent. Some code has been p
     ```python
    # Define an agent that uses the Code Interpreter tool
    with project_client:
-       code_interpreter = CodeInterpreterTool()
-       agent = project_client.agents.create_agent(
-           model=MODEL_DEPLOYMENT,
-           name="data-agent",
-           instructions="You are an AI agent that analyzes data. If the user requests a chart, you create it and save it as a .png file.",
-           tools=code_interpreter.definitions,
-           tool_resources=code_interpreter.resources,
-       )
-       print(f"Using agent: {agent.name}")
+        code_interpreter = CodeInterpreterTool()
+        agent = project_client.agents.create_agent(
+            model=MODEL_DEPLOYMENT,
+            name="data-agent",
+            instructions="You are an AI agent that analyzes data. If the user requests a chart, you create it and save it as a .png file.",
+            tools=code_interpreter.definitions,
+            tool_resources=code_interpreter.resources,
+        )
+        print(f"Using agent: {agent.name}")
     ```
 
 1. Note that the next section of code sets up a loop for a user to enter a prompt, ending when the user enters "quit".
@@ -175,11 +175,11 @@ Now you're ready to create a client app that uses an agent. Some code has been p
    # Send a prompt to the agent
    thread = project_client.agents.create_thread()
    message = project_client.agents.create_message(
-       thread_id=thread.id,
-       role="user",
-       content=f"{user_prompt} - {data}",
-   )
-   run = project_client.agents.create_and_process_run(thread_id=thread.id, agent_id=agent.id)
+        thread_id=thread.id,
+        role="user",
+        content=f"{user_prompt} - {data}",
+    )
+    run = project_client.agents.create_and_process_run(thread_id=thread.id, agent_id=agent.id)
      ```
 
 1. Find the comment **Check the run status for failures** and add the following code to show any errors that occur.
@@ -187,7 +187,7 @@ Now you're ready to create a client app that uses an agent. Some code has been p
     ```python
    # Check the run status for failures
    if run.status == "failed":
-       print(f"Run failed: {run.last_error}")
+        print(f"Run failed: {run.last_error}")
     ```
 
 1. Find the comment **Get messages from the thread** and add the following code to retrieve the messages from the completed thread and display the last ne that was sent by the agent.
@@ -197,7 +197,7 @@ Now you're ready to create a client app that uses an agent. Some code has been p
    messages = project_client.agents.list_messages(thread_id=thread.id)
    last_msg = messages.get_last_text_message_by_role("assistant")
    if last_msg:
-       print(f"Last Message: {last_msg.text.value}")
+        print(f"Last Message: {last_msg.text.value}")
     ```
 
 1. Find the comment **Save any generated files** and add the following code to get any file paths from the messages (which indicate that the agent generated a file) and save the generated files to the app folder.
@@ -205,8 +205,8 @@ Now you're ready to create a client app that uses an agent. Some code has been p
     ```python
    # Save any generated files
    for file_path_annotation in messages.file_path_annotations:
-       project_client.agents.save_file(file_id=file_path_annotation.file_path.file_id, file_name=Path(file_path_annotation.text).name)
-       print(f"File saved as {Path(file_path_annotation.text).name}")
+        project_client.agents.save_file(file_id=file_path_annotation.file_path.file_id, file_name=Path(file_path_annotation.text).name)
+        print(f"File saved as {Path(file_path_annotation.text).name}")
     ```
 
 1. Find the comment **Delete the agent when done** and add the following code to delete the agent when no longer needed.
