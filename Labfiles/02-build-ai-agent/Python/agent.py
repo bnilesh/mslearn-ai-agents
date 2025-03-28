@@ -14,15 +14,15 @@ def main():
 
     # Load environment variables from .env file
     load_dotenv()
-    PROJECT_CONNECTION_STRING= os.getenv("PROJECT_CONNECTION")
-    MODEL_DEPLOYMENT = os.getenv("MODEL_DEPLOYMENT")
+    PROJECT_CONNECTION_STRING= os.getenv("AZURE_AI_AGENT_PROJECT_CONNECTION_STRING")
+    MODEL_DEPLOYMENT = os.getenv("AZURE_AI_AGENT_MODEL_DEPLOYMENT_NAME")
 
     # Load data to be analyzed
     script_dir = Path(__file__).parent  # Get the directory of the script
     file_path = script_dir / 'data.txt'
 
     with file_path.open('r') as file:
-        data = file.read()
+        data = file.read() + "\n"
         print(data)
 
     # Connect to the Azure AI Foundry project
@@ -30,6 +30,9 @@ def main():
 
 
     # Define an agent that uses the CodeInterpreter tool
+
+
+        # Create a thread for the conversation
 
     
         # Loop until the user types 'quit'
@@ -48,13 +51,18 @@ def main():
             # Check the run status for failures
 
     
-            # Get messages from the thread
-
-    
-            # Save any generated files
+            # Show the last response from the agent
 
 
-        # Delete the agent when done
+        # Get the conversation history
+        
+
+
+        # Get any generated files
+
+
+
+        # Clean up
 
     
 

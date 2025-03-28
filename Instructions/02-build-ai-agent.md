@@ -159,26 +159,33 @@ Now you're ready to create a client app that uses an agent. Some code has been p
         agent = project_client.agents.create_agent(
             model=MODEL_DEPLOYMENT,
             name="data-agent",
-            instructions="You are an AI agent that analyzes data. If the user requests a chart, you create it and save it as a .png file.",
+            instructions="You are an AI agent that analyzes data. If the user requests a chart, create it and save it as a .png file.",
             tools=code_interpreter.definitions,
             tool_resources=code_interpreter.resources,
         )
         print(f"Using agent: {agent.name}")
     ```
 
-1. Note that the next section of code sets up a loop for a user to enter a prompt, ending when the user enters "quit".
-
-1. Find the comment **Send a prompt to the agent** and add the following code to create a thread, add a user message to the prompt along with the data from the file that was loaded previously, and run thread with the agent.
+1. Find the comment **Create a thread for the conversation** and add the following code to start a thread on which the chat session with the agent will run (note that this code is indented under the *with* block that as started in the previous code):
 
     ```python
-    
-   # Send a prompt to the agent
    thread = project_client.agents.create_thread()
+    ```
+    
+1. Note that the next section of code sets up a loop for a user to enter a prompt, ending when the user enters "quit".
+
+1. Find the comment **Send a prompt to the agent** and add the following code to add a user message to the prompt (along with the data from the file that was loaded previously), and then run thread with the agent.
+
+    ```python
+   # Send a prompt to the agent
    message = project_client.agents.create_message(
         thread_id=thread.id,
         role="user",
-        content=f"{user_prompt} - {data}",
+        content=f"{data}{user_prompt}",
     )
+
+    data = "" # Clear data (it's only needed in the first message)
+
     run = project_client.agents.create_and_process_run(thread_id=thread.id, agent_id=agent.id)
      ```
 
@@ -190,17 +197,27 @@ Now you're ready to create a client app that uses an agent. Some code has been p
         print(f"Run failed: {run.last_error}")
     ```
 
-1. Find the comment **Get messages from the thread** and add the following code to retrieve the messages from the completed thread and display the last ne that was sent by the agent.
+1. Find the comment **Show the last response from the agent** and add the following code to retrieve the messages from the completed thread and display the last one that was sent by the agent.
 
     ```python
-   # Get messages from the thread
+   # Show the last response from the agent
    messages = project_client.agents.list_messages(thread_id=thread.id)
    last_msg = messages.get_last_text_message_by_role("assistant")
    if last_msg:
         print(f"Last Message: {last_msg.text.value}")
     ```
 
-1. Find the comment **Save any generated files** and add the following code to get any file paths from the messages (which indicate that the agent generated a file) and save the generated files to the app folder.
+1. Find the comment **Get the conversation history**, which is after the loop ends, and add the following code to print out the messages from the conversation thread; reversing the order to show them in chronological sequence
+
+    ```python
+   # Get the conversation history
+   print("\nConversation Log:\n")
+   for message_data in reversed(messages.data):
+        last_message_content = message_data.content[-1]
+        print(f"{message_data.role}: {last_message_content.text.value}\n")
+    ```
+
+1. Find the comment **Get any generated files** and add the following code to get any file path annotations from the messages (which indicate that the agent saved a file in its internal storage) and copy the files to the app folder.
 
     ```python
    # Save any generated files
@@ -209,11 +226,12 @@ Now you're ready to create a client app that uses an agent. Some code has been p
         print(f"File saved as {Path(file_path_annotation.text).name}")
     ```
 
-1. Find the comment **Delete the agent when done** and add the following code to delete the agent when no longer needed.
+1. Find the comment **Clean up** and add the following code to delete the agent and thread when no longer needed.
 
     ```python
-   # Delete the agent when done
+   # Clean up
    project_client.agents.delete_agent(agent.id)
+   project_client.agents.delete_thread(thread.id)
     ```
 
 1. Review the code, using the comments to understand how it:
@@ -248,7 +266,7 @@ Now you're ready to create a client app that uses an agent. Some code has been p
 1. When prompted, view the data that the app has loaded from the *data.txt* text file. Then enter a prompt such as:
 
     ```
-   What's the highest value category?
+   What's the category with the highest cost?
     ```
 
     > **Tip**: If the app fails because the rate limit is exceeded. Wait a few seconds and try the prompt again.
@@ -256,12 +274,13 @@ Now you're ready to create a client app that uses an agent. Some code has been p
 1. View the response. Then enter another prompt, this time requesting a chart:
 
     ```
-   Create a pie chart by category.
+   Create a pie chart showing cost by category.
     ```
 
-1. The agent should selectively use the code interpreter tool as required, in this case to create a chart based on your request.
+    The agent should selectively use the code interpreter tool as required, in this case to create a chart based on your request.
 
-1. Enter `quit` to end the application.
+1. You can continue the conversation if you like. The thread is *stateful*, so it retains the conversation history - meaning that the agent has the full context for each response. Enter `quit` when you're done.
+1. Review the conversation messages that were retrieved from the thread, and the files that were generated.
 
 1. When the application has finished, use the **download** command to download each .png file that was saved in the app folder. For example:
 
