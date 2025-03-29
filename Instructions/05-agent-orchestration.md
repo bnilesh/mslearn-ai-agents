@@ -60,7 +60,7 @@ Now you're ready to deploy a generative AI language model to support your agents
 
 1. Deploy the model with the following settings by selecting **Customize** in the deployment details:
 
-    - **Deployment name**: *A unique name for your model deployment - for example `gpt-4-model` (remember the name you choose - you'll need it later)*
+    - **Deployment name**: *A unique name for your model deployment - for example `gpt-4` (remember the name you choose - you'll need it later)*
     - **Deployment type**: Standard
     - **Model version**: 0613
     - **Connected AI resource**: *Select your Azure OpenAI resource connection*
