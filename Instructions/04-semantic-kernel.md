@@ -24,15 +24,16 @@ Let's start by creating an Azure AI Foundry project.
     - **Hub name**: *A unique name - for example `my-ai-hub`*
     - **Subscription**: *Your Azure subscription*
     - **Resource group**: *Create a new resource group with a unique name (for example, `my-ai-resources`), or select an existing one*
-    - **Location**: **Location**: Select any of the following regions\*:
-        - East US
-        - Japan East
-        - UK South
-        - West US
+    - **Location**: Select a region from the following:\*
+        - australiaeast
+        - eastus
+        - eastus2
+        - francecentral
+        - swedencentral
     - **Connect Azure AI Services or Azure OpenAI**: *Create a new AI Services resource with an appropriate name (for example, `my-ai-services`) or use an existing one*
     - **Connect Azure AI Search**: Skip connecting
 
-   > \* At the time of writing, the OpenAI *gpt-35-turbo* model we're going to use in this exercise is available for use with agents in these regions. You can check the latest regional availability for specific models in the [Azure AI Foundry documentation](https://learn.microsoft.com/azure/ai-foundry/how-to/deploy-models-serverless-availability#region-availability). In the event of a regional quota limit being reached later in the exercise, there's a possibility you may need to create another resource in a different region.
+    > \* At the time of writing, these regions support the gpt-4 model for use in agents. Model quotas are constrained at the tenant level by regional quotas. In the event of a quota limit being reached later in the exercise, there's a possibility you may need to create another project in a different region.
 
 1. Select **Next** and review your configuration. Then select **Create** and wait for the process to complete.
 1. When your project is created, close any tips that are displayed and review the project page in Azure AI Foundry portal, which should look similar to the following image:
@@ -45,23 +46,19 @@ Let's start by creating an Azure AI Foundry project.
 
 Now you're ready to deploy a generative AI language model to support your agent.
 
-1. In the toolbar at the top right of your Azure AI Foundry project page, use the **Preview features** icon to ensure that the **Deploy models to Azure AI model inference service** feature is enabled. This feature ensures your model is deployed to the Azure AI Inference service.
 1. In the pane on the left for your project, in the **My assets** section, select the **Models + endpoints** page.
 1. In the **Models + endpoints** page, in the **Model deployments** tab, in the **+ Deploy model** menu, select **Deploy base model**.
-1. Search for the `gpt-35-turbo` model in the list, and then select and confirm it.
+1. Search for the **gpt-4** model in the list, and then select and confirm it.
 1. Deploy the model with the following settings by selecting **Customize** in the deployment details:
-
-    **<font color="red">It's important to choose exactly these settings - otherwise your agent may not work</font>**
-
-    - **Deployment name**: *A unique name for your model deployment - for example `gpt-35-turbo` (remember the name you choose - you'll need it later)*
+    - **Deployment name**: *A unique name for your model deployment - for example `gpt-4-model` (remember the name you choose - you'll need it later)*
     - **Deployment type**: Standard
-    - **Model version**: 0125
+    - **Model version**: 0613
     - **Connected AI resource**: *Select your Azure OpenAI resource connection*
-    - **Tokens per Minute Rate Limit (thousands)**: 10K
+    - **Tokens per Minute Rate Limit (thousands)**: 5K
     - **Content filter**: DefaultV2
-    - **Enable dynamic quota**: Enabled
-      
-    > **Note**: Reducing the TPM helps avoid over-using the quota available in the subscription you are using. 10,000 TPM should be sufficient for the data used in this exercise. If you later experience a *Rate Limit Reached* error, you can edit the model deployment to increase this value.
+    - **Enable dynamic quota**: Disabled
+
+    > **Note**: Reducing the TPM helps avoid over-using the quota available in the subscription you are using. 5,000 TPM is sufficient for the data used in this exercise.
 
 1. Wait for the deployment provisioning state to be **Completed**.
 
@@ -124,7 +121,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
 
     The file is opened in a code editor.
 
-1. In the code file, replace the **your_project_connection_string** placeholder with the connection string for your project (copied from the project **Overview** page in the Azure AI Foundry portal), and the **your_model_deployment** placeholder with the name you assigned to your gpt-35-turbo model deployment.
+1. In the code file, replace the **your_project_connection_string** placeholder with the connection string for your project (copied from the project **Overview** page in the Azure AI Foundry portal), and the **your_model_deployment** placeholder with the name you assigned to your gpt-4 model deployment.
 1. After you've replaced the placeholders, use the **CTRL+S** command to save your changes and then use the **CTRL+Q** command to close the code editor while keeping the cloud shell command line open.
 
 ### Write code for an agent app
@@ -149,12 +146,12 @@ Now you're ready to create a client app that defines an agent and a custom funct
    # Add references
    from dotenv import load_dotenv
    from azure.identity.aio import DefaultAzureCredential
-   from semantic_kernel.agents.azure_ai import AzureAIAgent, AzureAIAgentSettings
+   from semantic_kernel.agents import AzureAIAgent, AzureAIAgentSettings
    from semantic_kernel.functions import kernel_function
    from typing import Annotated
     ```
 
-1. Near the bottom of the file, find the comment **Create a Plugin for the email functionality**, and add the following code to define a class for a plugin containing a function that your agent will use to send email:
+1. Near the bottom of the file, find the comment **Create a Plugin for the email functionality**, and add the following code to define a class for a plugin containing a function that your agent will use to send email (plug-ins are a way to add custom functionality to Semantic Kernel agents)
 
     ```python
    # Create a Plugin for the email functionality
@@ -209,7 +206,9 @@ Now you're ready to create a client app that defines an agent and a custom funct
    expenses_agent_def = await project_client.agents.create_agent(
        model= ai_agent_settings.model_deployment_name,
        name="expenses_agent",
-       instructions="Send an expense claim to expenses@contoso.com with the subject 'Expense Claim`and a body that contains itemized expenses with a total."
+       instructions="""You are an AI assistant for expense claim submission.
+                       When a user submits expenses data and requests an expense claim, use the plug-in function to send an email to expenses@contoso.com with the subject 'Expense Claim`and a body that contains itemized expenses with a total.
+                       Then confirm to the user that you've done so."""
    )
     ```
 
@@ -233,119 +232,23 @@ Now you're ready to create a client app that defines an agent and a custom funct
     ```python
    # Use the agent to generate an expense claim email
    thread = await project_client.agents.create_thread()
-
    try:
-       # Add the user input as a chat message
-       prompt_message = "Create an expense claim for the following expenses: " + expenses_data
-       await expenses_agent.add_chat_message(thread_id=thread.id, message=prompt_message)
-       # Invoke the agent for the specified thread for response
-       response = await expenses_agent.get_response(thread_id=thread.id)
-       print(f"\n# {response.name}:\n{response}")
+        # Add the input prompt to a list of messages to be submitted
+        prompt_messages = [f"Create an expense claim for the following expenses: {expenses_data}"]
+        # Invoke the agent for the specified thread with the messages
+        response = await expenses_agent.get_response(thread_id=thread.id, messages=prompt_messages)
+        # Display the response
+        print(f"\n# {response.name}:\n{response}")
    except Exception as e:
-       # Something went wrong
-       print (e)
+        # Something went wrong
+        print (e)
    finally:
-       # Cleanup: Delete the thread and agent
-       await project_client.agents.delete_thread(thread.id)
-       await project_client.agents.delete_agent(expenses_agent.id)
+        # Cleanup: Delete the thread and agent
+        await project_client.agents.delete_thread(thread.id)
+        await project_client.agents.delete_agent(expenses_agent.id)
     ```
 
-1. Verify that the completed code for your agent looks like this, and then save your code changes (**CTRL+S**).
-
-    ```python
-   import os                                                       
-   import asyncio
-   from typing import Annotated
-    
-   # Add references
-   from dotenv import load_dotenv
-   from azure.identity.aio import DefaultAzureCredential
-   from semantic_kernel.agents.azure_ai import AzureAIAgent, AzureAIAgentSettings
-   from semantic_kernel.functions import kernel_function
-    
-   async def main():
-       # Clear the console
-       os.system('cls' if os.name=='nt' else 'clear')
-    
-       # Create expense claim data
-       data = """{'expenses':[
-                   {'date':'07-Mar-2025','description':'taxi','amount':24.00},
-                   {'date':'07-Mar-2025','description':'dinner','amount':65.50},
-                   {'date':'07-Mar-2025','description':'hotel','amount':125.90}]
-               }
-               """
-    
-       # Run the async agent code
-       await create_expense_claim(data)
-    
-   async def create_expense_claim(expenses_data):
-    
-       # Get configuration settings
-       load_dotenv()
-       ai_agent_settings = AzureAIAgentSettings.create()
-    
-       # Connect to the Azure AI Foundry project
-       async with (
-           DefaultAzureCredential(
-               exclude_environment_credential=True,
-               exclude_managed_identity_credential=True) as creds,
-           AzureAIAgent.create_client(
-               credential=creds,
-               conn_str=ai_agent_settings.project_connection_string.get_secret_value(),
-           ) as project_client,
-       ):
-     
-           # Define an Azure AI agent that sends an expense claim email
-           expenses_agent_def = await project_client.agents.create_agent(
-               model= ai_agent_settings.model_deployment_name,
-               name="expenses_agent",
-               instructions="Send an expense claim to expenses@contoso.com with the subject 'Expense Claim`and a body that contains itemized expenses with a total."
-           )
-    
-           # Create a semantic kernel agent
-           expenses_agent = AzureAIAgent(
-               client=project_client,
-               definition=expenses_agent_def,
-               plugins=[EmailPlugin()]
-           )
-    
-           # Use the agent to generate an expense claim email
-           thread = await project_client.agents.create_thread()
-    
-           try:
-               # Add the user input as a chat message
-               prompt_message = "Create an expense claim for the following expenses: " + expenses_data
-               await expenses_agent.add_chat_message(thread_id=thread.id, message=prompt_message)
-               # Invoke the agent for the specified thread for response
-               response = await expenses_agent.get_response(thread_id=thread.id)
-               print(f"\n# {response.name}:\n{response}")
-           except Exception as e:
-               # Something went wrong
-               print (e)
-           finally:
-               # Cleanup: Delete the thread and agent
-               await project_client.agents.delete_thread(thread.id)
-               await project_client.agents.delete_agent(expenses_agent.id)
-    
-
-   # Create a Plugin for the email functionality
-   class EmailPlugin:
-       """A Plugin to simulate email functionality."""
-    
-       @kernel_function(description="Sends an email.")
-       def send_email(self,
-           to: Annotated[str, "Who to send the email to"],
-           subject: Annotated[str, "The subject of the email."],
-           body: Annotated[str, "The text body of the email."]):
-           print("\nTo:", to)
-           print("Subject:", subject)
-           print(body, "\n")
-    
-    
-   if __name__ == "__main__":
-       asyncio.run(main())
-    ```
-    
+1. Review that the completed code for your agent,using the comments to help you understand what each block of code does, and then save your code changes (**CTRL+S**).
 
 ### Sign into Azure and run the app
 

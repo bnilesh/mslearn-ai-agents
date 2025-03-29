@@ -10,12 +10,10 @@ async def main():
     os.system('cls' if os.name=='nt' else 'clear')
 
     # Create expense claim data
-    data = """{'expenses':[
-                {'date':'07-Mar-2025','description':'taxi','amount':24.00},
-                {'date':'07-Mar-2025','description':'dinner','amount':65.50},
-                {'date':'07-Mar-2025','description':'hotel','amount':125.90}]
-            }
-            """
+    data = """date,description,amount
+              07-Mar-2025,taxi,24.00
+              07-Mar-2025,dinner,65.50
+              07-Mar-2025,hotel,125.90"""
 
     # Run the async agent code
     await create_expense_claim(data)
