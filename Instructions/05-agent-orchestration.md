@@ -221,15 +221,15 @@ Let's start with the **SelectionStrategy**, identifies which agent should take t
 
     ```python
    async def select_agent(self, agents, history):
-       """"Check which agent should take the next turn in the chat."""
+        """"Check which agent should take the next turn in the chat."""
 
-       # The Incident Manager should go after the User or the Devops Assistant
-       if (history[-1].name == DEVOPS_ASSISTANT or history[-1].role == AuthorRole.USER):
-           agent_name = INCIDENT_MANAGER
-           return next((agent for agent in agents if agent.name == agent_name), None)
+        # The Incident Manager should go after the User or the Devops Assistant
+        if (history[-1].name == DEVOPS_ASSISTANT or history[-1].role == AuthorRole.USER):
+            agent_name = INCIDENT_MANAGER
+            return next((agent for agent in agents if agent.name == agent_name), None)
         
-       # Otherwise it is the Devops Assistant's turn
-       return next((agent for agent in agents if agent.name == DEVOPS_ASSISTANT), None)
+        # Otherwise it is the Devops Assistant's turn
+        return next((agent for agent in agents if agent.name == DEVOPS_ASSISTANT), None)
     ```
 
     This code runs on every turn to determine which agent should respond, checking the chat history to see who last responded.
@@ -240,8 +240,8 @@ Let's start with the **SelectionStrategy**, identifies which agent should take t
 
     ```python
    async def should_agent_terminate(self, agent, history):
-       """Check if the agent should terminate."""
-       return "no action needed" in history[-1].content.lower()
+        """Check if the agent should terminate."""
+        return "no action needed" in history[-1].content.lower()
     ```
 
     The kernel invokes this function after the agent's response to determine if the completion criteria is complete. In this case, the goal is met when the incident manager responds with "No action needed." This phrase is defined in the incident manager agent instructions.
@@ -255,13 +255,13 @@ Now that you have two agents, and strategies to help them take turns and end a c
     ```python
    # Add the agents to a group chat with a custom termination and selection strategy
    chat = AgentGroupChat(
-       agents=[agent_incident, agent_devops],
-       termination_strategy=ApprovalTerminationStrategy(
-           agents=[agent_incident], 
-           maximum_iterations=10, 
-           automatic_reset=True
-       ),
-       selection_strategy=SelectionStrategy(agents=[agent_incident,agent_devops]),      
+        agents=[agent_incident, agent_devops],
+        termination_strategy=ApprovalTerminationStrategy(
+            agents=[agent_incident], 
+            maximum_iterations=10, 
+            automatic_reset=True
+        ),
+        selection_strategy=SelectionStrategy(agents=[agent_incident,agent_devops]),      
    )
     ```
 
