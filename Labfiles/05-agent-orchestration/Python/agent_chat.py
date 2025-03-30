@@ -2,6 +2,7 @@ import asyncio
 import os
 import textwrap
 from datetime import datetime
+from pathlib import Path
 
 from azure.identity.aio import DefaultAzureCredential
 from semantic_kernel.agents import AgentGroupChat
@@ -70,9 +71,11 @@ async def main():
 
         # Add the agents to a group chat with a custom termination and selection strategy
         
-
-        for filename in os.listdir("sample_logs"):
-            logfile_msg = ChatMessageContent(role=AuthorRole.USER, content=f"USER > sample_logs/{filename}")
+         # Process log files
+        script_dir = Path(__file__).parent  # Get the directory of the script
+        file_path = script_dir / "sample_logs"
+        for filename in os.listdir(file_path):
+            logfile_msg = ChatMessageContent(role=AuthorRole.USER, content=f"USER > {file_path}/{filename}")
             
             # Append the current log file to the chat
 
