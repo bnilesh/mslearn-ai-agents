@@ -169,6 +169,7 @@ Now you're ready to create a client app that uses an agent. Some code has been p
 1. Find the comment **Create a thread for the conversation** and add the following code to start a thread on which the chat session with the agent will run (note that this code is indented under the *with* block that as started in the previous code):
 
     ```python
+   # Create a thread for the conversation
    thread = project_client.agents.create_thread()
     ```
     
