@@ -320,11 +320,11 @@ Now you're ready to run your code and watch your AI agents collaborate.
     
     INCIDENT_MANAGER > /home/.../sample_logs/log1.log | Restart service ServiceX
     DEVOPS_ASSISTANT > Service ServiceX restarted successfully.
-    INCIDENT_MANAGER > /home/.../sample_logs/log1.log | No action needed.
+    INCIDENT_MANAGER > No action needed.
 
     INCIDENT_MANAGER > /home/.../sample_logs/log2.log | Rollback transaction for transaction ID 987654.
     DEVOPS_ASSISTANT > Transaction rolled back successfully.
-    INCIDENT_MANAGER > /home/.../sample_logs/log2.log | No action needed.
+    INCIDENT_MANAGER > No action needed.
 
     INCIDENT_MANAGER > /home/.../sample_logs/log3.log | Increase quota.
     DEVOPS_ASSISTANT > Successfully increased quota.
