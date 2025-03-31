@@ -19,7 +19,7 @@ Let's start by creating an Azure AI Foundry project.
     ![Screenshot of Azure AI Foundry portal.](./Media/ai-foundry-home.png)
 
 1. In the home page, select **+ Create project**.
-1. 1. In the **Create a project** wizard, enter a suitable project name (for example, `my-ai-project`) and if an existing hub is suggested, choose the option to create a new one. Then review the Azure resources that will be automatically created to support your hub and project.
+1. In the **Create a project** wizard, enter a suitable project name (for example, `my-ai-project`) and if an existing hub is suggested, choose the option to create a new one. Then review the Azure resources that will be automatically created to support your hub and project.
 1. Select **Customize** and specify the following settings for your hub:
     - **Hub name**: *A unique name - for example `my-ai-hub`*
     - **Subscription**: *Your Azure subscription*
@@ -69,6 +69,9 @@ Now you're ready to create a client app that uses an agent. Some code has been p
 ### Clone the repo containing the application code
 
 1. Open a new browser tab (keeping the Azure AI Foundry portal open in the existing tab). Then in the new tab, browse to the [Azure portal](https://portal.azure.com) at `https://portal.azure.com`; signing in with your Azure credentials if prompted.
+
+    Close any welcome notifications to see the Azure portal home page.
+
 1. Use the **[\>_]** button to the right of the search bar at the top of the page to create a new Cloud Shell in the Azure portal, selecting a ***PowerShell*** environment with no storage in your subscription.
 
     The cloud shell provides a command line interface in a pane at the bottom of the Azure portal. You can resize or maximize this pane to make it easier to work in.

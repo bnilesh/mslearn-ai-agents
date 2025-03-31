@@ -71,6 +71,9 @@ Now that you've created your project in AI Foundry, let's develop an app that im
 ### Clone the repo containing the application code
 
 1. Open a new browser tab (keeping the Azure AI Foundry portal open in the existing tab). Then in the new tab, browse to the [Azure portal](https://portal.azure.com) at `https://portal.azure.com`; signing in with your Azure credentials if prompted.
+
+    Close any welcome notifications to see the Azure portal home page.
+
 1. Use the **[\>_]** button to the right of the search bar at the top of the page to create a new Cloud Shell in the Azure portal, selecting a ***PowerShell*** environment with no storage in your subscription.
 
     The cloud shell provides a command line interface in a pane at the bottom of the Azure portal. You can resize or maximize this pane to make it easier to work in.
