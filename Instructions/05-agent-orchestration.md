@@ -165,9 +165,9 @@ Now you're ready to create the  agents for your multi-agent solution! Let's get 
     ```python
    # Create the incident manager agent on the Azure AI agent service
    incident_agent_definition = await client.agents.create_agent(
-       model=ai_agent_settings.model_deployment_name,
-       name=INCIDENT_MANAGER,
-       instructions=INCIDENT_MANAGER_INSTRUCTIONS
+        model=ai_agent_settings.model_deployment_name,
+        name=INCIDENT_MANAGER,
+        instructions=INCIDENT_MANAGER_INSTRUCTIONS
    )
     ```
 
@@ -178,9 +178,9 @@ Now you're ready to create the  agents for your multi-agent solution! Let's get 
     ```python
    # Create a Semantic Kernel agent for the Azure AI incident manager agent
    agent_incident = AzureAIAgent(
-       client=client,
-       definition=incident_agent_definition,
-       plugins=[LogFilePlugin()]
+        client=client,
+        definition=incident_agent_definition,
+        plugins=[LogFilePlugin()]
    )
     ```
 
@@ -195,9 +195,9 @@ Now you're ready to create the  agents for your multi-agent solution! Let's get 
     ```python
    # Create the devops agent on the Azure AI agent service
    devops_agent_definition = await client.agents.create_agent(
-       model=ai_agent_settings.model_deployment_name,
-       name=DEVOPS_ASSISTANT,
-       instructions=DEVOPS_ASSISTANT_INSTRUCTIONS,
+        model=ai_agent_settings.model_deployment_name,
+        name=DEVOPS_ASSISTANT,
+        instructions=DEVOPS_ASSISTANT_INSTRUCTIONS,
    )
     ```
 
@@ -206,9 +206,9 @@ Now you're ready to create the  agents for your multi-agent solution! Let's get 
     ```python
    # Create a Semantic Kernel agent for the devops Azure AI agent
    agent_devops = AzureAIAgent(
-       client=client,
-       definition=devops_agent_definition,
-       plugins=[DevopsPlugin()]
+        client=client,
+        definition=devops_agent_definition,
+        plugins=[DevopsPlugin()]
    )
     ```
 
@@ -285,9 +285,9 @@ Now that you have two agents, and strategies to help them take turns and end a c
     ```python
    # Invoke a response from the agents
    async for response in chat.invoke():
-       if response is None or not response.name:
-           continue
-       print(f"{response.content}")
+        if response is None or not response.name:
+            continue
+        print(f"{response.content}")
     ```
 
     This is the code that triggers the chat. Since the log file text has been added as a message, the selection strategy will determine which agent should read and respond to it and then the conversation will continue between the agents until the conditions of the termination strategy are met or the maximum number of iterations is reached.
