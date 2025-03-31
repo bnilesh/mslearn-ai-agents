@@ -222,7 +222,7 @@ Now you're ready to create a client app that uses an agent. Some code has been p
 1. Find the comment **Get any generated files** and add the following code to get any file path annotations from the messages (which indicate that the agent saved a file in its internal storage) and copy the files to the app folder.
 
     ```python
-   # Save any generated files
+   # Get any generated files
    for file_path_annotation in messages.file_path_annotations:
         project_client.agents.save_file(file_id=file_path_annotation.file_path.file_id, file_name=Path(file_path_annotation.text).name)
         print(f"File saved as {Path(file_path_annotation.text).name}")
