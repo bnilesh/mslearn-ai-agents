@@ -50,14 +50,14 @@ Now you're ready to deploy a generative AI language model to support your agent.
 1. Deploy the model with the following settings by selecting **Customize** in the deployment details:
     - **Deployment name**: *A unique name for your model deployment - for example `gpt-4`*
     - **Deployment type**: Standard
-    - **Model version**: 0613 *This is likely the default version*
+    - **Model version**: 0613
     - **Connected AI resource**: *Select your Azure OpenAI resource connection*
     - **Tokens per Minute Rate Limit (thousands)**: 5K
     - **Content filter**: DefaultV2
     - **Enable dynamic quota**: Disabled
       
     > **Note**: Reducing the TPM helps avoid over-using the quota available in the subscription you are using. 5,000 TPM is sufficient for the data used in this exercise.
-1. Wait for the deployment provisioning state to be **Completed**.
+1. Wait for the deployment to complete.
 
 ## Create an AI agent
 

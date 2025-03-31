@@ -60,7 +60,7 @@ Now you're ready to deploy a generative AI language model to support your agent.
       
     > **Note**: Reducing the TPM helps avoid over-using the quota available in the subscription you are using. 5,000 TPM is sufficient for the data used in this exercise.
 
-1. Wait for the deployment provisioning state to be **Completed**.
+1. Wait for the deployment to complete.
 
 ## Create an agent client app
 
