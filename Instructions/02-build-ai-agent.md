@@ -175,7 +175,7 @@ Now you're ready to create a client app that uses an agent. Some code has been p
    agent = project_client.agents.create_agent(
         model=MODEL_DEPLOYMENT,
         name="data-agent",
-        instructions="You are an AI agent that analyzes data. If the user requests a chart, create it and save it as a .png file.",
+        instructions="You are an AI agent that analyzes the data in the file that has been uploaded. If the user requests a chart, create it and save it as a .png file.",
         tools=code_interpreter.definitions,
         tool_resources=code_interpreter.resources,
    )
