@@ -1,10 +1,10 @@
 ---
 lab:
-    title: 'Implement custom tools in an AI agent'
-    description: 'Learn how to use function tools to add custom capabilities to your agents.'
+    title: 'Use a custom function in an AI agent'
+    description: 'Learn how to use functions to add custom capabilities to your agents.'
 ---
 
-# Implement custom tools in an AI agent
+# Use a custom function in an AI agent
 
 In this exercise you will explore creating an agent that can use custom functions as a tool to complete tasks.
 
