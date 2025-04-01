@@ -121,7 +121,7 @@ Now you're ready to create a client app that uses an agent. Some code has been p
 
 ### Write code for an agent app
 
-> **Tip**: As you add code, be sure to maintain the correct indentation.
+> **Tip**: As you add code, be sure to maintain the correct indentation. Use the comment indentation levels as a guide.
 
 1. Enter the following command to edit the code file that has been provided:
 
@@ -136,10 +136,10 @@ Now you're ready to create a client app that uses an agent. Some code has been p
    # Add references
    from azure.identity import DefaultAzureCredential
    from azure.ai.projects import AIProjectClient
-   from azure.ai.projects.models import CodeInterpreterTool
+   from azure.ai.projects.models import FilePurpose, CodeInterpreterTool
     ```
 
-1. Find the comment **Connect to the Azure AI Foundry project** and add the following code to connect to the Azure AI project using the current Azure credentials.
+1. Find the comment **Connect to the Azure AI Foundry project** and add the following code to connect to the Azure AI project.
 
     > **Tip**: Be careful to maintain the correct indentation level.
 
@@ -151,25 +151,38 @@ Now you're ready to create a client app that uses an agent. Some code has been p
              exclude_managed_identity_credential=True),
         conn_str=PROJECT_CONNECTION_STRING
    )
+   with project_client:
     ```
-    
-1. Find the comment **Define an agent that uses the CodeInterpreter tool** and add the following code to define an AI agent that analyzes data and can use the code interpreter tool:
+
+    The code connects to the Azure AI Foundry project using the current Azure credentials. The final *with project_client* statement starts a code block that defines the scope of the client, ensuring it is cleaned up when the code within the block is finished.
+
+1. Find the comment **Upload the data file and create a CodeInterpreterTool**, within the *with project_client* block, and add the following code to upload the data file to the project and create a CodeInterpreterTool that can access the data in it:
 
     ```python
-   # Define an agent that uses the Code Interpreter tool
-   with project_client:
-        code_interpreter = CodeInterpreterTool()
-        agent = project_client.agents.create_agent(
-            model=MODEL_DEPLOYMENT,
-            name="data-agent",
-            instructions="You are an AI agent that analyzes data. If the user requests a chart, create it and save it as a .png file.",
-            tools=code_interpreter.definitions,
-            tool_resources=code_interpreter.resources,
-        )
-        print(f"Using agent: {agent.name}")
+   # Upload the data file and create a CodeInterpreterTool
+   file = project_client.agents.upload_file_and_poll(
+        file_path=file_path, purpose=FilePurpose.AGENTS
+   )
+   print(f"Uploaded {file.filename}")
+
+   code_interpreter = CodeInterpreterTool(file_ids=[file.id])
+    ```
+    
+1. Find the comment **Define an agent that uses the CodeInterpreterTool** and add the following code to define an AI agent that analyzes data and can use the code interpreter tool you defined previously:
+
+    ```python
+   # Define an agent that uses the CodeInterpreterTool
+   agent = project_client.agents.create_agent(
+        model=MODEL_DEPLOYMENT,
+        name="data-agent",
+        instructions="You are an AI agent that analyzes data. If the user requests a chart, create it and save it as a .png file.",
+        tools=code_interpreter.definitions,
+        tool_resources=code_interpreter.resources,
+   )
+   print(f"Using agent: {agent.name}")
     ```
 
-1. Find the comment **Create a thread for the conversation** and add the following code to start a thread on which the chat session with the agent will run (note that this code is indented under the *with* block that as started in the previous code):
+1. Find the comment **Create a thread for the conversation** and add the following code to start a thread on which the chat session with the agent will run:
 
     ```python
    # Create a thread for the conversation
@@ -185,10 +198,8 @@ Now you're ready to create a client app that uses an agent. Some code has been p
    message = project_client.agents.create_message(
         thread_id=thread.id,
         role="user",
-        content=f"{data}{user_prompt}",
+        content=user_prompt,
     )
-
-    data = "" # Clear data (it's only needed in the first message)
 
     run = project_client.agents.create_and_process_run(thread_id=thread.id, agent_id=agent.id)
      ```
@@ -240,7 +251,9 @@ Now you're ready to create a client app that uses an agent. Some code has been p
     ```
 
 1. Review the code, using the comments to understand how it:
-    - Creates a new agent that uses the built-in code interpreter tool and has explicit instructions.
+    - Connects to the AI Foundry project.
+    - Uploads the data file and creates a code interpreter tool that can access it.
+    - Creates a new agent that uses the code interpreter tool and has explicit instructions to analyze the data and create charts as .png files.
     - Runs a thread with a prompt message from the user along with the data to be analyzed.
     - Checks the status of the run in case there's a failure
     - Retrieves the messages from the completed thread and displays the last one sent by the agent.

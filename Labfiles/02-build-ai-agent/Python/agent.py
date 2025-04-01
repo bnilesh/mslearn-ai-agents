@@ -17,7 +17,7 @@ def main():
     PROJECT_CONNECTION_STRING= os.getenv("AZURE_AI_AGENT_PROJECT_CONNECTION_STRING")
     MODEL_DEPLOYMENT = os.getenv("AZURE_AI_AGENT_MODEL_DEPLOYMENT_NAME")
 
-    # Load data to be analyzed
+    # Display the data to be analyzed
     script_dir = Path(__file__).parent  # Get the directory of the script
     file_path = script_dir / 'data.txt'
 
@@ -28,8 +28,10 @@ def main():
     # Connect to the Azure AI Foundry project
 
 
+        # Upload the data file and create a CodeInterpreterTool
 
-    # Define an agent that uses the CodeInterpreter tool
+
+        # Define an agent that uses the CodeInterpreterTool
 
 
         # Create a thread for the conversation
