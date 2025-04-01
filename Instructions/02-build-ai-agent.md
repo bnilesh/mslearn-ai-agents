@@ -1,10 +1,10 @@
 ---
 lab:
-    title: 'Create an AI agent'
+    title: 'Develop an AI agent'
     description: 'Use the Azure AI Agent Service to develop an agent that uses built-in tools.'
 ---
 
-# Create an AI agent
+# Develop an AI agent
 
 In this exercise you'll use Azure AI Agent Service to create a simple agent that analyzes data and creates charts. The agent uses the built-in *Code Interpreter* tool to dynamically generate the code required to create charts as images, and then saves the resulting chart images.
 
