@@ -149,7 +149,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
    # Add references
    from dotenv import load_dotenv
    from azure.identity.aio import DefaultAzureCredential
-   from semantic_kernel.agents import AzureAIAgent, AzureAIAgentSettings
+   from semantic_kernel.agents import AzureAIAgent, AzureAIAgentSettings, AzureAIAgentThread
    from semantic_kernel.functions import kernel_function
    from typing import Annotated
     ```
@@ -194,8 +194,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
            exclude_environment_credential=True,
            exclude_managed_identity_credential=True) as creds,
        AzureAIAgent.create_client(
-           credential=creds,
-           conn_str=ai_agent_settings.project_connection_string.get_secret_value(),
+           credential=creds
        ) as project_client,
    ):
     ```
@@ -234,7 +233,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
 
     ```python
    # Use the agent to generate an expense claim email
-   thread = await project_client.agents.create_thread()
+   thread: AzureAIAgentThread = AzureAIAgentThread(client=project_client)
    try:
         # Add the input prompt to a list of messages to be submitted
         prompt_messages = [f"Create an expense claim for the following expenses: {expenses_data}"]
@@ -247,7 +246,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
         print (e)
    finally:
         # Cleanup: Delete the thread and agent
-        await project_client.agents.delete_thread(thread.id)
+        await thread.delete() if thread else None
         await project_client.agents.delete_agent(expenses_agent.id)
     ```
 
