@@ -223,6 +223,7 @@ Let's start with the **SelectionStrategy**, identifies which agent should take t
 1. In the **SelectionStrategy** class (below the **main** function), find the comment **Select the next agent that should take the next turn in the chat**, and add the following code to define a selection function:
 
     ```python
+   # Select the next agent that should take the next turn in the chat
    async def select_agent(self, agents, history):
         """"Check which agent should take the next turn in the chat."""
 
@@ -242,6 +243,7 @@ Let's start with the **SelectionStrategy**, identifies which agent should take t
 1. In the **ApprovalTerminationStrategy** class, find the comment **End the chat if the agent has indicated there is no action needed**, and add the following code to define the termination function:
 
     ```python
+   # End the chat if the agent has indicated there is no action needed
    async def should_agent_terminate(self, agent, history):
         """Check if the agent should terminate."""
         return "no action needed" in history[-1].content.lower()
