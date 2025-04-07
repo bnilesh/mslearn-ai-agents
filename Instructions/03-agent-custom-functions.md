@@ -91,7 +91,7 @@ Now that you've created your project in AI Foundry, let's develop an app that im
    git clone https://github.com/MicrosoftLearning/mslearn-ai-agents ai-agents
     ```
 
-    > **Tip**: As you enter commands into the cloudshell, the ouput may take up a large amount of the screen buffer and the cursor on the current line may be obscured. You can clear the screen by entering the `cls` command to make it easier to focus on each task.
+    > **Tip**: As you enter commands into the cloudshell, the output may take up a large amount of the screen buffer and the cursor on the current line may be obscured. You can clear the screen by entering the `cls` command to make it easier to focus on each task.
 
 1. Enter the following command to change the working directory to the folder containing the code files and list them all.
 
