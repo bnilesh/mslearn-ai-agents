@@ -286,7 +286,7 @@ Now you're ready to create a client app that uses an agent. Some code has been p
    What's the category with the highest cost?
     ```
 
-    > **Tip**: If the app fails because the rate limit is exceeded. Wait a few seconds and try the prompt again. If there is insufficient quota avaiable in your subscription, the model may not be able to respond.
+    > **Tip**: If the app fails because the rate limit is exceeded. Wait a few seconds and try again. If there is insufficient quota available in your subscription, the model may not be able to respond.
 
 1. View the response. Then enter another prompt, this time requesting a chart:
 

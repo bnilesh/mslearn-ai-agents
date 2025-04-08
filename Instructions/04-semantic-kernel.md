@@ -269,7 +269,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
     
     The application runs using the credentials for your authenticated Azure session to connect to your project and create and run the agent.
 
-    > **Tip**: If the app fails because the rate limit is exceeded. Wait a few seconds and try again. If there is insufficient quota avaiable in your subscription, the model may not be able to respond.
+    > **Tip**: If the app fails because the rate limit is exceeded. Wait a few seconds and try again. If there is insufficient quota available in your subscription, the model may not be able to respond.
 
 1. When the application has finished, review the output. The agent should have composed an email for an expenses claim based on the data that was provided.
 

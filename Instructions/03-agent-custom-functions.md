@@ -303,7 +303,7 @@ Now that you've created your project in AI Foundry, let's develop an app that im
    I have a technical problem
     ```
 
-    > **Tip**: If the app fails because the rate limit is exceeded. Wait a few seconds and try the prompt again. If there is insufficient quota avaiable in your subscription, the model may not be able to respond.
+    > **Tip**: If the app fails because the rate limit is exceeded. Wait a few seconds and try again. If there is insufficient quota available in your subscription, the model may not be able to respond.
 
 1. View the response. The agent may ask for your email address and a description of the issue. You can use any email address (for example, `alex@contoso.com`) and any issue description (for example `my computer won't start`)
 

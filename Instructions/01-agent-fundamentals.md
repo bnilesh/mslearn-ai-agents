@@ -92,7 +92,7 @@ Now that you've created an agent, you can test it in the Azure AI Foundry portal
 
     ![Screenshot of the Adding files dialog box in Azure AI Foundry portal.](./Media/ai-agent-playground.png)
 
-    > **Note**: If the rate limit is exceeded, wait for a minute and try again. If there is insufficient quota avaiable in your subscription, the model may not be able to respond.
+    > **Note**: If the app fails because the rate limit is exceeded. Wait a few seconds and try again. If there is insufficient quota available in your subscription, the model may not be able to respond.
 
 1. Continue chatting with your agent, asking expenses related questions and reviewing the responses.
 
