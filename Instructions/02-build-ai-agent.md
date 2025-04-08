@@ -50,7 +50,7 @@ Now you're ready to deploy a generative AI language model to support your agent.
 1. Deploy the model with the following settings by selecting **Customize** in the deployment details:
     - **Deployment name**: *A unique name for your model deployment - for example `gpt-4o`*
     - **Deployment type**: Global Standard
-    - **Automatic version update**: Selected
+    - **Automatic version update**: Enabled
     - **Model version**: *Select the most recent available version*
     - **Connected AI resource**: *Select your Azure OpenAI resource connection*
     - **Tokens per Minute Rate Limit (thousands)**: 50K *(or the maximum available in your subscription if less than 50K)*
