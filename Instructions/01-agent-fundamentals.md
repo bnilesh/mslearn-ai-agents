@@ -14,7 +14,7 @@ This exercise takes approximately **30** minutes.
 
 Let's start by creating an Azure AI Foundry project.
 
-1. In a web browser, open the [Azure AI Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that are opened the first time you sign in, and if necessary use the **Azure AI Foundry** logo at the top left to navigate to the home page, which looks similar to the following image:
+1. In a web browser, open the [Azure AI Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that are opened the first time you sign in, and if necessary use the **Azure AI Foundry** logo at the top left to navigate to the home page, which looks similar to the following image (close the **Help** pane if it is open):
 
     ![Screenshot of Azure AI Foundry portal.](./Media/ai-foundry-home.png)
 
@@ -25,15 +25,15 @@ Let's start by creating an Azure AI Foundry project.
     - **Subscription**: *Your Azure subscription*
     - **Resource group**: *Create a new resource group with a unique name (for example, `my-ai-resources`), or select an existing one*
     - **Location**: Select a region from the following:\*
-        - australiaeast
         - eastus
         - eastus2
-        - francecentral
         - swedencentral
+        - westus
+        - westus3
     - **Connect Azure AI Services or Azure OpenAI**: *Create a new AI Services resource with an appropriate name (for example, `my-ai-services`) or use an existing one*
     - **Connect Azure AI Search**: Skip connecting
 
-    > \* At the time of writing, these regions support the gpt-4 model for use in agents. Model quotas are constrained at the tenant level by regional quotas. In the event of a quota limit being reached later in the exercise, there's a possibility you may need to create another project in a different region.
+    > \* At the time of writing, these regions support the gpt-4o model for use in agents. Model quotas are constrained at the tenant level by regional quotas. In the event of a quota limit being reached later in the exercise, there's a possibility you may need to create another project in a different region.
 
 1. Select **Next** and review your configuration. Then select **Create** and wait for the process to complete.
 1. When your project is created, close any tips that are displayed and review the project page in Azure AI Foundry portal, which should look similar to the following image:
@@ -46,17 +46,18 @@ Now you're ready to deploy a generative AI language model to support your agent.
 
 1. In the pane on the left for your project, in the **My assets** section, select the **Models + endpoints** page.
 1. In the **Models + endpoints** page, in the **Model deployments** tab, in the **+ Deploy model** menu, select **Deploy base model**.
-1. Search for the **gpt-4** model in the list, and then select and confirm it.
+1. Search for the **gpt-4o** model in the list, and then select and confirm it.
 1. Deploy the model with the following settings by selecting **Customize** in the deployment details:
-    - **Deployment name**: *A unique name for your model deployment - for example `gpt-4`*
-    - **Deployment type**: Standard
-    - **Model version**: 0613
+    - **Deployment name**: *A unique name for your model deployment - for example `gpt-4o`*
+    - **Deployment type**: Global Standard
+    - **Automatic version update**: Selected
+    - **Model version**: *Select the most recent available version*
     - **Connected AI resource**: *Select your Azure OpenAI resource connection*
-    - **Tokens per Minute Rate Limit (thousands)**: 5K
+    - **Tokens per Minute Rate Limit (thousands)**: 50K *(or the maximum available in your subscription if less than 50K)*
     - **Content filter**: DefaultV2
-    - **Enable dynamic quota**: Disabled
-      
-    > **Note**: Reducing the TPM helps avoid over-using the quota available in the subscription you are using. 5,000 TPM is sufficient for the data used in this exercise.
+
+    > **Note**: Reducing the TPM helps avoid over-using the quota available in the subscription you are using. 50,000 TPM should be sufficient for the data used in this exercise. If your available quota is lower than this, you will be able to complete the exercise but you may need to wait and resubmit prompts if the rate limit is exceeded.
+
 1. Wait for the deployment to complete.
 
 ## Create an AI agent
@@ -69,7 +70,7 @@ Now that you have a model deployed, you're ready to build an AI agent. In this e
 
     A new agent with a name like *Agent123* should be created automatically (if not, use the **+ New agent** button to create one).
 
-1. Select your new agent. Then, in the **Setup** pane for your new agent, set the **Agent name** to `ExpensesAgent`, ensure that the gpt-4 model deployment you created previously is selected, and set the **Instructions** to `Answer questions related to expense claims`.
+1. Select your new agent. Then, in the **Setup** pane for your new agent, set the **Agent name** to `ExpensesAgent`, ensure that the gpt-4o model deployment you created previously is selected, and set the **Instructions** to `Answer questions related to expense claims`.
 
     ![Screenshot of the AI agent setup page in Azure AI Foundry portal.](./Media/ai-agent-setup.png)
 
@@ -90,6 +91,8 @@ Now that you've created an agent, you can test it in the Azure AI Foundry portal
 1. In the playground, enter the prompt `What's the maximum I can claim for meals?` and review the agent's response - which should be based on information in the expenses policy document you added as knowledge to the agent setup.
 
     ![Screenshot of the Adding files dialog box in Azure AI Foundry portal.](./Media/ai-agent-playground.png)
+
+    > **Note**: If the rate limit is exceeded, wait for a minute and try again. If there is insufficient quota avaiable in your subscription, the model may not be able to respond.
 
 1. Continue chatting with your agent, asking expenses related questions and reviewing the responses.
 

@@ -16,7 +16,7 @@ This exercise should take approximately **30** minutes to complete.
 
 Let's start by creating an Azure AI Foundry project.
 
-1. In a web browser, open the [Azure AI Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that are opened the first time you sign in, and if necessary use the **Azure AI Foundry** logo at the top left to navigate to the home page, which looks similar to the following image:
+1. In a web browser, open the [Azure AI Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that are opened the first time you sign in, and if necessary use the **Azure AI Foundry** logo at the top left to navigate to the home page, which looks similar to the following image (close the **Help** pane if it is open):
 
     ![Screenshot of Azure AI Foundry portal.](./Media/ai-foundry-home.png)
 
@@ -27,22 +27,20 @@ Let's start by creating an Azure AI Foundry project.
     - **Subscription**: *Your Azure subscription*
     - **Resource group**: *Create a new resource group with a unique name (for example, `my-ai-resources`), or select an existing one*
     - **Location**: Select a region from the following:\*
-        - australiaeast
         - eastus
         - eastus2
-        - francecentral
         - swedencentral
+        - westus
+        - westus3
     - **Connect Azure AI Services or Azure OpenAI**: *Create a new AI Services resource with an appropriate name (for example, `my-ai-services`) or use an existing one*
     - **Connect Azure AI Search**: Skip connecting
 
-    > \* At the time of writing, these regions support the gpt-4 model for use in agents. Model quotas are constrained at the tenant level by regional quotas. In the event of a quota limit being reached later in the exercise, there's a possibility you may need to create another project in a different region.
+    > \* At the time of writing, these regions support the gpt-4o model for use in agents. Model quotas are constrained at the tenant level by regional quotas. In the event of a quota limit being reached later in the exercise, there's a possibility you may need to create another project in a different region.
 
 1. Select **Next** and review your configuration. Then select **Create** and wait for the process to complete.
 1. When your project is created, close any tips that are displayed and review the project page in Azure AI Foundry portal, which should look similar to the following image:
 
     ![Screenshot of a Azure AI project details in Azure AI Foundry portal.](./Media/ai-foundry-project.png)
-
-1. In the project overview page, in the **Project details** area, note the **Project connection string**. Later, you'll use this connection string to connect to your project in a client application.
 
 ## Deploy a generative AI model
 
@@ -50,17 +48,17 @@ Now you're ready to deploy a generative AI language model to support your agent.
 
 1. In the pane on the left for your project, in the **My assets** section, select the **Models + endpoints** page.
 1. In the **Models + endpoints** page, in the **Model deployments** tab, in the **+ Deploy model** menu, select **Deploy base model**.
-1. Search for the **gpt-4** model in the list, and then select and confirm it.
+1. Search for the **gpt-4o** model in the list, and then select and confirm it.
 1. Deploy the model with the following settings by selecting **Customize** in the deployment details:
-    - **Deployment name**: *A unique name for your model deployment - for example `gpt-4` (remember the name you choose - you'll need it later)*
-    - **Deployment type**: Standard
-    - **Model version**: 0613
+    - **Deployment name**: *A unique name for your model deployment - for example `gpt-4o`*
+    - **Deployment type**: Global Standard
+    - **Automatic version update**: Selected
+    - **Model version**: *Select the most recent available version*
     - **Connected AI resource**: *Select your Azure OpenAI resource connection*
-    - **Tokens per Minute Rate Limit (thousands)**: 5K
+    - **Tokens per Minute Rate Limit (thousands)**: 50K *(or the maximum available in your subscription if less than 50K)*
     - **Content filter**: DefaultV2
-    - **Enable dynamic quota**: Disabled
 
-    > **Note**: Reducing the TPM helps avoid over-using the quota available in the subscription you are using. 5,000 TPM is sufficient for the data used in this exercise.
+    > **Note**: Reducing the TPM helps avoid over-using the quota available in the subscription you are using. 50,000 TPM should be sufficient for the data used in this exercise. If your available quota is lower than this, you will be able to complete the exercise but you may need to wait and resubmit prompts if the rate limit is exceeded.
 
 1. Wait for the deployment to complete.
 
@@ -120,7 +118,7 @@ Now that you've created your project in AI Foundry, let's develop an app that im
 
     The file is opened in a code editor.
 
-1. In the code file, replace the **your_project_connection_string** placeholder with the connection string for your project (copied from the project **Overview** page in the Azure AI Foundry portal), and the **your_model_deployment** placeholder with the name you assigned to your gpt-4 model deployment.
+1. In the code file, replace the **your_project_connection_string** placeholder with the connection string for your project (copied from the project **Overview** page in the Azure AI Foundry portal), and the **your_model_deployment** placeholder with the name you assigned to your gpt-4o model deployment.
 1. After you've replaced the placeholders, use the **CTRL+S** command to save your changes and then use the **CTRL+Q** command to close the code editor while keeping the cloud shell command line open.
 
 ### Define a custom function
@@ -305,7 +303,7 @@ Now that you've created your project in AI Foundry, let's develop an app that im
    I have a technical problem
     ```
 
-    > **Tip**: If the app fails because the rate limit is exceeded. Wait a few seconds and try the prompt again.
+    > **Tip**: If the app fails because the rate limit is exceeded. Wait a few seconds and try the prompt again. If there is insufficient quota avaiable in your subscription, the model may not be able to respond.
 
 1. View the response. The agent may ask for your email address and a description of the issue. You can use any email address (for example, `alex@contoso.com`) and any issue description (for example `my computer won't start`)
 

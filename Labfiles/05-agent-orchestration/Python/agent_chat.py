@@ -3,6 +3,7 @@ import os
 import textwrap
 from datetime import datetime
 from pathlib import Path
+import shutil
 
 from azure.identity.aio import DefaultAzureCredential
 from semantic_kernel.agents import AgentGroupChat
@@ -49,6 +50,14 @@ async def main():
     # Clear the console
     os.system('cls' if os.name=='nt' else 'clear')
 
+    # Get the log files
+    print("Getting log files...\n")
+    script_dir = Path(__file__).parent  # Get the directory of the script
+    src_path = script_dir / "sample_logs"
+    file_path = script_dir / "logs"
+    shutil.copytree(src_path, file_path, dirs_exist_ok=True)
+
+    # Get the Azure AI Agent settings
     ai_agent_settings = AzureAIAgentSettings.create()
 
     async with (
@@ -73,11 +82,12 @@ async def main():
         
 
          # Process log files
-        script_dir = Path(__file__).parent  # Get the directory of the script
-        file_path = script_dir / "sample_logs"
         for filename in os.listdir(file_path):
             logfile_msg = ChatMessageContent(role=AuthorRole.USER, content=f"USER > {file_path}/{filename}")
-            
+            await asyncio.sleep(15) # Wait to retrict TPM
+            print(f"\nReady to process log file: {filename}\n")
+
+
             # Append the current log file to the chat
 
 
@@ -89,6 +99,13 @@ async def main():
                 
             except Exception as e:
                 print(f"Error during chat invocation: {e}")
+                # If TPM rate exceeded, wait 30 secs
+                if "Rate limit is exceeded" in str(e):
+                    print ("Waiting...")
+                    await asyncio.sleep(30)
+                    continue
+                else:
+                    break
 
 
 

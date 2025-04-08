@@ -6,7 +6,7 @@ lab:
 
 # Develop a multi-agent solution
 
-In this exercise, you'll create a project that orchestrates two AI agents using the Semantic Kernel SDK. An *Incident Manager* agent will analyze service log files for issues. If an issue is found, the Incident Manager will recommend a resolution action and a *DevOps Assistant* agent will receive the recommendation and invoke the corrective function to perform the resolution. The Incident Manager agent will then review the updated logs to make sure the resolution was successful.
+In this exercise, you'll create a project that orchestrates two AI agents using the Semantic Kernel SDK. An *Incident Manager* agent will analyze service log files for issues. If an issue is found, the Incident Manager will recommend a resolution action and a *DevOps Assistant* agent will receive the recommendation and invoke the corrective function and perform the resolution. The Incident Manager agent will then review the updated logs to make sure the resolution was successful.
 
 > **Note**: For this exercise, four sample log files are provided. The DevOps Assistant agent code only updates the sample log files with some example log messages.
 
@@ -16,59 +16,49 @@ This exercise should take approximately **30** minutes to complete.
 
 Let's start by creating an Azure AI Foundry project.
 
-1. In a web browser, open the [Azure AI Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that are opened the first time you sign in, and if necessary use the **Azure AI Foundry** logo at the top left to navigate to the home page, which looks similar to the following image:
+1. In a web browser, open the [Azure AI Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that are opened the first time you sign in, and if necessary use the **Azure AI Foundry** logo at the top left to navigate to the home page, which looks similar to the following image (close the **Help** pane if it is open):
 
     ![Screenshot of Azure AI Foundry portal.](./Media/ai-foundry-home.png)
 
 1. In the home page, select **+ Create project**.
-
 1. In the **Create a project** wizard, enter a suitable project name (for example, `my-ai-project`) and if an existing hub is suggested, choose the option to create a new one. Then review the Azure resources that will be automatically created to support your hub and project.
-
 1. Select **Customize** and specify the following settings for your hub:
-
     - **Hub name**: *A unique name - for example `my-ai-hub`*
     - **Subscription**: *Your Azure subscription*
     - **Resource group**: *Create a new resource group with a unique name (for example, `my-ai-resources`), or select an existing one*
     - **Location**: Select a region from the following:\*
-        - australiaeast
         - eastus
         - eastus2
-        - francecentral
         - swedencentral
+        - westus
+        - westus3
     - **Connect Azure AI Services or Azure OpenAI**: *Create a new AI Services resource with an appropriate name (for example, `my-ai-services`) or use an existing one*
     - **Connect Azure AI Search**: Skip connecting
 
-    > \* Model quotas are constrained at the tenant level by regional quotas. In the event of a quota limit being reached later in the exercise, there's a possibility you may need to create another project in a different region.
+    > \* At the time of writing, these regions support the gpt-4o model for use in agents. Model quotas are constrained at the tenant level by regional quotas. In the event of a quota limit being reached later in the exercise, there's a possibility you may need to create another project in a different region.
 
 1. Select **Next** and review your configuration. Then select **Create** and wait for the process to complete.
-
 1. When your project is created, close any tips that are displayed and review the project page in Azure AI Foundry portal, which should look similar to the following image:
 
     ![Screenshot of a Azure AI project details in Azure AI Foundry portal.](./Media/ai-foundry-project.png)
 
-1. In the project overview page, in the **Project details** area, note the **Project connection string**. Later, you'll use this connection string to connect to your project in a client application.
-
 ## Deploy a generative AI model
 
-Now you're ready to deploy a generative AI language model to support your agents. In this example, you'll use the same model to support both agents.
+Now you're ready to deploy a generative AI language model to support your agent.
 
 1. In the pane on the left for your project, in the **My assets** section, select the **Models + endpoints** page.
-
 1. In the **Models + endpoints** page, in the **Model deployments** tab, in the **+ Deploy model** menu, select **Deploy base model**.
-
-1. Search for the **gpt-4** model in the list, and then select and confirm it.
-
+1. Search for the **gpt-4o** model in the list, and then select and confirm it.
 1. Deploy the model with the following settings by selecting **Customize** in the deployment details:
-
-    - **Deployment name**: *A unique name for your model deployment - for example `gpt-4` (remember the name you choose - you'll need it later)*
-    - **Deployment type**: Standard
-    - **Model version**: 0613
+    - **Deployment name**: *A unique name for your model deployment - for example `gpt-4o`*
+    - **Deployment type**: Global Standard
+    - **Automatic version update**: Selected
+    - **Model version**: *Select the most recent available version*
     - **Connected AI resource**: *Select your Azure OpenAI resource connection*
-    - **Tokens per Minute Rate Limit (thousands)**: 5K
+    - **Tokens per Minute Rate Limit (thousands)**: 50K *(or the maximum available in your subscription if less than 50K)*
     - **Content filter**: DefaultV2
-    - **Enable dynamic quota**: Disabled
-      
-    > **Note**: Reducing the TPM helps avoid over-using the quota available in the subscription you are using. 5,000 TPM is sufficient for the data used in this exercise.
+
+    > **Note**: Reducing the TPM helps avoid over-using the quota available in the subscription you are using. 50,000 TPM should be sufficient for the data used in this exercise. If your available quota is lower than this, you will be able to complete the exercise but you may experience errors if the rate limit is exceeded.
 
 1. Wait for the deployment to complete.
 
@@ -134,7 +124,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
 
     The file is opened in a code editor.
 
-1. In the code file, replace the **your_project_connection_string** placeholder with the connection string for your project (copied from the project **Overview** page in the Azure AI Foundry portal), and the **your_model_deployment** placeholder with the name you assigned to your gpt-4 model deployment.
+1. In the code file, replace the **your_project_connection_string** placeholder with the connection string for your project (copied from the project **Overview** page in the Azure AI Foundry portal), and the **your_model_deployment** placeholder with the name you assigned to your gpt-4o model deployment.
 
 1. After you've replaced the placeholders, use the **CTRL+S** command to save your changes and then use the **CTRL+Q** command to close the code editor while keeping the cloud shell command line open.
 
@@ -320,20 +310,22 @@ Now you're ready to run your code and watch your AI agents collaborate.
 
     ```output
     
-    INCIDENT_MANAGER > /home/.../sample_logs/log1.log | Restart service ServiceX
+    INCIDENT_MANAGER > /home/.../logs/log1.log | Restart service ServiceX
     DEVOPS_ASSISTANT > Service ServiceX restarted successfully.
     INCIDENT_MANAGER > No action needed.
 
-    INCIDENT_MANAGER > /home/.../sample_logs/log2.log | Rollback transaction for transaction ID 987654.
+    INCIDENT_MANAGER > /home/.../logs/log2.log | Rollback transaction for transaction ID 987654.
     DEVOPS_ASSISTANT > Transaction rolled back successfully.
     INCIDENT_MANAGER > No action needed.
 
-    INCIDENT_MANAGER > /home/.../sample_logs/log3.log | Increase quota.
+    INCIDENT_MANAGER > /home/.../logs/log3.log | Increase quota.
     DEVOPS_ASSISTANT > Successfully increased quota.
     (continued)
     ```
 
-1. Verify that the log files are updated with resolution operation messages from the DevopsAssistant.
+    > **Note**: The app includes some code to wait between processing each log file to try to reduce the risk of a TPM rate limit being exceeded, and exception handling in case it happens anyway. If there is insufficient quota avaiable in your subscription, the model may not be able to respond.
+
+1. Verify that the log files in the **log** folder are updated with resolution operation messages from the DevopsAssistant.
 
     For example, log1.log should have the following log messages appended:
 
