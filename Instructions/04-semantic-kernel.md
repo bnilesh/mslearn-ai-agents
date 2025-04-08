@@ -76,7 +76,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
 
     > **Note**: If you have previously created a cloud shell that uses a *Bash* environment, switch it to ***PowerShell***.
 
-1. In the PowerShell pane, enter the following commands to clone the GitHub repo containing the code files for this exercise:
+1. In the cloud shell pane, enter the following commands to clone the GitHub repo containing the code files for this exercise:
 
     ```
    rm -r ai-agents -f

@@ -80,7 +80,7 @@ Now you're ready to create a client app that uses an agent. Some code has been p
 
     **<font color="red">Ensure you've switched to the classic version of the cloud shell before continuing.</font>**
 
-1. In the PowerShell pane, enter the following commands to clone the GitHub repo containing the code files for this exercise:
+1. In the cloud shell pane, enter the following commands to clone the GitHub repo containing the code files for this exercise:
 
     ```
    rm -r ai-agents -f
