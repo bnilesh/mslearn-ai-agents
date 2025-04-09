@@ -254,6 +254,8 @@ Now you're ready to create a client app that defines an agent and a custom funct
 
 **<font color="red">You must sign into Azure - even though the cloud shell session is already authenticated.</font>**
 
+    > **Note**: In most scenarios, just using *az login* will be sufficient. However, if you have subscriptions in multiple tenants, you may need to specify the tenant by using the *--tenant* parameter. See the [Sign into Azure interactively using the Azure CLI](https://learn.microsoft.com/cli/azure/authenticate-azure-cli-interactively) for details.
+
 1. In the cloud shell command line pane beneath the code editor, enter the following command to sign into Azure.
 
     ```
