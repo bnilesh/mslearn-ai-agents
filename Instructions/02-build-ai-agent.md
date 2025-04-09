@@ -301,7 +301,7 @@ Now you're ready to create a client app that uses an agent. Some code has been p
 1. You can continue the conversation if you like. The thread is *stateful*, so it retains the conversation history - meaning that the agent has the full context for each response. Enter `quit` when you're done.
 1. Review the conversation messages that were retrieved from the thread, and the files that were generated.
 
-1. When the application has finished, use the **download** command to download each .png file that was saved in the app folder. For example:
+1. When the application has finished, use the cloud shell **download** command to download each .png file that was saved in the app folder. For example:
 
     ```
    download ./<file_name>.png
