@@ -90,11 +90,11 @@ Now that you've created an agent, you can test it in the Azure AI Foundry portal
 1. At the top of the **Setup** pane for your agent, select **Try in playground**.
 1. In the playground, enter the prompt `What's the maximum I can claim for meals?` and review the agent's response - which should be based on information in the expenses policy document you added as knowledge to the agent setup.
 
-    ![Screenshot of the Adding files dialog box in Azure AI Foundry portal.](./Media/ai-agent-playground.png)
+    ![Screenshot of the Agent Playground in Azure AI Foundry portal.](./Media/ai-agent-playground.png)
 
     > **Note**: If the agent fails to respond because the rate limit is exceeded. Wait a few seconds and try again. If there is insufficient quota available in your subscription, the model may not be able to respond.
 
-1. Continue chatting with your agent, asking expenses related questions and reviewing the responses.
+1. Try a follow-up question, like `What about accommodation?` and review the response.
 
 ## Clean up
 
