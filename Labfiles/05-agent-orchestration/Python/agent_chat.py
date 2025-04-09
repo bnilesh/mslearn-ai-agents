@@ -84,7 +84,7 @@ async def main():
          # Process log files
         for filename in os.listdir(file_path):
             logfile_msg = ChatMessageContent(role=AuthorRole.USER, content=f"USER > {file_path}/{filename}")
-            await asyncio.sleep(15) # Wait to retrict TPM
+            await asyncio.sleep(30) # Wait to reduce TPM
             print(f"\nReady to process log file: {filename}\n")
 
 
@@ -99,10 +99,10 @@ async def main():
                 
             except Exception as e:
                 print(f"Error during chat invocation: {e}")
-                # If TPM rate exceeded, wait 30 secs
+                # If TPM rate exceeded, wait 60 secs
                 if "Rate limit is exceeded" in str(e):
                     print ("Waiting...")
-                    await asyncio.sleep(30)
+                    await asyncio.sleep(60)
                     continue
                 else:
                     break
