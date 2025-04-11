@@ -6,7 +6,7 @@ lab:
 
 # Use a custom function in an AI agent
 
-In this exercise you will explore creating an agent that can use custom functions as a tool to complete tasks.
+In this exercise you'll explore creating an agent that can use custom functions as a tool to complete tasks.
 
 You'll build a simple technical support agent that can collect details of a technical problem and generate a support ticket.
 
@@ -16,7 +16,7 @@ This exercise should take approximately **30** minutes to complete.
 
 Let's start by creating an Azure AI Foundry project.
 
-1. In a web browser, open the [Azure AI Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that are opened the first time you sign in, and if necessary use the **Azure AI Foundry** logo at the top left to navigate to the home page, which looks similar to the following image (close the **Help** pane if it is open):
+1. In a web browser, open the [Azure AI Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that are opened the first time you sign in, and if necessary use the **Azure AI Foundry** logo at the top left to navigate to the home page, which looks similar to the following image (close the **Help** pane if it's open):
 
     ![Screenshot of Azure AI Foundry portal.](./Media/ai-foundry-home.png)
 
@@ -74,7 +74,7 @@ Now that you've created your project in AI Foundry, let's develop an app that im
 
 1. Use the **[\>_]** button to the right of the search bar at the top of the page to create a new Cloud Shell in the Azure portal, selecting a ***PowerShell*** environment with no storage in your subscription.
 
-    The cloud shell provides a command line interface in a pane at the bottom of the Azure portal. You can resize or maximize this pane to make it easier to work in.
+    The cloud shell provides a command-line interface in a pane at the bottom of the Azure portal. You can resize or maximize this pane to make it easier to work in.
 
     > **Note**: If you have previously created a cloud shell that uses a *Bash* environment, switch it to ***PowerShell***.
 
@@ -102,7 +102,7 @@ Now that you've created your project in AI Foundry, let's develop an app that im
 
 ### Configure the application settings
 
-1. In the cloud shell command line pane, enter the following command to install the libraries you'll use:
+1. In the cloud shell command-line pane, enter the following command to install the libraries you'll use:
 
     ```
    pip install python-dotenv azure-identity azure-ai-projects
@@ -165,8 +165,8 @@ Now that you've created your project in AI Foundry, let's develop an app that im
 
     > **Tip**: As you add code to the code file, be sure to maintain the correct indentation.
 
-1. Review the existing code, which retrieves the application configuration settings and sets up a loop in which the user can enter prompts for the agent. The rest of the file includes comments where you will add the necessary code to implement your technical support agent.
-1. Find the comment **Add references** and add the following code to import the classes you will need to build an Azure AI agent that uses your function code as a tool:
+1. Review the existing code, which retrieves the application configuration settings and sets up a loop in which the user can enter prompts for the agent. The rest of the file includes comments where you'll add the necessary code to implement your technical support agent.
+1. Find the comment **Add references** and add the following code to import the classes you'll need to build an Azure AI agent that uses your function code as a tool:
 
     ```python
    # Add references
@@ -274,13 +274,13 @@ Now that you've created your project in AI Foundry, let's develop an app that im
     - Checks the status of the run in case there's a failure
     - Retrieves the messages from the completed thread and displays the last one sent by the agent.
     - Displays the conversation history
-    - Deletes the agent and thread when they are no longer required.
+    - Deletes the agent and thread when they're no longer required.
 
-1. Save the code file (*CTRL+S*) when you have finished. You can also close the code editor (*CTRL+Q*); though you may want to keep it open in case you need to make any edits to the code you added. In either case, keep the cloud shell command line pane open.
+1. Save the code file (*CTRL+S*) when you have finished. You can also close the code editor (*CTRL+Q*); though you may want to keep it open in case you need to make any edits to the code you added. In either case, keep the cloud shell command-line pane open.
 
 ### Sign into Azure and run the app
 
-1. In the cloud shell command line pane, enter the following command to sign into Azure.
+1. In the cloud shell command-line pane, enter the following command to sign into Azure.
 
     ```
     az login
@@ -309,7 +309,7 @@ Now that you've created your project in AI Foundry, let's develop an app that im
 
 1. View the response. The agent may ask for your email address and a description of the issue. You can use any email address (for example, `alex@contoso.com`) and any issue description (for example `my computer won't start`)
 
-    When it has enough information, the agent should choose to use your funtion as required.
+    When it has enough information, the agent should choose to use your function as required.
 
 1. You can continue the conversation if you like. The thread is *stateful*, so it retains the conversation history - meaning that the agent has the full context for each response. Enter `quit` when you're done.
 1. Review the conversation messages that were retrieved from the thread, and the tickets that were generated.

@@ -6,7 +6,7 @@ lab:
 
 # Develop a multi-agent solution
 
-In this exercise, you'll create a project that orchestrates two AI agents using the Semantic Kernel SDK. An *Incident Manager* agent will analyze service log files for issues. If an issue is found, the Incident Manager will recommend a resolution action and a *DevOps Assistant* agent will receive the recommendation and invoke the corrective function and perform the resolution. The Incident Manager agent will then review the updated logs to make sure the resolution was successful.
+In this exercise, you'll create a project that orchestrates two AI agents using the Semantic Kernel SDK. An *Incident Manager* agent will analyze service log files for issues. If an issue is found, the Incident Manager will recommend a resolution action, and a *DevOps Assistant* agent will receive the recommendation and invoke the corrective function and perform the resolution. The Incident Manager agent will then review the updated logs to make sure the resolution was successful.
 
 > **Note**: For this exercise, four sample log files are provided. The DevOps Assistant agent code only updates the sample log files with some example log messages.
 
@@ -16,7 +16,7 @@ This exercise should take approximately **30** minutes to complete.
 
 Let's start by creating an Azure AI Foundry project.
 
-1. In a web browser, open the [Azure AI Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that are opened the first time you sign in, and if necessary use the **Azure AI Foundry** logo at the top left to navigate to the home page, which looks similar to the following image (close the **Help** pane if it is open):
+1. In a web browser, open the [Azure AI Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that are opened the first time you sign in, and if necessary use the **Azure AI Foundry** logo at the top left to navigate to the home page, which looks similar to the following image (close the **Help** pane if it's open):
 
     ![Screenshot of Azure AI Foundry portal.](./Media/ai-foundry-home.png)
 
@@ -74,7 +74,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
 
 1. Use the **[\>_]** button to the right of the search bar at the top of the page to create a new Cloud Shell in the Azure portal, selecting a ***PowerShell*** environment with no storage in your subscription.
 
-    The cloud shell provides a command line interface in a pane at the bottom of the Azure portal. You can resize or maximize this pane to make it easier to work in.
+    The cloud shell provides a command-line interface in a pane at the bottom of the Azure portal. You can resize or maximize this pane to make it easier to work in.
 
     > **Note**: If you have previously created a cloud shell that uses a *Bash* environment, switch it to ***PowerShell***.
 
@@ -108,7 +108,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
 
 ### Configure the application settings
 
-1. In the cloud shell command line pane, enter the following command to install the libraries you'll use:
+1. In the cloud shell command-line pane, enter the following command to install the libraries you'll use:
 
     ```
    pip install python-dotenv azure-identity semantic-kernel[azure] 
@@ -141,7 +141,7 @@ Now you're ready to create the  agents for your multi-agent solution! Let's get 
 1. Review the code in the file, noting that it contains:
     - Constants that define the names and instructions for your two agents.
     - A **main** function where most of the code to implement your multi-agent solution will be added.
-    - A **SelectionStrategy** class which you'll use to implement the logic required to determine which agent should be selected for each turn in the conversation.
+    - A **SelectionStrategy** class, which you'll use to implement the logic required to determine which agent should be selected for each turn in the conversation.
     - An **ApprovalTerminationStrategy** class, which you'll use to implement the logic needed to determine when the conversation to end.
     - A **DevopsPlugin** class that contains functions to perform devops operations.
     - A **LogFilePlugin** class that contains functions to read and write log files.
@@ -176,7 +176,7 @@ Now you're ready to create the  agents for your multi-agent solution! Let's get 
 
     This code creates the Semantic Kernel agent with access to the **LogFilePlugin**. This plugin allows the agent to read the log file contents.
 
-    Now let's create the second agent, which will respnd to issues and perform DevOps operations to resolve them.
+    Now let's create the second agent, which will respond to issues and perform DevOps operations to resolve them.
 
 1. At the top of the code file, take a moment to observe the **DEVOPS_ASSISTANT_INSTRUCTIONS** string. These are the instructions you'll provide to the new DevOps assistant agent.
 
@@ -206,9 +206,9 @@ Now you're ready to create the  agents for your multi-agent solution! Let's get 
 
 ### Define group chat strategies
 
-INow you need to provide the logic used to determine which agent should be selected to take the next turn in a conversation, and when the conversation should be ended.
+Now you need to provide the logic used to determine which agent should be selected to take the next turn in a conversation, and when the conversation should be ended.
 
-Let's start with the **SelectionStrategy**, identifies which agent should take the next turn.
+Let's start with the **SelectionStrategy**, which identifies which agent should take the next turn.
 
 1. In the **SelectionStrategy** class (below the **main** function), find the comment **Select the next agent that should take the next turn in the chat**, and add the following code to define a selection function:
 
@@ -239,7 +239,7 @@ Let's start with the **SelectionStrategy**, identifies which agent should take t
         return "no action needed" in history[-1].content.lower()
     ```
 
-    The kernel invokes this function after the agent's response to determine if the completion criteria is complete. In this case, the goal is met when the incident manager responds with "No action needed." This phrase is defined in the incident manager agent instructions.
+    The kernel invokes this function after the agent's response to determine if the completion criteria are met. In this case, the goal is met when the incident manager responds with "No action needed." This phrase is defined in the incident manager agent instructions.
 
 ### Implement the group chat
 
@@ -290,7 +290,7 @@ Now that you have two agents, and strategies to help them take turns and end a c
 
 Now you're ready to run your code and watch your AI agents collaborate.
 
-1. In the cloud shell command line pane, enter the following command to sign into Azure.
+1. In the cloud shell command-line pane, enter the following command to sign into Azure.
 
     ```
    az login

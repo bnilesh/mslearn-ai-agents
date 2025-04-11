@@ -6,7 +6,7 @@ lab:
 
 # Develop an AI agent
 
-In this exercise you'll use Azure AI Agent Service to create a simple agent that analyzes data and creates charts. The agent uses the built-in *Code Interpreter* tool to dynamically generate the code required to create charts as images, and then saves the resulting chart images.
+In this exercise, you'll use Azure AI Agent Service to create a simple agent that analyzes data and creates charts. The agent uses the built-in *Code Interpreter* tool to dynamically generate the code required to create charts as images, and then saves the resulting chart images.
 
 This exercise should take approximately **30** minutes to complete.
 
@@ -14,7 +14,7 @@ This exercise should take approximately **30** minutes to complete.
 
 Let's start by creating an Azure AI Foundry project.
 
-1. In a web browser, open the [Azure AI Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that are opened the first time you sign in, and if necessary use the **Azure AI Foundry** logo at the top left to navigate to the home page, which looks similar to the following image (close the **Help** pane if it is open):
+1. In a web browser, open the [Azure AI Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that are opened the first time you sign in, and if necessary use the **Azure AI Foundry** logo at the top left to navigate to the home page, which looks similar to the following image (close the **Help** pane if it's open):
 
     ![Screenshot of Azure AI Foundry portal.](./Media/ai-foundry-home.png)
 
@@ -72,7 +72,7 @@ Now you're ready to create a client app that uses an agent. Some code has been p
 
 1. Use the **[\>_]** button to the right of the search bar at the top of the page to create a new Cloud Shell in the Azure portal, selecting a ***PowerShell*** environment with no storage in your subscription.
 
-    The cloud shell provides a command line interface in a pane at the bottom of the Azure portal. You can resize or maximize this pane to make it easier to work in.
+    The cloud shell provides a command-line interface in a pane at the bottom of the Azure portal. You can resize or maximize this pane to make it easier to work in.
 
     > **Note**: If you have previously created a cloud shell that uses a *Bash* environment, switch it to ***PowerShell***.
 
@@ -100,7 +100,7 @@ Now you're ready to create a client app that uses an agent. Some code has been p
 
 ### Configure the application settings
 
-1. In the cloud shell command line pane, enter the following command to install the libraries you'll use:
+1. In the cloud shell command-line pane, enter the following command to install the libraries you'll use:
 
     ```
    pip install python-dotenv azure-identity azure-ai-projects
@@ -127,8 +127,8 @@ Now you're ready to create a client app that uses an agent. Some code has been p
    code agent.py
     ```
 
-1. Review the existing code, which retrieves the application configuration settings and loads data from *data.txt* to be analyzed. The rest of the file includes comments where you will add the necessary code to implement your data analysis agent.
-1. Find the comment **Add references** and add the following code to import the classes you will need to build an Azure AI agent that uses the built-in code interpreter tool:
+1. Review the existing code, which retrieves the application configuration settings and loads data from *data.txt* to be analyzed. The rest of the file includes comments where you'll add the necessary code to implement your data analysis agent.
+1. Find the comment **Add references** and add the following code to import the classes you'll need to build an Azure AI agent that uses the built-in code interpreter tool:
 
     ```python
    # Add references
@@ -152,7 +152,7 @@ Now you're ready to create a client app that uses an agent. Some code has been p
    with project_client:
     ```
 
-    The code connects to the Azure AI Foundry project using the current Azure credentials. The final *with project_client* statement starts a code block that defines the scope of the client, ensuring it is cleaned up when the code within the block is finished.
+    The code connects to the Azure AI Foundry project using the current Azure credentials. The final *with project_client* statement starts a code block that defines the scope of the client, ensuring it's cleaned up when the code within the block is finished.
 
 1. Find the comment **Upload the data file and create a CodeInterpreterTool**, within the *with project_client* block, and add the following code to upload the data file to the project and create a CodeInterpreterTool that can access the data in it:
 
@@ -257,13 +257,13 @@ Now you're ready to create a client app that uses an agent. Some code has been p
     - Retrieves the messages from the completed thread and displays the last one sent by the agent.
     - Displays the conversation history
     - Saves each file that was generated.
-    - Deletes the agent and thread when they are no longer required.
+    - Deletes the agent and thread when they're no longer required.
 
-1. Save the code file (*CTRL+S*) when you have finished. You can also close the code editor (*CTRL+Q*); though you may want to keep it open in case you need to make any edits to the code you added. In either case, keep the cloud shell command line pane open.
+1. Save the code file (*CTRL+S*) when you have finished. You can also close the code editor (*CTRL+Q*); though you may want to keep it open in case you need to make any edits to the code you added. In either case, keep the cloud shell command-line pane open.
 
 ### Sign into Azure and run the app
 
-1. In the cloud shell command line pane, enter the following command to sign into Azure.
+1. In the cloud shell command-line pane, enter the following command to sign into Azure.
 
     ```
     az login
@@ -307,7 +307,7 @@ Now you're ready to create a client app that uses an agent. Some code has been p
    download ./<file_name>.png
     ```
 
-    The download command creates a popup link at the bottom right of your browser, which you can click to download and open the file.
+    The download command creates a popup link at the bottom right of your browser, which you can select to download and open the file.
 
 ## Summary
 

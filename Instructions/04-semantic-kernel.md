@@ -6,7 +6,7 @@ lab:
 
 # Develop an Azure AI agent with the Semantic Kernel SDK
 
-In this exercise you'll use Azure AI Agent Service and Semantic Kernel to create an AI agent that creates an expense claim email.
+In this exercise, you'll use Azure AI Agent Service and Semantic Kernel to create an AI agent that creates an expense claim email.
 
 This exercise should take approximately **30** minutes to complete.
 
@@ -14,7 +14,7 @@ This exercise should take approximately **30** minutes to complete.
 
 Let's start by creating an Azure AI Foundry project.
 
-1. In a web browser, open the [Azure AI Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that are opened the first time you sign in, and if necessary use the **Azure AI Foundry** logo at the top left to navigate to the home page, which looks similar to the following image (close the **Help** pane if it is open):
+1. In a web browser, open the [Azure AI Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that are opened the first time you sign in, and if necessary use the **Azure AI Foundry** logo at the top left to navigate to the home page, which looks similar to the following image (close the **Help** pane if it's open):
 
     ![Screenshot of Azure AI Foundry portal.](./Media/ai-foundry-home.png)
 
@@ -72,7 +72,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
 
 1. Use the **[\>_]** button to the right of the search bar at the top of the page to create a new Cloud Shell in the Azure portal, selecting a ***PowerShell*** environment with no storage in your subscription.
 
-    The cloud shell provides a command line interface in a pane at the bottom of the Azure portal. You can resize or maximize this pane to make it easier to work in.
+    The cloud shell provides a command-line interface in a pane at the bottom of the Azure portal. You can resize or maximize this pane to make it easier to work in.
 
     > **Note**: If you have previously created a cloud shell that uses a *Bash* environment, switch it to ***PowerShell***.
 
@@ -106,7 +106,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
 
 ### Configure the application settings
 
-1. In the cloud shell command line pane, enter the following command to install the libraries you'll use:
+1. In the cloud shell command-line pane, enter the following command to install the libraries you'll use:
 
     ```
    pip install python-dotenv azure-identity semantic-kernel[azure] 
@@ -141,7 +141,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
     - A **create_expense_claim** function in which the code to create and use your agent must be added
     - An **EmailPlugin** class that includes a kernel function named **send_email**; which will be used by your agent to simulate the functionality used to send an email.
 
-1. At the top of the file, after the existing **import** statement, find the comment **Add references**, and add the following code to reference the namespaces in the libraries you will need to implement your agent:
+1. At the top of the file, after the existing **import** statement, find the comment **Add references**, and add the following code to reference the namespaces in the libraries you'll need to implement your agent:
 
     ```python
    # Add references
@@ -181,7 +181,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
    ai_agent_settings = AzureAIAgentSettings.create()
     ```
 
-1. Find the comment **Connect to the Azure AI Foundry project**, and add the following code to connect to your Azure AI Foundry project using the Azure credentials you are currently signed in with.
+1. Find the comment **Connect to the Azure AI Foundry project**, and add the following code to connect to your Azure AI Foundry project using the Azure credentials you're currently signed in with.
 
     (Be sure to maintain the indentation level)
 
@@ -212,7 +212,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
    )
     ```
 
-1. Find the comment **Create a  semantic kernel agent**, and add the following code to create asemantic kernel agent object for your Azure AI agent, and includes a reference to the **EmailPlugin** plugin.
+1. Find the comment **Create a  semantic kernel agent**, and add the following code to create a semantic kernel agent object for your Azure AI agent, and includes a reference to the **EmailPlugin** plugin.
 
     (Be sure to maintain the indentation level)
 
@@ -248,7 +248,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
         await project_client.agents.delete_agent(expenses_agent.id)
     ```
 
-1. Review that the completed code for your agent,using the comments to help you understand what each block of code does, and then save your code changes (**CTRL+S**).
+1. Review that the completed code for your agent, using the comments to help you understand what each block of code does, and then save your code changes (**CTRL+S**).
 
 ### Sign into Azure and run the app
 
@@ -256,7 +256,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
 
     > **Note**: In most scenarios, just using *az login* will be sufficient. However, if you have subscriptions in multiple tenants, you may need to specify the tenant by using the *--tenant* parameter. See [Sign into Azure interactively using the Azure CLI](https://learn.microsoft.com/cli/azure/authenticate-azure-cli-interactively) for details.
 
-1. In the cloud shell command line pane beneath the code editor, enter the following command to sign into Azure.
+1. In the cloud shell command-line pane beneath the code editor, enter the following command to sign into Azure.
 
     ```
     az login
