@@ -10,6 +10,8 @@ In this exercise, you'll use Azure AI Agent Service to create a simple agent tha
 
 This exercise should take approximately **30** minutes to complete.
 
+> **Note**: Some of the technologies used in this exercise are in preview or in active development. You may experience some unexpected behavior, warnings, or errors.
+
 ## Create an Azure AI Foundry project
 
 Let's start by creating an Azure AI Foundry project.

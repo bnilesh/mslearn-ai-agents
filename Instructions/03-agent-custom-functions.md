@@ -12,6 +12,8 @@ You'll build a simple technical support agent that can collect details of a tech
 
 This exercise should take approximately **30** minutes to complete.
 
+> **Note**: Some of the technologies used in this exercise are in preview or in active development. You may experience some unexpected behavior, warnings, or errors.
+
 ## Create an Azure AI Foundry project
 
 Let's start by creating an Azure AI Foundry project.

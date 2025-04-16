@@ -10,6 +10,8 @@ In this exercise, you use the Azure AI Agent service tools in the Azure AI Found
 
 This exercise takes approximately **30** minutes.
 
+> **Note**: Some of the technologies used in this exercise are in preview or in active development. You may experience some unexpected behavior, warnings, or errors.
+
 ## Create an Azure AI Foundry project
 
 Let's start by creating an Azure AI Foundry project.

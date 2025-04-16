@@ -8,9 +8,11 @@ lab:
 
 In this exercise, you'll create a project that orchestrates two AI agents using the Semantic Kernel SDK. An *Incident Manager* agent will analyze service log files for issues. If an issue is found, the Incident Manager will recommend a resolution action, and a *DevOps Assistant* agent will receive the recommendation and invoke the corrective function and perform the resolution. The Incident Manager agent will then review the updated logs to make sure the resolution was successful.
 
-> **Note**: For this exercise, four sample log files are provided. The DevOps Assistant agent code only updates the sample log files with some example log messages.
+For this exercise, four sample log files are provided. The DevOps Assistant agent code only updates the sample log files with some example log messages.
 
 This exercise should take approximately **30** minutes to complete.
+
+> **Note**: Some of the technologies used in this exercise are in preview or in active development. You may experience some unexpected behavior, warnings, or errors.
 
 ## Create an Azure AI Foundry project
 
