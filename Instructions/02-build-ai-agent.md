@@ -103,6 +103,8 @@ Now you're ready to create a client app that uses an agent. Some code has been p
 1. In the cloud shell command-line pane, enter the following command to install the libraries you'll use:
 
     ```
+   python -m venv labenv
+   ./labenv/bin/Activate.ps1
    pip install python-dotenv azure-identity azure-ai-projects
     ```
 
