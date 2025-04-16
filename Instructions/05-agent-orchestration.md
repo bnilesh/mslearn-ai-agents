@@ -78,6 +78,10 @@ Now you're ready to create a client app that defines an agent and a custom funct
 
     > **Note**: If you have previously created a cloud shell that uses a *Bash* environment, switch it to ***PowerShell***.
 
+1. In the cloud shell toolbar, in the **Settings** menu, select **Go to Classic version** (this is required to use the code editor).
+
+    **<font color="red">Ensure you've switched to the classic version of the cloud shell before continuing.</font>**
+
 1. In the cloud shell pane, enter the following commands to clone the GitHub repo containing the code files for this exercise (type the command, or copy it to the clipboard and then right-click in the command line and paste as plain text):
 
     ```
@@ -87,17 +91,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
 
     > **Tip**: As you enter commands into the cloud shell, the output may take up a large amount of the screen buffer and the cursor on the current line may be obscured. You can clear the screen by entering the `cls` command to make it easier to focus on each task.
 
-1. Enter the following command to install the required version of Python in the cloud shell:
-
-    ```
-   sh ~/ai-agents/Labfiles/update-python.sh
-    ```
-
-1. After the installation is complete, in the cloud shell toolbar, in the **Settings** menu, select **Go to Classic version** (this starts a new session, and is required to use the code editor).
-
-    **<font color="red">Ensure you've switched to the classic version of the cloud shell and a new session has started before continuing.</font>**
-
-1. Enter the following command to change the working directory to the folder containing the code files and list them all.
+1. When the repo has been cloned, enter the following command to change the working directory to the folder containing the code files and list them all.
 
     ```
    cd ai-agents/Labfiles/05-agent-orchestration/Python
@@ -111,6 +105,8 @@ Now you're ready to create a client app that defines an agent and a custom funct
 1. In the cloud shell command-line pane, enter the following command to install the libraries you'll use:
 
     ```
+   python -m venv labenv
+   ./labenv/bin/Activate.ps1
    pip install python-dotenv azure-identity semantic-kernel[azure] 
     ```
 
