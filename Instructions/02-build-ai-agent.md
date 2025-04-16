@@ -297,7 +297,7 @@ Now you're ready to create a client app that uses an agent. Some code has been p
 1. View the response. Then enter another prompt, this time requesting a chart:
 
     ```
-   Create a pie chart showing cost by category.
+   Create a pie chart showing cost by category
     ```
 
     The agent should selectively use the code interpreter tool as required, in this case to create a chart based on your request.
