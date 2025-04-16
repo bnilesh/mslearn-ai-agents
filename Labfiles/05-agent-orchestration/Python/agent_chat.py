@@ -58,7 +58,7 @@ async def main():
     shutil.copytree(src_path, file_path, dirs_exist_ok=True)
 
     # Get the Azure AI Agent settings
-    ai_agent_settings = AzureAIAgentSettings.create()
+    ai_agent_settings = AzureAIAgentSettings()
 
     async with (
         DefaultAzureCredential(exclude_environment_credential=True, 

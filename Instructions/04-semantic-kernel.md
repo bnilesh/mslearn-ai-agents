@@ -176,7 +176,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
     ```python
    # Get configuration settings
    load_dotenv()
-   ai_agent_settings = AzureAIAgentSettings.create()
+   ai_agent_settings = AzureAIAgentSettings()
     ```
 
 1. Find the comment **Connect to the Azure AI Foundry project**, and add the following code to connect to your Azure AI Foundry project using the Azure credentials you're currently signed in with.
