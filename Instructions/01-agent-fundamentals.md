@@ -77,7 +77,7 @@ Now that you have a model deployed, you're ready to build an AI agent. In this e
     ![Screenshot of the AI agent setup page in Azure AI Foundry portal.](./Media/ai-agent-setup.png)
 
 1. Further down in the **Setup** pane, next to the **Knowledge** header, select **+ Add**. Then in the **Add knowledge** dialog box, select **Files**.
-1. In the **Adding files** dialog box, create a new vector store named `Expenses_Vector_Store`, uploading the **Expenses_policy.docx** local file that you downloaded previously.
+1. In the **Adding files** dialog box, create a new vector store named `Expenses_Vector_Store`, uploading and saving the **Expenses_policy.docx** local file that you downloaded previously.
 
     ![Screenshot of the Adding files dialog box in Azure AI Foundry portal.](./Media/ai-agent-add-files.png)
 
