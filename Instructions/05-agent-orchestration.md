@@ -325,7 +325,7 @@ Now you're ready to run your code and watch your AI agents collaborate.
 
     > **Note**: The app includes some code to wait between processing each log file to try to reduce the risk of a TPM rate limit being exceeded, and exception handling in case it happens anyway. If there is insufficient quota available in your subscription, the model may not be able to respond.
 
-1. Verify that the log files in the **log** folder are updated with resolution operation messages from the DevopsAssistant.
+1. Verify that the log files in the **logs** folder are updated with resolution operation messages from the DevopsAssistant.
 
     For example, log1.log should have the following log messages appended:
 
