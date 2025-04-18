@@ -13,3 +13,7 @@ The exercises in this repo are designed to provide you with a hands-on learning 
 - [Develop a multi-agent solution](Instructions/05-agent-orchestration.md)
 
 > **Note**: While you can complete these exercises on their own, they're designed to complement modules on [Microsoft Learn](https://learn.microsoft.com/training/paths/develop-ai-agents-on-azure/); in which you'll find a deeper dive into some of the underlying concepts on which these exercises are based.
+
+## Reporting issues
+
+If you encounter any problems in the exercises, please report them as **issues** in this repo.
