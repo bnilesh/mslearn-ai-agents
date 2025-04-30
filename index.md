@@ -1,10 +1,8 @@
 ---
-title: Azure AI Agents Exercises
+title: Develop AI Agents in Azure
 permalink: index.html
 layout: home
 ---
-
-# Develop AI Agents in Azure
 
 The following exercises are designed to provide you with a hands-on learning experience in which you'll explore common tasks that developers do when building AI agents on Microsoft Azure.
 
