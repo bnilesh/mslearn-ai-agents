@@ -109,7 +109,7 @@ Now that you've created your project in AI Foundry, let's develop an app that im
     ```
    python -m venv labenv
    ./labenv/bin/Activate.ps1
-   pip install python-dotenv azure-identity azure-ai-projects==1.0.0b8
+   pip install python-dotenv azure-identity azure-ai-projects
     ```
 
     >**Note:** You can ignore any warning or error messages displayed during the library installation.
@@ -203,6 +203,7 @@ Now that you've created your project in AI Foundry, let's develop an app that im
         functions = FunctionTool(user_functions)
         toolset = ToolSet()
         toolset.add(functions)
+        project_client.agents.enable_auto_function_calls(toolset=toolset)
             
         agent = project_client.agents.create_agent(
             model=MODEL_DEPLOYMENT,
