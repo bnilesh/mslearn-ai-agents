@@ -1,5 +1,6 @@
 import os
 import asyncio
+from pathlib import Path
 
 # Add references
 
@@ -9,16 +10,19 @@ async def main():
     # Clear the console
     os.system('cls' if os.name=='nt' else 'clear')
 
-    # Create expense claim data
-    data = """date,description,amount
-              07-Mar-2025,taxi,24.00
-              07-Mar-2025,dinner,65.50
-              07-Mar-2025,hotel,125.90"""
+    # Load the expnses data file
+    script_dir = Path(__file__).parent
+    file_path = script_dir / 'data.txt'
+    with file_path.open('r') as file:
+        data = file.read() + "\n"
 
+    # Ask for a prompt
+    user_prompt = input(f"Here is the expenses data in your file:\n\n{data}\n\nWhat would you like me to do with it?\n\n")
+    
     # Run the async agent code
-    await create_expense_claim(data)
-
-async def create_expense_claim(expenses_data):
+    await process_expenses_data (user_prompt, data)
+    
+async def process_expenses_data(prompt, expenses_data):
 
     # Get configuration settings
 
@@ -32,7 +36,7 @@ async def create_expense_claim(expenses_data):
         # Create a semantic kernel agent
 
 
-        # Use the agent to generate an expense claim email
+        # Use the agent to process the expenses data
 
 
 

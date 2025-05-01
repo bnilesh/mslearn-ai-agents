@@ -6,7 +6,7 @@ lab:
 
 # Develop an Azure AI agent with the Semantic Kernel SDK
 
-In this exercise, you'll use Azure AI Agent Service and Semantic Kernel to create an AI agent that creates an expense claim email.
+In this exercise, you'll use Azure AI Agent Service and Semantic Kernel to create an AI agent that processes expense claims.
 
 This exercise should take approximately **30** minutes to complete.
 
@@ -98,7 +98,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
    ls -a -l
     ```
 
-    The provided files include application code and a file for configuration settings.
+    The provided files include application code a file for configuration settings, and a file containing expenses data.
 
 ### Configure the application settings
 
@@ -135,8 +135,8 @@ Now you're ready to create a client app that defines an agent and a custom funct
 
 1. Review the code in the file. It contains:
     - Some **import** statements to add references to commonly used namespaces
-    - A *main* function that defines data for an expense claim (in a real application, this would likely be submitted as a file) and then calls...
-    - A **create_expense_claim** function in which the code to create and use your agent must be added
+    - A *main* function that loads a file containing expenses data, asks the user for instructions, and and then calls...
+    - A **process_expenses_data** function in which the code to create and use your agent must be added
     - An **EmailPlugin** class that includes a kernel function named **send_email**; which will be used by your agent to simulate the functionality used to send an email.
 
 1. At the top of the file, after the existing **import** statement, find the comment **Add references**, and add the following code to reference the namespaces in the libraries you'll need to implement your agent:
@@ -223,16 +223,16 @@ Now you're ready to create a client app that defines an agent and a custom funct
    )
     ```
 
-1. Find the comment **Use the agent to generate an expense claim email**, and add the following code to create a thread for your agent to run on, and then invoke it with a chat message.
+1. Find the comment **Use the agent to process the expenses data**, and add the following code to create a thread for your agent to run on, and then invoke it with a chat message.
 
     (Be sure to maintain the indentation level):
 
     ```python
-   # Use the agent to generate an expense claim email
+   # Use the agent to process the expenses data
    thread: AzureAIAgentThread = AzureAIAgentThread(client=project_client)
    try:
         # Add the input prompt to a list of messages to be submitted
-        prompt_messages = [f"Create an expense claim for the following expenses: {expenses_data}"]
+        prompt_messages = [f"{prompt}: {expenses_data}"]
         # Invoke the agent for the specified thread with the messages
         response = await expenses_agent.get_response(thread_id=thread.id, messages=prompt_messages)
         # Display the response
@@ -247,6 +247,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
     ```
 
 1. Review that the completed code for your agent, using the comments to help you understand what each block of code does, and then save your code changes (**CTRL+S**).
+1. Keep the code editor open in case you need to correct any typo's in the code, but resize the panes so you can see more of the command line console.
 
 ### Sign into Azure and run the app
 
@@ -269,9 +270,15 @@ Now you're ready to create a client app that defines an agent and a custom funct
     
     The application runs using the credentials for your authenticated Azure session to connect to your project and create and run the agent.
 
-    > **Tip**: If the app fails because the rate limit is exceeded. Wait a few seconds and try again. If there is insufficient quota available in your subscription, the model may not be able to respond.
+1. When asked what to do with the expenses data, enter the following prompt:
+
+    ```
+   Submit an expense claim
+    ```
 
 1. When the application has finished, review the output. The agent should have composed an email for an expenses claim based on the data that was provided.
+
+    > **Tip**: If the app fails because the rate limit is exceeded. Wait a few seconds and try again. If there is insufficient quota available in your subscription, the model may not be able to respond.
 
 ## Summary
 
