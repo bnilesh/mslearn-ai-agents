@@ -1,12 +1,12 @@
 ---
 lab:
     title: 'Explore AI Agent development'
-    description: 'Take your first steps in developing AI agents by exploring the Azure AI Agent service tools in the Azure AI Foundry portal.'
+    description: 'Take your first steps in developing AI agents by exploring the Azure AI Agent service in the Azure AI Foundry portal.'
 ---
 
 # Explore AI Agent development
 
-In this exercise, you use the Azure AI Agent service tools in the Azure AI Foundry portal to create a simple AI agent that answers questions about expense claims.
+In this exercise, you use the Azure AI Agent service in the Azure AI Foundry portal to create a simple AI agent that assists employees with expense claims.
 
 This exercise takes approximately **30** minutes.
 
@@ -72,7 +72,13 @@ Now that you have a model deployed, you're ready to build an AI agent. In this e
 
     A new agent with a name like *Agent123* should be created automatically (if not, use the **+ New agent** button to create one).
 
-1. Select your new agent. Then, in the **Setup** pane for your new agent, set the **Agent name** to `ExpensesAgent`, ensure that the gpt-4o model deployment you created previously is selected, and set the **Instructions** to `Answer questions related to expense claims`.
+1. Select your new agent. Then, in the **Setup** pane for your new agent, set the **Agent name** to `ExpensesAgent`, ensure that the gpt-4o model deployment you created previously is selected, and set the **Instructions** to:
+
+    ```prompt
+   You are an AI assistant for corporate expenses.
+   You answer questions about expenses based on the expenses policy data.
+   If a user wants to submit an expense claim, you get their email address, a description of the claim, and the amount to be claimed and write the claim details to a text file that the user can download.
+    ```
 
     ![Screenshot of the AI agent setup page in Azure AI Foundry portal.](./Media/ai-agent-setup.png)
 
@@ -83,20 +89,27 @@ Now that you have a model deployed, you're ready to build an AI agent. In this e
 
 1. In the **Setup** pane, in the **Knowledge** section, verify that **Expenses_Vector_Store** is listed and shown as containing 1 file.
 
-    > **Note**: You can also add **Actions** to an agent to automate tasks. In this simple information retrieval agent example, no actions are required.
+1. Below the **Knowledge** section, next to **Actions**, select **+ Add**. Then in the **Add action** dialog box, select **Code interpreter** and then select **Save** (you do not need to upload any files for the code interpreter).
+
+    Your agent will use the document you uploaded as its knowledge source to *ground* its responses (in other words, it will answer questions based on the contents of this document). It will use the code interpreter tool as required to perform actions by generating and running its own Python code.
 
 ## Test your agent
 
 Now that you've created an agent, you can test it in the Azure AI Foundry portal playground.
 
 1. At the top of the **Setup** pane for your agent, select **Try in playground**.
-1. In the playground, enter the prompt `What's the maximum I can claim for meals?` and review the agent's response - which should be based on information in the expenses policy document you added as knowledge to the agent setup.
-
-    ![Screenshot of the Agent Playground in Azure AI Foundry portal.](./Media/ai-agent-playground.png)
+1. In the playground, enter the prompt: `What's the maximum I can claim for meals?` and review the agent's response - which should be based on information in the expenses policy document you added as knowledge to the agent setup.
 
     > **Note**: If the agent fails to respond because the rate limit is exceeded. Wait a few seconds and try again. If there is insufficient quota available in your subscription, the model may not be able to respond.
 
-1. Try a follow-up question, like `What about accommodation?` and review the response.
+1. Try the following follow-up prompt: `I'd like to submit a claim for a meal.` and review the response. The agent should ask you for the required information to submit a claim.
+1. Provide the agent with an email address; for example, `fred@contoso.com`. The agent should acknowledge the response and request the remaining information required for the expense claim (description and amount)
+1. Submit a prompt that describes the claim and the amount; for example, `Breakfast cost me $20`.
+1. The agent should use the code interpreter to prepare the expense claim text file, and provide a link so you can download it.
+
+    ![Screenshot of the Agent Playground in Azure AI Foundry portal.](./Media/ai-agent-playground.png)
+
+1. Download and open the text document to see the expense claim details.
 
 ## Clean up
 
