@@ -159,7 +159,7 @@ Now that you've created your project in AI Foundry, let's develop an app that im
    # Add references
    from azure.identity import DefaultAzureCredential
    from azure.ai.agents import AgentsClient
-   from azure.ai.agents.models import FunctionTool, ToolSet, ListSortOrder
+   from azure.ai.agents.models import FunctionTool, ToolSet, ListSortOrder, MessageRole
    from user_functions import user_functions
     ```
 
