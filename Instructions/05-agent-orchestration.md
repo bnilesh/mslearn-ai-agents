@@ -1,6 +1,6 @@
 ---
 lab:
-    title: 'Develop a multi-agent solution'
+    title: 'Develop a multi-agent solution with Semantic Kernel'
     description: 'Learn to configure multiple agents to collaborate using the Semantic Kernel SDK'
 ---
 
