@@ -1,8 +1,4 @@
----
-lab:
-    title: 'Develop a multi-agent solution with Azure AI Foundry'
-    description: 'Learn to configure multiple agents to collaborate using Azure AI Foundry Agent Service'
----
+# UNDER CONSTRUCTION
 
 # Develop a multi-agent solution
 
