@@ -1,5 +1,7 @@
 # UNDER CONSTRUCTION
 
+***This exercise is not yet complete, and may not work successfully.***
+
 # Develop a multi-agent solution
 
 In this exercise, you'll create a project that orchestrates multiple AI agents using Azure AI Foundry Agent Service. In this exercise, you'll create a quest master agent that is responsible for guiding a party through a dungeon. The party consists of connected AI agents representing a warrior, a healer, and a scout. The quest master agent receives a scenario from the user and delegates tasks to the party members accordingly. Let's get started!
