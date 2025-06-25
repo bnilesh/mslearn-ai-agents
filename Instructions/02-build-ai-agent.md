@@ -6,7 +6,7 @@ lab:
 
 # Develop an AI agent
 
-In this exercise, you'll use Azure AI Agent Service to create a simple agent that analyzes data and creates charts. The agent uses the built-in *Code Interpreter* tool to dynamically generate the code required to create charts as images, and then saves the resulting chart images.
+In this exercise, you'll use Azure AI Agent Service to create a simple agent that analyzes data and creates charts. The agent can use the built-in *Code Interpreter* tool to dynamically generate any code required to analyze data.
 
 This exercise should take approximately **30** minutes to complete.
 
@@ -160,7 +160,7 @@ Now you're ready to create a client app that uses an agent. Some code has been p
    agent = agent_client.create_agent(
         model=model_deployment,
         name="data-agent",
-        instructions="You are an AI agent that analyzes the data in the file that has been uploaded. If the user requests a chart, create it and save it as a .png file.",
+        instructions="You are an AI agent that analyzes the data in the file that has been uploaded. Use Python to calculate statistical metrics as necessary.",
         tools=code_interpreter.definitions,
         tool_resources=code_interpreter.resources,
    )
@@ -221,19 +221,6 @@ Now you're ready to create a client app that uses an agent. Some code has been p
            print(f"{message.role}: {last_msg.text.value}\n")
     ```
 
-1. Find the comment **Get any generated files** and add the following code to get any file path annotations from the messages (which indicate that the agent saved a file in its internal storage) and copy the files to the app folder. _NOTE_: Currently the image contents are not available by the system.
-
-    ```python
-   # Get any generated files
-   for msg in messages:
-       # Save every image file in the message
-       for img in msg.image_contents:
-           file_id = img.image_file.file_id
-           file_name = f"{file_id}_image_file.png"
-           agent_client.files.save(file_id=file_id, file_name=file_name)
-           print(f"Saved image file to: {Path.cwd() / file_name}")
-    ```
-
 1. Find the comment **Clean up** and add the following code to delete the agent and thread when no longer needed.
 
     ```python
@@ -244,12 +231,11 @@ Now you're ready to create a client app that uses an agent. Some code has been p
 1. Review the code, using the comments to understand how it:
     - Connects to the AI Foundry project.
     - Uploads the data file and creates a code interpreter tool that can access it.
-    - Creates a new agent that uses the code interpreter tool and has explicit instructions to analyze the data and create charts as .png files.
+    - Creates a new agent that uses the code interpreter tool and has explicit instructions to use Python as necessary for statistical analysis.
     - Runs a thread with a prompt message from the user along with the data to be analyzed.
     - Checks the status of the run in case there's a failure
     - Retrieves the messages from the completed thread and displays the last one sent by the agent.
     - Displays the conversation history
-    - Saves each file that was generated.
     - Deletes the agent and thread when they're no longer required.
 
 1. Save the code file (*CTRL+S*) when you have finished. You can also close the code editor (*CTRL+Q*); though you may want to keep it open in case you need to make any edits to the code you added. In either case, keep the cloud shell command-line pane open.
@@ -283,28 +269,26 @@ Now you're ready to create a client app that uses an agent. Some code has been p
 
     > **Tip**: If the app fails because the rate limit is exceeded. Wait a few seconds and try again. If there is insufficient quota available in your subscription, the model may not be able to respond.
 
-1. View the response. Then enter another prompt, this time requesting a chart:
+1. View the response. Then enter another prompt, this time requesting a visualization:
 
     ```
-   Create a pie chart showing cost by category
+   Create a text-based bar chart showing cost by category
     ```
 
-    The agent should selectively use the code interpreter tool as required, in this case to create a chart based on your request.
+1. View the response. Then enter another prompt, this time requesting a statistical metric:
+
+    ```
+   What's the standard deviation of cost?
+    ```
+
+    View the response.
 
 1. You can continue the conversation if you like. The thread is *stateful*, so it retains the conversation history - meaning that the agent has the full context for each response. Enter `quit` when you're done.
-1. Review the conversation messages that were retrieved from the thread, and the files that were generated.
-
-1. When the application has finished, use the cloud shell **download** command to download each .png file that was saved in the app folder. For example:
-
-    ```
-   download ./<file_name>.png
-    ```
-
-    The download command creates a popup link at the bottom right of your browser, which you can select to download and open the file.
+1. Review the conversation messages that were retrieved from the thread - which may include messages the agent generated to explain its steps when using the code interpreter tool.
 
 ## Summary
 
-In this exercise, you used the Azure AI Agent Service SDK to create a client application that uses an AI agent. The agent uses the built-in Code Interpreter tool to run dynamic code that creates images.
+In this exercise, you used the Azure AI Agent Service SDK to create a client application that uses an AI agent. The agent can use the built-in Code Interpreter tool to run dynamic Python code to perform statistical analyses.
 
 ## Clean up
 
