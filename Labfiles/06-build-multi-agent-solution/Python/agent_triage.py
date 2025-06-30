@@ -1,16 +1,16 @@
 import os
 from dotenv import load_dotenv
-from azure.ai.agents import AgentsClient
-from azure.ai.agents.models import ConnectedAgentTool, MessageRole, ListSortOrder, ToolSet, FunctionTool
-from azure.identity import DefaultAzureCredential
+
+#Add references
+
 
 # Clear the console
 os.system('cls' if os.name=='nt' else 'clear')
 
 # Load environment variables from .env file
 load_dotenv()
-project_endpoint = os.getenv("AZURE_AI_AGENT_ENDPOINT")
-model_deployment = os.getenv("AZURE_AI_AGENT_MODEL_DEPLOYMENT_NAME")
+project_endpoint = os.getenv("PROJECT_ENDPOINT")
+model_deployment = os.getenv("MODEL_DEPLOYMENT_NAME")
 
 # Priority agent definition
 priority_agent_name = "priority_agent"
@@ -58,7 +58,10 @@ Base your estimate on the complexity implied by the ticket. Respond with the eff
 # Connect to the agents client
 agents_client = AgentsClient(
     endpoint=project_endpoint,
-    credential=DefaultAzureCredential(),
+    credential=DefaultAzureCredential(
+        exclude_environment_credential=True, 
+        exclude_managed_identity_credential=True
+    ),
 )
 
 with agents_client:
