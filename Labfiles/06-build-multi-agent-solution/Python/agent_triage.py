@@ -58,7 +58,10 @@ Base your estimate on the complexity implied by the ticket. Respond with the eff
 # Connect to the agents client
 agents_client = AgentsClient(
     endpoint=project_endpoint,
-    credential=DefaultAzureCredential(),
+    credential=DefaultAzureCredential(
+        exclude_environment_credential=True, 
+        exclude_managed_identity_credential=True
+    ),
 )
 
 with agents_client:
