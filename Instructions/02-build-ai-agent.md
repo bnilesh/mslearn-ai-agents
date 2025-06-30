@@ -8,6 +8,8 @@ lab:
 
 In this exercise, you'll use Azure AI Agent Service to create a simple agent that analyzes data and creates charts. The agent can use the built-in *Code Interpreter* tool to dynamically generate any code required to analyze data.
 
+> **Tip**: The code used in this exercise is based on the for Azure AI Foundry SDK for Python. You can develop similar solutions using the SDKs for Microsoft .NET, JavaScript, and Java. Refer to [Azure AI Foundry SDK client libraries](https://learn.microsoft.com/azure/ai-foundry/how-to/develop/sdk-overview) for details.
+
 This exercise should take approximately **30** minutes to complete.
 
 > **Note**: Some of the technologies used in this exercise are in preview or in active development. You may experience some unexpected behavior, warnings, or errors.
@@ -31,15 +33,13 @@ Let's start by creating an Azure AI Foundry project.
     > \* Some Azure AI resources are constrained by regional model quotas. In the event of a quota limit being exceeded later in the exercise, there's a possibility you may need to create another resource in a different region.
 
 1. Select **Create** and wait for your project to be created.
-1. When your project is created, the Agents playground will be opened automatically so you can select or deploy a model:
+1. If prompted, deploy a **gpt-4o** model using either the *Global Standard* or *Standard* deployment option (depending on your quota availability).
 
-    ![Screenshot of a Azure AI Foundry project Agents playground.](./Media/ai-foundry-agents-playground.png)
+    >**Note**: If quota is available, a GPT-4o base model may be deployed automatically when creating your Agent and project.
 
-    >**Note**: A GPT-4o base model is automatically deployed when creating your Agent and project.
+1. When your project is created, the Agents playground will be opened.
 
 1. In the navigation pane on the left, select **Overview** to see the main page for your project; which looks like this:
-
-    > **Note**: If an *Insufficient permissions** error is displayed, use the **Fix me** button to resolve it.
 
     ![Screenshot of a Azure AI Foundry project overview page.](./Media/ai-foundry-project.png)
 

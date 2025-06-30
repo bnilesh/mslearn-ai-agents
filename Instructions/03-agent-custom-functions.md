@@ -6,9 +6,9 @@ lab:
 
 # Use a custom function in an AI agent
 
-In this exercise you'll explore creating an agent that can use custom functions as a tool to complete tasks.
+In this exercise you'll explore creating an agent that can use custom functions as a tool to complete tasks. You'll build a simple technical support agent that can collect details of a technical problem and generate a support ticket.
 
-You'll build a simple technical support agent that can collect details of a technical problem and generate a support ticket.
+> **Tip**: The code used in this exercise is based on the for Azure AI Foundry SDK for Python. You can develop similar solutions using the SDKs for Microsoft .NET, JavaScript, and Java. Refer to [Azure AI Foundry SDK client libraries](https://learn.microsoft.com/azure/ai-foundry/how-to/develop/sdk-overview) for details.
 
 This exercise should take approximately **30** minutes to complete.
 
@@ -33,19 +33,17 @@ Let's start by creating an Azure AI Foundry project.
     > \* Some Azure AI resources are constrained by regional model quotas. In the event of a quota limit being exceeded later in the exercise, there's a possibility you may need to create another resource in a different region.
 
 1. Select **Create** and wait for your project to be created.
-1. When your project is created, the Agents playground will be opened automatically so you can select or deploy a model:
+1. If prompted, deploy a **gpt-4o** model using either the *Global Standard* or *Standard* deployment option (depending on your quota availability).
 
-    ![Screenshot of a Azure AI Foundry project Agents playground.](./Media/ai-foundry-agents-playground.png)
+    >**Note**: If quota is available, a GPT-4o base model may be deployed automatically when creating your Agent and project.
 
-    >**Note**: A GPT-4o base model is automatically deployed when creating your Agent and project.
+1. When your project is created, the Agents playground will be opened.
 
 1. In the navigation pane on the left, select **Overview** to see the main page for your project; which looks like this:
 
-    > **Note**: If an *Insufficient permissions** error is displayed, use the **Fix me** button to resolve it.
-
     ![Screenshot of a Azure AI Foundry project overview page.](./Media/ai-foundry-project.png)
 
-1. Copy the **Azure AI Foundry project endpoint** value to a notepad, as you'll use it to connect to your project in a client application.
+1. Copy the **Azure AI Foundry project endpoint** values to a notepad, as you'll use them to connect to your project in a client application.
 
 ## Develop an agent that uses function tools
 

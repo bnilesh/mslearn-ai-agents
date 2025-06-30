@@ -10,6 +10,8 @@ In this exercise, you'll create a project that orchestrates two AI agents using 
 
 For this exercise, four sample log files are provided. The DevOps Assistant agent code only updates the sample log files with some example log messages.
 
+> **Tip**: The code used in this exercise is based on the for Semantic Kernel SDK for Python. You can develop similar solutions using the SDKs for Microsoft .NET and Java. Refer to [Supported Semantic Kernel languages](https://learn.microsoft.com/semantic-kernel/get-started/supported-languages) for details.
+
 This exercise should take approximately **30** minutes to complete.
 
 > **Note**: Some of the technologies used in this exercise are in preview or in active development. You may experience some unexpected behavior, warnings, or errors.
@@ -46,8 +48,6 @@ Let's start by deploying a model in an Azure AI Foundry project.
 
 1. In the **Setup** pane, note the name of your model deployment; which should be **gpt-4o**. You can confirm this by viewing the deployment in the **Models and endpoints** page (just open that page in the navigation pane on the left).
 1. In the navigation pane on the left, select **Overview** to see the main page for your project; which looks like this:
-
-    > **Note**: If an *Insufficient permissions** error is displayed, use the **Fix me** button to resolve it.
 
     ![Screenshot of a Azure AI project details in Azure AI Foundry portal.](./Media/ai-foundry-project.png)
 

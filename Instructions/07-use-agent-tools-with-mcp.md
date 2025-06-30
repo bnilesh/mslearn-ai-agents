@@ -10,6 +10,8 @@ In this exercise, you'll create an agent that can connect to an MCP server and a
 
 You'll build a simple inventory assessment agent for a cosmetics retailer. Using the MCP server, the agent will be able to retrieve information about the inventory and make restock or clearance suggestions.
 
+> **Tip**: The code used in this exercise is based on the for Azure AI Foundry and MCP SDKs for Python. You can develop similar solutions using the SDKs for Microsoft .NET. Refer to [Azure AI Foundry SDK client libraries](https://learn.microsoft.com/azure/ai-foundry/how-to/develop/sdk-overview) and [MCP C# SDK](https://modelcontextprotocol.github.io/csharp-sdk/api/ModelContextProtocol.html) for details.
+
 This exercise should take approximately **30** minutes to complete.
 
 > **Note**: Some of the technologies used in this exercise are in preview or in active development. You may experience some unexpected behavior, warnings, or errors.
@@ -40,8 +42,6 @@ Let's start by creating an Azure AI Foundry project.
     >**Note**: A GPT-4o base model is automatically deployed when creating your Agent and project.
 
 1. In the navigation pane on the left, select **Overview** to see the main page for your project; which looks like this:
-
-    > **Note**: If an *Insufficient permissions** error is displayed, use the **Fix me** button to resolve it.
 
     ![Screenshot of a Azure AI Foundry project overview page.](./Media/ai-foundry-project.png)
 

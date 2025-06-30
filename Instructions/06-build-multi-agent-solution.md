@@ -8,7 +8,11 @@ lab:
 
 In this exercise, you'll create a project that orchestrates multiple AI agents using Azure AI Foundry Agent Service. You'll design an AI solution that assists with ticket triage. The connected agents will assess the ticket's priority, suggest a team assignment, and determine the level of effort required to complete the ticket. Let's get started!
 
+> **Tip**: The code used in this exercise is based on the for Azure AI Foundry SDK for Python. You can develop similar solutions using the SDKs for Microsoft .NET, JavaScript, and Java. Refer to [Azure AI Foundry SDK client libraries](https://learn.microsoft.com/azure/ai-foundry/how-to/develop/sdk-overview) for details.
+
 This exercise should take approximately **30** minutes to complete.
+
+> **Note**: Some of the technologies used in this exercise are in preview or in active development. You may experience some unexpected behavior, warnings, or errors.
 
 ## Deploy a model in an Azure AI Foundry project
 
@@ -41,8 +45,6 @@ Let's start by deploying a model in an Azure AI Foundry project.
    > **NOTE**: 40,000 TPM should be sufficient for the data used in this exercise. If your available quota is lower than this, you will be able to complete the exercise but you may need to wait and resubmit prompts if the rate limit is exceeded.
 
 1. In the navigation pane on the left, select **Overview** to see the main page for your project; which looks like this:
-
-    > **Note**: If an *Insufficient permissions** error is displayed, use the **Fix me** button to resolve it.
 
     ![Screenshot of a Azure AI Foundry project overview page.](./Media/ai-foundry-project.png)
 
