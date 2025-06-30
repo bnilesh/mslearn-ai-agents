@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 
-#Add references
+# Add references
 
 
 # Clear the console
