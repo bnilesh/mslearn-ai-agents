@@ -119,7 +119,7 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
     ```python
     # Add references
     from azure.ai.agents import AgentsClient
-    from azure.ai.agents.models import ConnectedAgentTool, MessageRole, ListSortOrder
+    from azure.ai.agents.models import ConnectedAgentTool, MessageRole, ListSortOrder, ToolSet, FunctionTool
     from azure.identity import DefaultAzureCredential
     ```
 
