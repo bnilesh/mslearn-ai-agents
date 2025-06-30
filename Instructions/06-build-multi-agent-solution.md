@@ -1,10 +1,6 @@
-# UNDER CONSTRUCTION
-
-***This exercise is not yet complete, and may not work successfully.***
-
 # Develop a multi-agent solution
 
-In this exercise, you'll create a project that orchestrates multiple AI agents using Azure AI Foundry Agent Service. In this exercise, you'll create a quest master agent that is responsible for guiding a party through a dungeon. The party consists of connected AI agents representing a warrior, a healer, and a scout. The quest master agent receives a scenario from the user and delegates tasks to the party members accordingly. Let's get started!
+In this exercise, you'll create a project that orchestrates multiple AI agents using Azure AI Foundry Agent Service. You'll design an AI solution that assists with ticket triage. The connected agents will assess the ticket's priority, suggest a team assignment, and determine the level of effort required to complete the ticket. Let's get started!
 
 This exercise should take approximately **30** minutes to complete.
 
@@ -110,10 +106,10 @@ Now you're ready to create a client app that defines the agents and instructions
 
 Now you're ready to create the agents for your multi-agent solution! Let's get started!
 
-1. Enter the following command to edit the **agent_quest.py** file:
+1. Enter the following command to edit the **agent_triage.py** file:
 
     ```
-   code agent_quest.py
+   code agent_triage.py
     ```
 
 1. Review the code in the file, noting that it contains strings for each agent name and instructions.
@@ -127,61 +123,71 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
     from azure.identity import DefaultAzureCredential
     ```
 
-1. Locate the comment **Create the healer agent on the Azure AI agent service**, and add the following code to create an Azure AI Agent.
+1. Under the comment **Instructions for the primary agent**, enter the following code:
 
     ```python
-    # Create the healer agent on the Azure AI agent service
-    healer_agent = agents_client.create_agent(
+    # Instructions for the primary agent
+    triage_agent_instructions = """
+    Triage the given ticket. Use the connected tools to determine the ticket's priority, 
+    which team it should be assigned to, and how much effort it may take.
+    """
+    ```
+
+1. Locate the comment **Create the priority agent on the Azure AI agent service**, and add the following code to create an Azure AI Agent.
+
+    ```python
+    # Create the priority agent on the Azure AI agent service
+    priority_agent = agents_client.create_agent(
         model=model_deployment,
-        name=healer_agent_name,
-        instructions=healer_instructions
+        name=priority_agent_name,
+        instructions=priority_agent_instructions
     )
     ```
 
     This code creates the agent definition on your Azure AI agents client.
 
-1. Find the comment **Create a connected agent tool for the healer agent**, and add the following code:
+1. Find the comment **Create a connected agent tool for the priority agent**, and add the following code:
 
     ```python
-    # Create a connected agent tool for the healer agent
-    healer_agent_tool = ConnectedAgentTool(
-        id=healer_agent.id, 
-        name=healer_agent_name, 
-        description="Responsible for healing party members and addressing injuries."
+    # Create a connected agent tool for the priority agent
+    priority_agent_tool = ConnectedAgentTool(
+        id=priority_agent.id, 
+        name=priority_agent_name, 
+        description="Assess the priority of a ticket"
     )
     ```
 
-    Now let's create the other party member agents.
+    Now let's create the other triaging agents.
 
-1. Under the comment **Create the scout agent and connected tool**, and add the following code:
+1. Under the comment **Create the team agent and connected tool**, and add the following code:
     
     ```python
-    # Create the scout agent and connected tool
-    scout_agent = agents_client.create_agent(
+    # Create the team agent and connected tool
+    team_agent = agents_client.create_agent(
         model=model_deployment,
-        name=scout_agent_name,
-        instructions=scout_instructions
+        name=team_agent_name,
+        instructions=team_agent_instructions
     )
-    scout_agent_tool = ConnectedAgentTool(
-        id=scout_agent.id, 
-        name=scout_agent_name, 
-        description="Goes ahead of the main party to perform reconnaissance."
+    team_agent_tool = ConnectedAgentTool(
+        id=team_agent.id, 
+        name=team_agent_name, 
+        description="Determines which team should take the ticket"
     )
     ```
 
-1. Under the comment **Create the warrior agent and connected tool**, and add the following code:
+1. Under the comment **Create the effort agent and connected tool**, and add the following code:
     
     ```python
-    # Create the warrior agent and connected tool
-    warrior_agent = agents_client.create_agent(
+    # Create the effort agent and connected tool
+    effort_agent = agents_client.create_agent(
         model=model_deployment,
-        name=warrior_agent_name,
-        instructions=warrior_instructions
+        name=effort_agent_name,
+        instructions=effort_agent_instructions
     )
-    warrior_agent_tool = ConnectedAgentTool(
-        id=warrior_agent.id, 
-        name=warrior_agent_name, 
-        description="Responds to combat or physical challenges."
+    effort_agent_tool = ConnectedAgentTool(
+        id=effort_agent.id, 
+        name=effort_agent_name, 
+        description="Determines the effort required to complete the ticket"
     )
     ```
 
@@ -192,16 +198,12 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
     # Create a main agent with the Connected Agent tools
     agent = agents_client.create_agent(
         model=model_deployment,
-        name="quest_master",
-        instructions="""
-            You are the Questmaster, the intelligent guide of a three-member adventuring party exploring a short dungeon. 
-            Based on the scenario, delegate tasks to the appropriate party member. The current party members are: Warrior, Scout, Healer.
-            Only include the party member's response, do not provide an analysis or summary.
-        """,
+        name="triage-agent",
+        instructions=triage_agent_instructions,
         tools=[
-            healer_agent_tool.definitions[0],
-            scout_agent_tool.definitions[0],
-            warrior_agent_tool.definitions[0]
+            priority_agent_tool.definitions[0],
+            team_agent_tool.definitions[0],
+            effort_agent_tool.definitions[0]
         ]
     )
     ```
@@ -215,10 +217,12 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
     ```
 
 
-1. Under the comment **Create the quest prompt**, and add the following code:
+1. Under the comment **Create the ticket prompt**, and add the following code:
     
     ```python
-    prompt = "We find a locked door with strange symbols, and the warrior is limping."
+    # Create the ticket prompt
+    prompt = "Users can't reset their password from the mobile app."
+
     ```
 
 1. Under the comment **Send a prompt to the agent**, and add the following code:
@@ -262,7 +266,7 @@ Now you're ready to run your code and watch your AI agents collaborate.
 1. After you have signed in, enter the following command to run the application:
 
     ```
-   python agent_quest.py
+   python agent_triage.py
     ```
 
     You should see some output similar to the following:
@@ -272,21 +276,23 @@ Now you're ready to run your code and watch your AI agents collaborate.
     Processing agent thread. Please wait.
 
     MessageRole.USER:
-    We find a locked door with strange symbols, and the warrior is limping.
+    Users can't reset their password from the mobile app.
 
     MessageRole.AGENT:
-    - **Scout:** Decipher the celestial patterns of the strange symbols and determine the sequence to unlock the door. 
-    - **Healer:** The warrior's injury has been addressed; moderate strain is relieved through healing magic and restorative salve.
-    - **Warrior:** Recovered and ready to assist physically or guard the party as we proceed.
+    ### Ticket Assessment
+
+    - **Priority:** High — This issue blocks users from resetting their passwords, limiting access to their accounts.
+    - **Assigned Team:** Frontend Team — The problem lies in the mobile app's user interface or functionality.
+    - **Effort Required:** Medium — Resolving this problem involves identifying the root cause, potentially updating the mobile app functionality, reviewing API/backend integration, and testing to ensure compatibility across Android/iOS platforms.
 
     Cleaning up agents:
-    Deleted quest master agent.
-    Deleted healer agent.
-    Deleted scout agent.
-    Deleted warrior agent.
+    Deleted triage agent.
+    Deleted priority agent.
+    Deleted team agent.
+    Deleted effort agent.
     ```
 
-    You can try modifying the prompt using a different scenario to see how the agents collaborate.
+    You can try modifying the prompt using a different ticket scenario to see how the agents collaborate. For example, "Investigate occasional 502 errors from the search endpoint."
 
 ## Clean up
 
