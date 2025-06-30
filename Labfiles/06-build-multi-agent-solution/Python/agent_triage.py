@@ -1,8 +1,8 @@
 import os
 from dotenv import load_dotenv
-from azure.ai.agents import AgentsClient
-from azure.ai.agents.models import ConnectedAgentTool, MessageRole, ListSortOrder, ToolSet, FunctionTool
-from azure.identity import DefaultAzureCredential
+
+#Add references
+
 
 # Clear the console
 os.system('cls' if os.name=='nt' else 'clear')
