@@ -9,8 +9,8 @@ os.system('cls' if os.name=='nt' else 'clear')
 
 # Load environment variables from .env file
 load_dotenv()
-project_endpoint = os.getenv("AZURE_AI_AGENT_ENDPOINT")
-model_deployment = os.getenv("AZURE_AI_AGENT_MODEL_DEPLOYMENT_NAME")
+project_endpoint = os.getenv("PROJECT_ENDPOINT")
+model_deployment = os.getenv("MODEL_DEPLOYMENT_NAME")
 
 # Priority agent definition
 priority_agent_name = "priority_agent"
