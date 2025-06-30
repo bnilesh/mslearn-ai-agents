@@ -1,3 +1,9 @@
+---
+lab:
+    title: 'Develop a multi-agent solution with Azure AI Foundry'
+    description: 'Learn to configure multiple agents to collaborate using Azure AI Foundry Agent Service'
+---
+
 # Develop a multi-agent solution
 
 In this exercise, you'll create a project that orchestrates multiple AI agents using Azure AI Foundry Agent Service. You'll design an AI solution that assists with ticket triage. The connected agents will assess the ticket's priority, suggest a team assignment, and determine the level of effort required to complete the ticket. Let's get started!
