@@ -86,7 +86,7 @@ async def chat_loop(session):
         if run.status == "failed":
             print(f"Run failed: {run.last_error}")
 
-        # Display the messages
+        # Display the response
         
 
     # Delete the agent when done

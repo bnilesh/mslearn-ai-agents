@@ -83,7 +83,10 @@ Now that you've created your project in AI Foundry, let's develop an app that in
    ls -a -l
     ```
 
-    The provided files include the client and server application code.
+    The provided files include the client and server application code. The Model Context Protocal provides a standardized way to connect AI models to different data sources and tools. We separate `client.py` and `server.py` to keep the agent logic and tool definitions modular and simulate real-world architecture. 
+    
+    `server.py` defines the tools the agent can use, simulating backend services or business logic. 
+    `client.py` handles the AI agent setup, user prompts, and calling the tools when needed.
 
 ### Configure the application settings
 
@@ -109,7 +112,7 @@ Now that you've created your project in AI Foundry, let's develop an app that in
 
 1. After you've replaced the placeholder, use the **CTRL+S** command to save your changes and then use the **CTRL+Q** command to close the code editor while keeping the cloud shell command line open.
 
-### Define a custom function
+### Define function tools
 
 1. Enter the following command to edit the code file that has been provided for your function code:
 
@@ -117,12 +120,14 @@ Now that you've created your project in AI Foundry, let's develop an app that in
    code server.py
     ```
 
+    In this code file, you'll define the tools the agent can use to simulate a backend service for the retail store. 
+
 1. Find the comment **Add an inventory check tool** and add the following code:
 
     ```python
-    # Add an inventory check tool
-    @mcp.tool()
-    def get_inventory_levels() -> dict:
+   # Add an inventory check tool
+   @mcp.tool()
+   def get_inventory_levels() -> dict:
         """Returns current inventory for all products."""
         return {
             "Moisturizer": 6,
@@ -143,9 +148,9 @@ Now that you've created your project in AI Foundry, let's develop an app that in
 1. Find the comment **Add a weekly sales tool** and add the following code:
 
     ```python
-    # Add a weekly sales tool
-    @mcp.tool()
-    def get_weekly_sales() -> dict:
+   # Add a weekly sales tool
+   @mcp.tool()
+   def get_weekly_sales() -> dict:
         """Returns number of units sold last week."""
         return {
             "Moisturizer": 22,
@@ -168,51 +173,52 @@ Now that you've created your project in AI Foundry, let's develop an app that in
 1. Enter the following command to begin editing the agent code.
 
     ```
-    code client.py
+   code client.py
     ```
 
-    > **Tip**: As you add code to the code file, be sure to maintain the correct indentation.
+    In this file, you'll prepare the AI agent, accept user prompts, and invoke the function tools.
 
+    > **Tip**: As you add code to the code file, be sure to maintain the correct indentation.
 
 1. Review the existing function `connect_to_server`. This function starts the server and retrieves the tools available. The rest of the file includes comments where you'll add the necessary code to implement your inventory agent.
 
 1. Find the comment **Add references** and add the following code to import the classes:
 
     ```python
-    # Add references
-    from mcp import ClientSession, StdioServerParameters
-    from mcp.client.stdio import stdio_client
-    from azure.ai.agents import AgentsClient
-    from azure.ai.agents.models import FunctionTool, MessageRole, ListSortOrder
-    from azure.identity import DefaultAzureCredential
+   # Add references
+   from mcp import ClientSession, StdioServerParameters
+   from mcp.client.stdio import stdio_client
+   from azure.ai.agents import AgentsClient
+   from azure.ai.agents.models import FunctionTool, MessageRole, ListSortOrder
+   from azure.identity import DefaultAzureCredential
     ```
 
 1. Find the comment **Connect to the agents client** and add the following code to connect to the Azure AI project using the current Azure credentials.
 
     ```python
-    # Connect to the agents client
-    agents_client = AgentsClient(
+   # Connect to the agents client
+   agents_client = AgentsClient(
         endpoint=project_endpoint,
         credential=DefaultAzureCredential(
             exclude_environment_credential=True,
             exclude_managed_identity_credential=True
         )
-    )
+   )
     ```
 
 1. Under the comment **List tools available on the server**, add the following code:
 
     ```python
-    # List tools available on the server
-    response = await session.list_tools()
-    tools = response.tools
+   # List tools available on the server
+   response = await session.list_tools()
+   tools = response.tools
     ```
 
 1. Under the comment **Build a function for each tool** and add the following code:
 
     ```python
-    # Build a function for each tool
-    def make_tool_func(tool_name):
+   # Build a function for each tool
+   def make_tool_func(tool_name):
         async def tool_func(**kwargs):
             result = await session.call_tool(tool_name, kwargs)
             return result
@@ -220,8 +226,8 @@ Now that you've created your project in AI Foundry, let's develop an app that in
         tool_func.__name__ = tool_name
         return tool_func
 
-    functions_dict = {tool.name: make_tool_func(tool.name) for tool in tools}
-    mcp_function_tool = FunctionTool(functions=list(functions_dict.values()))
+   functions_dict = {tool.name: make_tool_func(tool.name) for tool in tools}
+   mcp_function_tool = FunctionTool(functions=list(functions_dict.values()))
     ```
 
     This code dynamically wraps tools available in the MCP server so that they can be called by the AI agent. Each tool is turned into an async function and then bundled into a `FunctionTool` for the agent to use.
@@ -229,8 +235,8 @@ Now that you've created your project in AI Foundry, let's develop an app that in
 1. Find the comment **Create the agent** and add the following code:
 
     ```python
-    # Create the agent
-    agent = agents_client.create_agent(
+   # Create the agent
+   agent = agents_client.create_agent(
         model=model_deployment,
         name="inventory-agent",
         instructions="""
@@ -239,46 +245,46 @@ Now that you've created your project in AI Foundry, let's develop an app that in
         - Recommend clearance if item inventory > 20 and weekly sales < 5
         """,
         tools=mcp_function_tool.definitions
-    )
+   )
     ```
 
 1. Find the comment **Enable auto function calling** and add the following code:
 
     ```python
-    # Enable auto function calling
-    agents_client.enable_auto_function_calls(tools=mcp_function_tool)
+   # Enable auto function calling
+   agents_client.enable_auto_function_calls(tools=mcp_function_tool)
     ```
 
 1. Under the comment **Create a thread for the chat session**, add the following code:
 
     ```python
-    # Create a thread for the chat session
-    thread = agents_client.threads.create()
+   # Create a thread for the chat session
+   thread = agents_client.threads.create()
     ```
 
 1. Locate the comment **Invoke the prompt** and add the following code:
 
     ```python
-    # Invoke the prompt
-    message = agents_client.messages.create(
+   # Invoke the prompt
+   message = agents_client.messages.create(
         thread_id=thread.id,
         role=MessageRole.USER,
         content=user_input,
-    )
-    run = agents_client.runs.create(thread_id=thread.id, agent_id=agent.id)
+   )
+   run = agents_client.runs.create(thread_id=thread.id, agent_id=agent.id)
     ```
 
 1. Locate the comment **Retrieve the matching function tool** and add the following code:
 
     ```python
-    # Retrieve the matching function tool
-    function_name = tool_call.function.name
-    args_json = tool_call.function.arguments
-    kwargs = json.loads(args_json)
-    required_function = functions_dict.get(function_name)
+   # Retrieve the matching function tool
+   function_name = tool_call.function.name
+   args_json = tool_call.function.arguments
+   kwargs = json.loads(args_json)
+   required_function = functions_dict.get(function_name)
 
-    # Invoke the function
-    output = await required_function(**kwargs)
+   # Invoke the function
+   output = await required_function(**kwargs)
     ```
 
     This code uses the information from the agent thread's tool call. The function name and arguments are retrieved and used to invoke the matching function.
@@ -286,18 +292,18 @@ Now that you've created your project in AI Foundry, let's develop an app that in
 1. Under the comment **Append the output text**, add the following code:
 
     ```python
-    # Append the output text
-    tool_outputs.append({
+   # Append the output text
+   tool_outputs.append({
         "tool_call_id": tool_call.id,
         "output": output.content[0].text,
-    })
+   })
     ```
 
 1. Under the comment **Submit the tool call output**, add the following code:
 
     ```python
-    # Submit the tool call output
-    agents_client.runs.submit_tool_outputs(thread_id=thread.id, run_id=run.id, tool_outputs=tool_outputs)
+   # Submit the tool call output
+   agents_client.runs.submit_tool_outputs(thread_id=thread.id, run_id=run.id, tool_outputs=tool_outputs)
     ```
 
     This code will signal to the agent thread that the required action is complete and update the tool call outputs.
@@ -305,9 +311,9 @@ Now that you've created your project in AI Foundry, let's develop an app that in
 1. Find the comment **Display the response** and add the following code:
 
     ```python
-    # Display the response
-    messages = agents_client.messages.list(thread_id=thread.id, order=ListSortOrder.ASCENDING)
-    for message in messages:
+   # Display the response
+   messages = agents_client.messages.list(thread_id=thread.id, order=ListSortOrder.ASCENDING)
+   for message in messages:
         if message.text_messages:
             last_msg = message.text_messages[-1]
             print(f"{message.role}:\n{last_msg.text.value}\n")
@@ -320,7 +326,7 @@ Now that you've created your project in AI Foundry, let's develop an app that in
 1. In the cloud shell command-line pane, enter the following command to sign into Azure.
 
     ```
-    az login
+   az login
     ```
 
     **<font color="red">You must sign into Azure - even though the cloud shell session is already authenticated.</font>**
@@ -332,13 +338,13 @@ Now that you've created your project in AI Foundry, let's develop an app that in
 1. After you have signed in, enter the following command to run the application:
 
     ```
-    python client.py
+   python client.py
     ```
 
 1. When prompted, enter a query such as:
 
     ```
-    What are the current inventory levels?
+   What are the current inventory levels?
     ```
 
     > **Tip**: If the app fails because the rate limit is exceeded. Wait a few seconds and try again. If there is insufficient quota available in your subscription, the model may not be able to respond.
@@ -366,9 +372,15 @@ Now that you've created your project in AI Foundry, let's develop an app that in
     Try entering prompts such as:
 
     ```
-    Are there any products that should be restocked?
-    Which products would you recommend for clearance?
-    What are the best sellers this week?
+   Are there any products that should be restocked?
+    ```
+
+    ```
+   Which products would you recommend for clearance?
+    ```
+
+    ```
+   What are the best sellers this week?
     ```
 
     Enter `quit` when you're done.
