@@ -35,11 +35,11 @@ Let's start by creating an Azure AI Foundry project.
     > \* Some Azure AI resources are constrained by regional model quotas. In the event of a quota limit being exceeded later in the exercise, there's a possibility you may need to create another resource in a different region.
 
 1. Select **Create** and wait for your project to be created.
-1. When your project is created, the Agents playground will be opened automatically so you can select or deploy a model:
+1. If prompted, deploy a **gpt-4o** model using either the *Global Standard* or *Standard* deployment option (depending on your quota availability).
 
-    ![Screenshot of a Azure AI Foundry project Agents playground.](./Media/ai-foundry-agents-playground.png)
+    >**Note**: If quota is available, a GPT-4o base model may be deployed automatically when creating your Agent and project.
 
-    >**Note**: A GPT-4o base model is automatically deployed when creating your Agent and project.
+1. When your project is created, the Agents playground will be opened.
 
 1. In the navigation pane on the left, select **Overview** to see the main page for your project; which looks like this:
 
@@ -229,6 +229,7 @@ Now that you've created your project in AI Foundry, let's develop an app that in
 1. Find the comment **Create the agent** and add the following code:
 
     ```python
+    # Create the agent
     agent = agents_client.create_agent(
         model=model_deployment,
         name="inventory-agent",
