@@ -59,7 +59,7 @@ async def chat_loop(session):
             print("Exiting chat.")
             break
 
-        # Run the prompt
+        # Invoke the prompt
 
 
         # Monitor the run status
