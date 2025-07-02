@@ -21,16 +21,12 @@ async def connect_to_server(exit_stack: AsyncExitStack):
         env=None
     )
 
-    # Start the server using stdio transport
-    stdio_transport = await exit_stack.enter_async_context(stdio_client(server_params))
-    stdio, write = stdio_transport
-    session = await exit_stack.enter_async_context(ClientSession(stdio, write))
-    await session.initialize()
+    # Start the MCP server
+    
+    # Create an MCP client session
 
     # List available tools
-    response = await session.list_tools()
-    tools = response.tools
-    print("\nConnected to server with tools:", [tool.name for tool in tools])
+
     return session
 
 async def chat_loop(session):

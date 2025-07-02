@@ -112,7 +112,9 @@ Now that you've created your project in AI Foundry, let's develop an app that in
 
 1. After you've replaced the placeholder, use the **CTRL+S** command to save your changes and then use the **CTRL+Q** command to close the code editor while keeping the cloud shell command line open.
 
-### Define function tools
+### Implement an MCP Server
+
+A Model Context Protocol (MCP) Server is a component that hosts callable tools. These tools are Python functions that can be exposed to AI agents. When tools are annotated with `@mcp.tool()`, they become discoverable to the client, allowing an AI agent to call them dynamically during a conversation or task. In this task, you'll add some tools that will allow the agent to perform inventory checks.
 
 1. Enter the following command to edit the code file that has been provided for your function code:
 
@@ -120,7 +122,7 @@ Now that you've created your project in AI Foundry, let's develop an app that in
    code server.py
     ```
 
-    In this code file, you'll define the tools the agent can use to simulate a backend service for the retail store. 
+    In this code file, you'll define the tools the agent can use to simulate a backend service for the retail store. Notice the server setup code at the top of the file. It uses `FastMCP` to quickly spin up an MCP server instance named "Inventory". This server will host the tools you define and make them accessible to the agent during the lab.
 
 1. Find the comment **Add an inventory check tool** and add the following code:
 
@@ -168,19 +170,17 @@ Now that you've created your project in AI Foundry, let's develop an app that in
 
 1. Save the file (*CTRL+S*).
 
-### Connect the MCP tools to your agent
+### Implement an MCP Client
 
-1. Enter the following command to begin editing the agent code.
+An MCP client is the component that connects to the MCP server to discover and call tools. You can think of it as the bridge between the agent and the server-hosted functions, enabling dynamic tool use in response to user prompts.
+
+1. Enter the following command to begin editing the client code.
 
     ```
    code client.py
     ```
 
-    In this file, you'll prepare the AI agent, accept user prompts, and invoke the function tools.
-
     > **Tip**: As you add code to the code file, be sure to maintain the correct indentation.
-
-1. Review the existing function `connect_to_server`. This function starts the server and retrieves the tools available. The rest of the file includes comments where you'll add the necessary code to implement your inventory agent.
 
 1. Find the comment **Add references** and add the following code to import the classes:
 
@@ -192,6 +192,41 @@ Now that you've created your project in AI Foundry, let's develop an app that in
    from azure.ai.agents.models import FunctionTool, MessageRole, ListSortOrder
    from azure.identity import DefaultAzureCredential
     ```
+
+1. Find the comment **Start the MCP server** and add the following code:
+
+    ```python
+   # Start the MCP server
+   stdio_transport = await exit_stack.enter_async_context(stdio_client(server_params))
+   stdio, write = stdio_transport
+    ```
+
+    In a standard production setup, the server would run separately from the client. But for the sake of this lab, the client is responsible for starting the server using standard input/output transport. This creates a lightweight communication channel between the two components and simplifies the local development setup.
+
+1. Find the comment **Create an MCP client session** and add the following code:
+
+    ```python
+   # Create an MCP client session
+   session = await exit_stack.enter_async_context(ClientSession(stdio, write))
+   await session.initialize()
+    ```
+
+    This creates a new client session using the input and output streams from the previous step. Calling `session.initialize` prepares the session to discover and call tools that are registered on the MCP server.
+
+1. Under the comment **List available tools**, add the following code to verify that the client has connected to the server:
+
+    ```python
+   # List available tools
+   response = await session.list_tools()
+   tools = response.tools
+   print("\nConnected to server with tools:", [tool.name for tool in tools]) 
+    ```
+
+    Now your client session is ready for use with your Azure AI Agent.
+
+### Connect the MCP tools to your agent
+
+In this task, you'll prepare the AI agent, accept user prompts, and invoke the function tools.
 
 1. Find the comment **Connect to the agents client** and add the following code to connect to the Azure AI project using the current Azure credentials.
 
