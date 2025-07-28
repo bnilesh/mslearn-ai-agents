@@ -1,9 +1,3 @@
----
-lab:
-    title: 'Connect AI Agents to Tools Using MCP'
-    description: 'Learn how to integrate Model Context Protocol with AI agents'
----
-
 # Connect AI agents to tools using Model Context Protocol (MCP)
 
 In this exercise, you'll create an agent that can connect to an MCP server and automatically discover callable functions.
