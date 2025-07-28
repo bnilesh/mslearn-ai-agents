@@ -141,7 +141,7 @@ In this task, you'll connect to a remote MCP server, prepare the AI agent, and r
    )
     ```
 
-    This code will connect to a remote git MCP server that allows AI agents to connect and assist with documentation queries for an existing github repository. 
+    This code will connect to the Microsft Learn Docs remote MCP server. This is a cloud-hosted service that enables clients to access trusted and up-to-date information directly from Microsoft's official documentation.
 
 1. Under the comment **Create a new agent with the mcp tool definitions** and add the following code:
 
@@ -151,8 +151,9 @@ In this task, you'll connect to a remote MCP server, prepare the AI agent, and r
        model=model_deployment,
        name="my-mcp-agent",
        instructions="""
-       You are a helpful agent that can use MCP tools to assist users. 
-       Use the available MCP tools to answer questions and perform tasks.""",
+        You have access to an MCP server called `microsoft.docs.mcp` - this tool allows you to 
+        search through Microsoft's latest official documentation. Use the available MCP tools 
+        to answer questions and perform tasks.""",
        tools=mcp_tool.definitions,
    )
     ```
@@ -174,7 +175,7 @@ In this task, you'll connect to a remote MCP server, prepare the AI agent, and r
    message = agents_client.messages.create(
        thread_id=thread.id,
        role="user",
-       content="Please summarize the Azure REST API specifications Readme",
+       content="Give me the Azure CLI commands to create an Azure Container App with a managed identity.",
    )
    print(f"Created message, ID: {message.id}")
     ```
@@ -201,7 +202,7 @@ In this task, you'll connect to a remote MCP server, prepare the AI agent, and r
    print(f"Created run, ID: {run.id}")
     ```
     
-    AI Agent will automatically invoke the connected MCP tools to process the prompt request. To illustrate this process, the code provided under the comment **Display run steps and tool calls** will output any invoked tools from the MCP server.
+    The AI Agent automatically invokes the connected MCP tools to process the prompt request. To illustrate this process, the code provided under the comment **Display run steps and tool calls** will output any invoked tools from the MCP server.
 
 1. Save the code file (*CTRL+S*) when you have finished. You can also close the code editor (*CTRL+Q*); though you may want to keep it open in case you need to make any edits to the code you added. In either case, keep the cloud shell command-line pane open.
 
@@ -229,7 +230,7 @@ In this task, you'll connect to a remote MCP server, prepare the AI agent, and r
 
     ```
     Created agent, ID: <<agent-id>>
-    MCP Server: github at https://gitmcp.io/Azure/azure-rest-api-specs
+    MCP Server: mslearn at https://learn.microsoft.com/api/mcp
     Created thread, ID: <<thread-id>>
     Created message, ID: <<message-id>>
     Created run, ID: <<run-id>>
@@ -238,26 +239,32 @@ In this task, you'll connect to a remote MCP server, prepare the AI agent, and r
 
     Step <<step2-id>> status: completed
     MCP Tool calls:
-        Tool Call ID: <<call-id>>
+        Tool Call ID: <<tool-call-id>>
         Type: mcp
-        Type: fetch_azure_rest_api_docs
+        Type: microsoft_docs_search
 
 
     Conversation:
     --------------------------------------------------
-    ASSISTANT: The Azure REST API specifications documentation provides insights into guidelines, processes, and tools for managing, configuring, and validating APIs and SDKs. Here's a summary of key topics covered:
+    ASSISTANT: You can use Azure CLI to create an Azure Container App with a managed identity (either system-assigned or user-assigned). Below are the relevant commands and workflow:
+
+    ---
+
+    ### **1. Create a Resource Group**
+    ```azurecli
+    az group create --name myResourceGroup --location eastus
+    ```
 
     {{continued...}}
 
-    The documentation serves as a comprehensive guide for developing, configuring, validating, and evolving Azure REST APIs with tools and processes for automation-enabled API management.
+    By following these steps, you can deploy an Azure Container App with either system-assigned or user-assigned managed identities to integrate seamlessly with other Azure services.
     --------------------------------------------------
-    USER: Please summarize the Azure REST API specifications Readme
+    USER: Give me the Azure CLI commands to create an Azure Container App with a managed identity.
     --------------------------------------------------
-
     Deleted agent
     ```
 
-    Notice that the agent was able to invoke the MCP tool `fetch_azure_rest_api_docs` automatically to fulfill the request.
+    Notice that the agent was able to invoke the MCP tool `microsoft_docs_search` automatically to fulfill the request.
 
 ## Clean up
 
