@@ -77,7 +77,7 @@ Now that you've created your project in AI Foundry, let's develop an app that in
 1. Enter the following command to change the working directory to the folder containing the code files and list them all.
 
     ```
-   cd ai-agents/Labfiles/07-use-agent-tools-with-mcp/Python
+   cd ai-agents/Labfiles/03c-use-agent-tools-with-mcp/Python
    ls -a -l
     ```
 

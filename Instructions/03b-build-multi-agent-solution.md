@@ -82,7 +82,7 @@ Now you're ready to create a client app that defines the agents and instructions
 1. When the repo has been cloned, enter the following command to change the working directory to the folder containing the code files and list them all.
 
     ```
-   cd ai-agents/Labfiles/06-build-multi-agent-solution/Python
+   cd ai-agents/Labfiles/03b-build-multi-agent-solution/Python
    ls -a -l
     ```
 
