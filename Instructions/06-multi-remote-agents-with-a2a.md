@@ -140,15 +140,6 @@ In this task, you create the title agent that helps writers create trendy headli
    code agent.py
     ```
 
-1. Find the comment **Add references** and add the following code to import the classes you'll need to build an Azure AI agent that uses the built-in code interpreter tool:
-
-    ```python
-   # Add references
-   from azure.identity import DefaultAzureCredential
-   from azure.ai.agents import AgentsClient
-   from azure.ai.agents.models import FilePurpose, CodeInterpreterTool, ListSortOrder, MessageRole
-    ```
-
 1. Find the comment **Create the agents client** and add the following code to connect to the Azure AI project:
 
     > **Tip**: Be careful to maintain the correct indentation level.
@@ -201,9 +192,7 @@ In this task, you create the title agent that helps writers create trendy headli
 
     The code provided in the rest of the file will process and return the agent's response. 
 
-1. Save the code file (*CTRL+S*). 
-
-    Now you're ready to share the agent's skills and card with the A2A protocol. 
+1. Save the code file (*CTRL+S*). Now you're ready to share the agent's skills and card with the A2A protocol. 
 
 1. Enter the following command to edit the title agent's `server.py` file  
 
@@ -302,7 +291,7 @@ In this task, you use the A2A protocol to enable the routing agent to send messa
 
     The routing agent finally captures the response and returns it to the user through the thread.
 
-    Notice that the `send_message` is async and must be awaited for the agent run to complete successfully.
+    Notice that the `send_message` method is async and must be awaited for the agent run to complete successfully.
 
 1. Add the following code under the comment **Retrieve the remote agent's A2A client using the agent name**:
 
