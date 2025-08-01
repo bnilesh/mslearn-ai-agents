@@ -4,20 +4,6 @@ lab:
     description: 'Use the A2A protocol to collaborate with remote agents.'
 ---
 
-
-https://a2aprotocol.ai/docs/guide/a2a-sdk-python
-https://a2aproject.github.io/A2A/latest/tutorials/python/3-agent-skills-and-card/#agent-card
-
-https://www.microsoft.com/en-us/microsoft-cloud/blog/2025/05/07/empowering-multi-agent-apps-with-the-open-agent2agent-a2a-protocol/?msockid=3370790b34536c0f2cf56dad35e96d4c
-https://learn.microsoft.com/en-us/microsoftteams/platform/teams-ai-library/typescript/in-depth-guides/ai/a2a/overview
-https://github.com/a2aproject/A2A
-https://learn.microsoft.com/en-us/microsoftteams/platform/teams-ai-library/typescript/in-depth-guides/ai/a2a/overview
-
-https://github.com/a2aproject/a2a-python
-https://github.com/a2aproject/a2a-samples/blob/main/samples/python/agents/airbnb_planner_multiagent/airbnb_agent/__main__.py#L151
-https://github.com/a2aproject/a2a-samples/blob/main/samples/python/agents/a2a-mcp-without-framework/src/no_llm_framework/client/agent.py#L197
-
-
 # Connect to remote agents with A2A protocol
 
 In this exercise, you'll use Azure AI Agent Service with the A2A protocol to create simple remote agents that interact with one another. These agents will assist technical writers with preparing their developer blog posts. A title agent will generate a headline, and an outline agent will use the title to develop a concise outline for the article. Let's get started
