@@ -77,7 +77,7 @@ Now you're ready to create a client app that uses an agent. Some code has been p
 1. Enter the following command to change the working directory to the folder containing the code files and list them all.
 
     ```
-   cd ai-agents/Labfiles/06-build-remote-agents-with-a2a/Python
+   cd ai-agents/Labfiles/06-build-remote-agents-with-a2a/python
    ls -a -l
     ```
 
@@ -414,12 +414,13 @@ In this task, you use the A2A protocol to enable the routing agent to send messa
 1. After you have signed in, enter the following command to run the application:
 
     ```
+    cd ..
     python run_all.py
     ```
     
     The application runs using the credentials for your authenticated Azure session to connect to your project and create and run the agent. You should see some output from each server as it starts.
 
-1. When prompted for input, enter a prompt such as:
+1. Wait until the prompt for input appears, then enter a prompt such as:
 
     ```
    Create a title and outline for an article about React programming.
