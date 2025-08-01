@@ -57,9 +57,8 @@ class FoundryAgentExecutor(AgentExecutor):
         # Start working
         await updater.start_work()
 
-        # LEARN
         # Process the request
-        await self._process_request(context.message.parts, context.context_id, updater)
+        
 
     async def cancel(self, context: RequestContext, event_queue: EventQueue):
         print(f'Title Agent: Cancelling execution for context {context.context_id}')
