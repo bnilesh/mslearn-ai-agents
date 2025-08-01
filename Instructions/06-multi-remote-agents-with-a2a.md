@@ -45,7 +45,7 @@ Let's start by creating an Azure AI Foundry project.
 
 1. Copy the **Azure AI Foundry project endpoint** values to a notepad, as you'll use them to connect to your project in a client application.
 
-## Create an agent client app
+## Create an A2A application
 
 Now you're ready to create a client app that uses an agent. Some code has been provided for you in a GitHub repository.
 
