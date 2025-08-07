@@ -234,7 +234,7 @@ In this task, you'll connect to a remote MCP server, prepare the AI agent, and r
    python client.py
     ```
 
-    You should see some output similar to the folloiwng:
+    You should see some output similar to the following:
 
     ```
     Created agent, ID: <<agent-id>>
@@ -259,9 +259,9 @@ In this task, you'll connect to a remote MCP server, prepare the AI agent, and r
     ---
 
     ### **1. Create a Resource Group**
-    ```azurecli
+    azurecli
     az group create --name myResourceGroup --location eastus
-    ```
+    
 
     {{continued...}}
 
