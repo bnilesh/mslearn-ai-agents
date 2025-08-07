@@ -156,13 +156,13 @@ In this task, you'll connect to a remote MCP server, prepare the AI agent, and r
     ```python
    # Create a new agent with the mcp tool definitions
    agent = agents_client.create_agent(
-       model=model_deployment,
-       name="my-mcp-agent",
-       instructions="""
+        model=model_deployment,
+        name="my-mcp-agent",
+        instructions="""
         You have access to an MCP server called `microsoft.docs.mcp` - this tool allows you to 
         search through Microsoft's latest official documentation. Use the available MCP tools 
         to answer questions and perform tasks.""",
-       tools=mcp_tool.definitions,
+        tools=mcp_tool.definitions,
    )
     ```
 
@@ -181,9 +181,9 @@ In this task, you'll connect to a remote MCP server, prepare the AI agent, and r
     ```python
    # Create a message on the thread
    message = agents_client.messages.create(
-       thread_id=thread.id,
-       role="user",
-       content="Give me the Azure CLI commands to create an Azure Container App with a managed identity.",
+        thread_id=thread.id,
+        role="user",
+        content="Give me the Azure CLI commands to create an Azure Container App with a managed identity.",
    )
    print(f"Created message, ID: {message.id}")
     ```
