@@ -109,6 +109,14 @@ Now that you've created your project in AI Foundry, let's develop an app that in
 
 In this task, you'll connect to a remote MCP server, prepare the AI agent, and run a user prompt.
 
+1. Enter the following command to edit the code file that has been provided:
+
+    ```
+   code client.py
+    ```
+
+    The file is opened in the code editor.
+
 1. Find the comment **Add references** and add the following code to import the classes:
 
     ```python
