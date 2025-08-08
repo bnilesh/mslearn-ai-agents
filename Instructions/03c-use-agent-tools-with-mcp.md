@@ -123,7 +123,7 @@ In this task, you'll connect to a remote MCP server, prepare the AI agent, and r
    # Add references
    from azure.identity import DefaultAzureCredential
    from azure.ai.agents import AgentsClient
-   from azure.ai.agents.models import McpTool
+   from azure.ai.agents.models import McpTool, ToolSet
     ```
 
 1. Find the comment **Connect to the agents client** and add the following code to connect to the Azure AI project using the current Azure credentials.
@@ -144,25 +144,29 @@ In this task, you'll connect to a remote MCP server, prepare the AI agent, and r
     ```python
    # Initialize agent MCP tool
    mcp_tool = McpTool(
-       server_label=mcp_server_label,
-       server_url=mcp_server_url,
+        server_label=mcp_server_label,
+        server_url=mcp_server_url,
    )
+    
+   mcp_tool.set_approval_mode("never")
+    
+   toolset = ToolSet()
+   toolset.add(mcp_tool)
     ```
 
     This code will connect to the Microsft Learn Docs remote MCP server. This is a cloud-hosted service that enables clients to access trusted and up-to-date information directly from Microsoft's official documentation.
 
-1. Under the comment **Create a new agent with the mcp tool definitions** and add the following code:
+1. Under the comment **Create a new agent** and add the following code:
 
     ```python
-   # Create a new agent with the mcp tool definitions
+   # Create a new agent
    agent = agents_client.create_agent(
         model=model_deployment,
         name="my-mcp-agent",
         instructions="""
         You have access to an MCP server called `microsoft.docs.mcp` - this tool allows you to 
         search through Microsoft's latest official documentation. Use the available MCP tools 
-        to answer questions and perform tasks.""",
-        tools=mcp_tool.definitions,
+        to answer questions and perform tasks."""
    )
     ```
 
@@ -188,25 +192,11 @@ In this task, you'll connect to a remote MCP server, prepare the AI agent, and r
    print(f"Created message, ID: {message.id}")
     ```
 
-1. Under the comment **Update mcp tool headers**, add the following code:
-
-    ```python
-   # Update mcp tool headers
-   mcp_tool.update_headers("SuperSecret", "123456")
-    ```
-
-1. Locate the comment **Set approval mode** and add the following code:
-
-    ```python
-   # Set approval mode
-   mcp_tool.set_approval_mode("never")
-    ```
-
-1. Locate the comment **Create and process agent run in thread with MCP tools** and add the following code:
+1. Find the comment **Create and process agent run in thread with MCP tools** and add the following code:
 
     ```python
    # Create and process agent run in thread with MCP tools
-   run = agents_client.runs.create_and_process(thread_id=thread.id, agent_id=agent.id, tool_resources=mcp_tool.resources)
+   run = agents_client.runs.create_and_process(thread_id=thread.id, agent_id=agent.id, toolset=toolset)
    print(f"Created run, ID: {run.id}")
     ```
     
@@ -259,8 +249,9 @@ In this task, you'll connect to a remote MCP server, prepare the AI agent, and r
     ---
 
     ### **1. Create a Resource Group**
-    azurecli
+    '''azurecli
     az group create --name myResourceGroup --location eastus
+    '''
     
 
     {{continued...}}
