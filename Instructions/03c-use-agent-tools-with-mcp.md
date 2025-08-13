@@ -28,7 +28,13 @@ Let's start by creating an Azure AI Foundry project.
     - **Azure AI Foundry resource**: *A valid name for your Azure AI Foundry resource*
     - **Subscription**: *Your Azure subscription*
     - **Resource group**: *Create or select a resource group*
-    - **Region**: *Select any **AI Services supported location***\*
+    - **Region**: *Select any of the following supported locations:* \*
+      * West US 2
+      * West US
+      * Norway East
+      * Switzerland North
+      * UAE North
+      * South India
 
     > \* Some Azure AI resources are constrained by regional model quotas. In the event of a quota limit being exceeded later in the exercise, there's a possibility you may need to create another resource in a different region.
 
