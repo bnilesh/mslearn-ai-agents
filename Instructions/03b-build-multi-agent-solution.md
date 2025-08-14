@@ -131,6 +131,7 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
 1. Find the comment **Connect to the agents client**, and add the following code to create an AgentsClient connected to your project:
 
     ```python
+   # Connect to the agents client
    agents_client = AgentsClient(
         endpoint=project_endpoint,
         credential=DefaultAzureCredential(
