@@ -294,7 +294,6 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
    messages = agents_client.messages.list(thread_id=thread.id, order=ListSortOrder.ASCENDING)
    for message in messages:
         if message.text_messages:
-            print(message)
             last_msg = message.text_messages[-1]
             print(f"{message.role}:\n{last_msg.text.value}\n")
    
