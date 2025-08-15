@@ -49,7 +49,7 @@ Let's start by creating an Azure AI Foundry project.
 
     ![Screenshot of a Azure AI Foundry project overview page.](./Media/ai-foundry-project.png)
 
-1. Copy the **Azure AI Foundry project endpoint** value to a notepad, as you'll use it to connect to your project in a client application.
+1. Copy the **Azure AI Foundry project endpoint** value. You'll use it to connect to your project in a client application.
 
 ## Develop an agent that uses MCP function tools
 
@@ -129,7 +129,7 @@ In this task, you'll connect to a remote MCP server, prepare the AI agent, and r
    # Add references
    from azure.identity import DefaultAzureCredential
    from azure.ai.agents import AgentsClient
-   from azure.ai.agents.models import McpTool, ToolSet
+   from azure.ai.agents.models import McpTool, ToolSet, ListSortOrder
     ```
 
 1. Find the comment **Connect to the agents client** and add the following code to connect to the Azure AI project using the current Azure credentials.
@@ -190,10 +190,11 @@ In this task, you'll connect to a remote MCP server, prepare the AI agent, and r
 
     ```python
    # Create a message on the thread
+   prompt = input("\nHow can I help?: ")
    message = agents_client.messages.create(
         thread_id=thread.id,
         role="user",
-        content="Give me the Azure CLI commands to create an Azure Container App with a managed identity.",
+        content=prompt,
    )
    print(f"Created message, ID: {message.id}")
     ```
@@ -230,7 +231,13 @@ In this task, you'll connect to a remote MCP server, prepare the AI agent, and r
    python client.py
     ```
 
-    You should see some output similar to the following:
+1. When prompted, enter a request for technical information such as:
+
+    ```
+    Give me the Azure CLI commands to create an Azure Container App with a managed identity.
+    ```
+
+1. Wait for the agent to process your prompt, using the MCP server to find a suitable tool to retrieve the requested information. You should see some output similar to the following:
 
     ```
     Created agent, ID: <<agent-id>>
@@ -270,6 +277,8 @@ In this task, you'll connect to a remote MCP server, prepare the AI agent, and r
     ```
 
     Notice that the agent was able to invoke the MCP tool `microsoft_docs_search` automatically to fulfill the request.
+
+1. You can run the app again (using the command `python client.py`) to ask for different information, In each case, the agent will attempt to find technical documentation by using the MCP tool.
 
 ## Clean up
 
