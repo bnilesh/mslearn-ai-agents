@@ -135,10 +135,15 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
 
     ```python
    # Create the chat client
-   chat_client = AzureAIAgentClient(async_credential=AzureCliCredential())
+   credential = AzureCliCredential()
+   async with (
+       AzureAIAgentClient(async_credential=credential) as chat_client,
+   ):
     ```
 
 1. Add the following code under the comment **Create agents**:
+
+    (Be sure to maintain the indentation level)
 
     ```python
    # Create agents
@@ -162,6 +167,8 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
 
 1. In the **main** function, find the comment **Initialize the current feedback** and add the following code:
     
+    (Be sure to maintain the indentation level)
+
     ```python
    # Initialize the current feedback
    feedback="""
