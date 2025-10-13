@@ -1,8 +1,14 @@
+---
+lab:
+    title: 'Develop an AI agent with VS Code extension'
+    description: 'Use the Azure AI Foundry VS Code extension to create an AI agent.'
+---
+
 # Develop an AI agent with VS Code extension
 
 In this exercise, you'll use the Azure AI Foundry VS Code extension to create an agent that can use Model Context Protocol (MCP) server tools to access external data sources and APIs. The agent will be able to retrieve up-to-date information and interact with various services through MCP tools.
 
-This exercise should take approximately **45** minutes to complete.
+This exercise should take approximately **30** minutes to complete.
 
 > **Note**: Some of the technologies used in this exercise are in preview or in active development. You may experience some unexpected behavior, warnings, or errors.
 
