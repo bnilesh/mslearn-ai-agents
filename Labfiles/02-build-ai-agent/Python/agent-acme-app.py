@@ -52,7 +52,7 @@ def main():
         )
         print(f"Uploaded {file.filename}")
 
-        code_interpreter = CodeInterpreterTool(file_ids=[file.id])
+        code_interpreter = CodeInterpreterTool()
 
         agent = project_client.agents.create_version(
             agent_name="data-agent",
@@ -76,7 +76,10 @@ def main():
 
             openai_client.conversations.items.create(
                 conversation_id=conversation.id,
-                items=[{"type": "message", "role": "user", "content": user_prompt}],
+                items=[{"type": "message", "role": "user", "content": [
+                    {"type": "input_file", "file_id": file.id},
+                    {"type": "input_text", "text": user_prompt},
+                ]}],
             )
 
             response = openai_client.responses.create(
